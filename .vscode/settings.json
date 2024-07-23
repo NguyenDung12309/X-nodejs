@@ -1,0 +1,64 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "search.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/logs": true
+  },
+  "cSpell.ignoreRegExpList": [
+    "persistor",
+    "uuidv4",
+    "nprogress",
+    "htmls",
+    "simplebar",
+    "Eles",
+    "Formik",
+    "antd",
+    "clsx",
+    "dont",
+    "kintone",
+    "furigana",
+    "reduxjs",
+    "xsmall",
+    "xtiny",
+    "ampm",
+    "hookform",
+    "overscanCount",
+    "hocs",
+    "dispFlag"
+  ],
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+  "editor.quickSuggestionsDelay": 10,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.tabSize": 2,
+  "eslint.validate": ["javascript", "javascriptreact", "html", "typescriptreact"],
+  "i18n-ally.localesPaths": ["packages/admin/locales", "packages/user/locales"],
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.scss": "tailwindcss"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
