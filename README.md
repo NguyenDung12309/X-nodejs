@@ -2,15 +2,13 @@
 
 1. **Branch Naming Convention:**
 
-   - Feature branch: `feature/[id-task]`
-     - Example: `feature/ADA-396`
-   - Bug fix branch: `fix-bug/[id-task]`
-     - Example: `fix-bug/ADA-396`
+   - Feature branch: `feature/name-branch`
+   - Bug fix branch: `fix-bug/name-branch`
 
 2. **Commit Message Format:**
 
-   - Format: `[action]: [id-task] content`
-     - Example: `feat: [ADA-396] add login screen`
+   - Format: `[action]: content`
+     - Example: `feat: add login screen`
 
 3. **Branch Management:**
 
