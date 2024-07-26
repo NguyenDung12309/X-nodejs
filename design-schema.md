@@ -43,10 +43,10 @@ interface User {
 
 ```ts
 interface RefreshToken {
-  _id: ObjectId,
-  token: string,
-  created_at: Date,
-  user_id: ObjectId,
+  _id: ObjectId
+  token: string
+  created_at: Date
+  user_id: ObjectId
 }
 ```
 
@@ -56,14 +56,15 @@ interface RefreshToken {
 
 ```ts
 interface followers {
-  _id: ObjectId,
-  user_id: ObjectId,
-  followed_user_id: ObjectId,
+  _id: ObjectId
+  user_id: ObjectId
+  followed_user_id: ObjectId
   created_at: Date
 }
 ```
 
 ## tweets
+
 - tweet có thể chứa text, hashtags, mentions, ảnh, video
 - tweet có thể hiển thị cho everyone hoặc twitter circle
 - tweet có thể quy định người replay (everyone, follower, mention)
@@ -78,17 +79,17 @@ interface followers {
 
 ```ts
 interface tweet {
-  _id: ObjectId,
-  user_id: ObjectId,
-  content: string,
-  audience: TweetAudience, //những người có thể thấy tweet
-  parent_id: ObjectId | null,
-  hashtags: ObjectId[],
-  mentions: ObjectId[],
-  medias: Media[],
-  guest_views: number,
-  user_views: number,
-  created_at: Date,
+  _id: ObjectId
+  user_id: ObjectId
+  content: string
+  audience: TweetAudience //những người có thể thấy tweet
+  parent_id: ObjectId | null
+  hashtags: ObjectId[]
+  mentions: ObjectId[]
+  medias: Media[]
+  guest_views: number
+  user_views: number
+  created_at: Date
   updated_at: Date
 }
 ```
@@ -117,26 +118,36 @@ enum TweetType {
 }
 ```
 
-
 ## Bookmarks
 
-- Bookmarks các tweet lại, mỗi user không giới hạn số lượng bookmark. 
+- Bookmarks các tweet lại, mỗi user không giới hạn số lượng bookmark.
 
 ```ts
 interface Bookmark {
-  _id: ObjectId,
-  user_id: ObjectId,
-  tweet_id: ObjectId,
+  _id: ObjectId
+  user_id: ObjectId
+  tweet_id: ObjectId
   created_at: Date
 }
 ```
 
 ## Likes
+
 ```ts
 interface Like {
-  _id: ObjectId,
-  user_id: ObjectId,
-  tweet_id: ObjectId,
+  _id: ObjectId
+  user_id: ObjectId
+  tweet_id: ObjectId
+  created_at: Date
+}
+```
+
+## Hashtag
+
+```ts
+interface Hashtag {
+  _id: ObjectId
+  name: string
   created_at: Date
 }
 ```
