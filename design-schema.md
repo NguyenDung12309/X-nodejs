@@ -43,9 +43,100 @@ interface User {
 
 ```ts
 interface RefreshToken {
-  _id: ObjectId
-  token: string
+  _id: ObjectId,
+  token: string,
+  created_at: Date,
+  user_id: ObjectId,
+}
+```
+
+## followers
+
+- Một người dùng có thể follow nhiều user. Nếu dùng 1 mảng `followings` chứa id trong collection `users` thì sẽ không tối ưu, khi muốn tìm kiếm ai đang follow user A thì lại khó. Nê tạo ra 1 collection riêng để lưu mối quan hệ follow giữa các user
+
+```ts
+interface followers {
+  _id: ObjectId,
+  user_id: ObjectId,
+  followed_user_id: ObjectId,
   created_at: Date
-  user_id: ObjectId
+}
+```
+
+## tweets
+- tweet có thể chứa text, hashtags, mentions, ảnh, video
+- tweet có thể hiển thị cho everyone hoặc twitter circle
+- tweet có thể quy định người replay (everyone, follower, mention)
+- tweet có thể nested tweet. tạo thêm 1 `parent_id` để biết tweet này là tweet con của ai. Nếu `null` thì là tweet gốc
+- Nếu là tweet bình thường thì sẽ có `content` là string. Nếu là retweet thì không có `content` mà chỉ có `parent_id` lúc này `content` là `''`
+- `audience` đại diện tính riêng tư của tweet. Tweet có thể public cho tất cả mọi người cùng xem `Everyone` hoặc chỉ có 1 nhóm nhất đinh `TwitterCircle`
+- `type` đại diện cho loại tweet: tweet, retweet, quote tweet
+- `hashtag` là mảng chứa ObjectId của các hashTag.
+- `mentions` là mảng chứa ObjectId của các user được mention
+- `medias` là mảng chứa ObjectId của media (image, video).
+- Sử dụng lượt view để phân tích lượt tiếp cận của tweet. Lượt view chia làm 2 lại `guest_view` là số lượng lượt xem từ user chưa login và `user_views` là user login.
+
+```ts
+interface tweet {
+  _id: ObjectId,
+  user_id: ObjectId,
+  content: string,
+  audience: TweetAudience, //những người có thể thấy tweet
+  parent_id: ObjectId | null,
+  hashtags: ObjectId[],
+  mentions: ObjectId[],
+  medias: Media[],
+  guest_views: number,
+  user_views: number,
+  created_at: Date,
+  updated_at: Date
+}
+```
+
+```ts
+interface Media {
+  url: string,
+  type: MediaType
+}
+
+enum MediaType {
+  Image,
+  Video
+}
+
+enum TweetAudience {
+  Everyone,
+  TwitterCircle
+}
+
+enum TweetType {
+  Tweet,
+  Retweet,
+  Comment,với
+  QuoteTweet
+}
+```
+
+
+## Bookmarks
+
+- Bookmarks các tweet lại, mỗi user không giới hạn số lượng bookmark. 
+
+```ts
+interface Bookmark {
+  _id: ObjectId,
+  user_id: ObjectId,
+  tweet_id: ObjectId,
+  created_at: Date
+}
+```
+
+## Likes
+```ts
+interface Like {
+  _id: ObjectId,
+  user_id: ObjectId,
+  tweet_id: ObjectId,
+  created_at: Date
 }
 ```
