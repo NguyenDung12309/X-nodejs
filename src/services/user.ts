@@ -2,21 +2,34 @@ import { Collection, Db } from "mongodb";
 import { databaseService } from "./db.js";
 import { UserSchema } from "@/models/schemas/user.js";
 import { DatabaseName } from "@/constraints/database.js";
-import { reqRegister } from "@/models/api/register.js";
+import { reqRegister } from "@/models/dto/register.js";
+import { __ } from "i18n";
 
 class UserService {
-  private db: Db
-
-  constructor() {
-    this.db = databaseService.database
-  }
-
-  get users(): Collection<UserSchema> {
-    return this.db.collection(DatabaseName.USERS)
-  }
 
   createUser(payload: reqRegister) {
-    return this.users.insertOne(new UserSchema(payload));
+    return databaseService.users.insertOne(new UserSchema({
+      ...payload,
+      date_of_birth: new Date(payload.date_of_birth)
+    }));
+  }
+
+  async checkEmailExists(email: string, { message }: { message: any }) {
+    try {
+      const isExistEmail = await databaseService.users.findOne({ email })
+
+      if (isExistEmail) {
+        return message({
+          external: __('emailExist'),
+        });
+      }
+
+      return true;
+    } catch (error) {
+      return message({
+        external: __('500'),
+      });
+    }
   }
 }
 
