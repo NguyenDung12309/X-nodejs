@@ -1,3 +1,5 @@
 {
-  "success": "success"
+  "success": "thành công",
+  "emailExist": "email đã tồn tại",
+  "500": "Server error"
 }

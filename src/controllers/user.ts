@@ -1,4 +1,4 @@
-import { UserSchema } from '@/models/schemas/user.js'
+import { reqRegister } from '@/models/dto/register'
 import { userService } from '@/services/user.js'
 import { Controller } from '@/types/type.js'
 import { __ } from 'i18n'
@@ -13,8 +13,7 @@ export const loginController: Controller<any> = (req, res) => {
   })
 }
 
-
-export const registerController: Controller<any> = async (req, res) => {
+export const registerController: Controller<reqRegister> = async (req, res) => {
   try {
     await userService.createUser(req.body)
     return res.status(201).json({ message: __('success') })
