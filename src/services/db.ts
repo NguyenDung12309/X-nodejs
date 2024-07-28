@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { Db, MongoClient } from 'mongodb'
 import 'dotenv/config'
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@x.grxx64n.mongodb.net/?retryWrites=true&w=majority&appName=X`
@@ -15,17 +15,25 @@ export async function run() {
 
 class DatabaseService {
   private client: MongoClient
+  private db: Db
   constructor() {
     this.client = new MongoClient(uri)
+    this.db = this.client.db(`${process.env.DB_NAME}`)
   }
 
   async connect() {
     try {
-      await this.client.db('admin').command({ ping: 1 })
+      await this.db.command({ ping: 1 })
       console.log('Pinged your deployment. You successfully connected to MongoDB!')
-    } finally {
-      await this.client.close()
+    } catch (error) {
+      console.log(error);
+
+      throw error
     }
+  }
+
+  get database() {
+    return this.db
   }
 }
 

@@ -1,8 +1,8 @@
 ## users
 
 - Người dùng đăng ký nhập `name`, `email`, `day_of_birth`, `password`.
-- Sau khi đăng ký sẽ có email đính kèm `email_verify_token` để xác thực email. Mỗi user chỉ có 1 `email_verify_token` duy nhất, nếu re-send thì override cái cũ. Nếu user đã xác thực thì set `''`
-- Tương tự chức năng quên mật khẩu thì gửi mail về để reset password, sử dụng `forgot_password_token` để xác thực. Nếu user đã xác thực thì set `''`
+- Sau khi đăng ký sẽ có email đính kèm `email_verify_token` để xác thực email. Mỗi user chỉ có 1 `email_verify_token` duy nhất, nếu re-send thì override cái cũ
+- Tương tự chức năng quên mật khẩu thì gửi mail về để reset password, sử dụng `forgot_password_token` để xác thực
 - `verify` để xác thực status của account. Chưa xác thực mail, đã xác thực, bị khóa, tích xanh. Kiểu enum
 - User có thể update các thông tin sau vào profile: `bio`, `location`, `website`, `username`, `avatar`, `cover_photo`.
 - sử dụng field `created_at`, `updated_at` để biết thời gian tạo và cập nhật info. Kiểu Date
@@ -69,7 +69,7 @@ interface followers {
 - tweet có thể hiển thị cho everyone hoặc twitter circle
 - tweet có thể quy định người replay (everyone, follower, mention)
 - tweet có thể nested tweet. tạo thêm 1 `parent_id` để biết tweet này là tweet con của ai. Nếu `null` thì là tweet gốc
-- Nếu là tweet bình thường thì sẽ có `content` là string. Nếu là retweet thì không có `content` mà chỉ có `parent_id` lúc này `content` là `''`
+- Nếu là tweet bình thường thì sẽ có `content` là string. Nếu là retweet thì không có `content` mà chỉ có `parent_id`
 - `audience` đại diện tính riêng tư của tweet. Tweet có thể public cho tất cả mọi người cùng xem `Everyone` hoặc chỉ có 1 nhóm nhất đinh `TwitterCircle`
 - `type` đại diện cho loại tweet: tweet, retweet, quote tweet
 - `hashtag` là mảng chứa ObjectId của các hashTag.

@@ -1,4 +1,7 @@
+import { UserSchema } from '@/models/schemas/user.js'
+import { userService } from '@/services/user.js'
 import { Controller } from '@/types/type.js'
+import { __ } from 'i18n'
 
 export const loginController: Controller<any> = (req, res) => {
   res.json({
@@ -8,4 +11,14 @@ export const loginController: Controller<any> = (req, res) => {
       }
     ]
   })
+}
+
+
+export const registerController: Controller<any> = async (req, res) => {
+  try {
+    await userService.createUser(req.body)
+    return res.status(201).json({ message: __('success') })
+  } catch (error) {
+    return res.status(500).json({ error })
+  }
 }
