@@ -7,3 +7,10 @@ interface RequestTypes<T> extends Request {
 export type MiddleWare = (req: Request, res: Response, next: NextFunction) => void
 
 export type Controller<T> = (req: RequestTypes<T>, res: Response, next?: NextFunction) => void
+
+export enum TokenType {
+  AccessToken,
+  RefreshToken,
+  ForgotPasswordToken,
+  EmailVerifyToken
+}

@@ -15,8 +15,9 @@ export const loginController: Controller<any> = (req, res) => {
 
 export const registerController: Controller<reqRegister> = async (req, res) => {
   try {
-    await userService.createUser(req.body)
-    return res.status(201).json({ message: __('success') })
+    const result = await userService.createUser(req.body)
+
+    return res.status(201).json({ message: __('success'), ...result })
   } catch (error) {
     return res.status(500).json({ error })
   }
