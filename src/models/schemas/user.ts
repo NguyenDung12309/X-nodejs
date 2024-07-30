@@ -1,5 +1,5 @@
-import { objectAssign } from "@/helpers/utils.js"
-import { ObjectId } from "mongodb"
+import { objectAssign } from '@/helpers/utils.js'
+import { ObjectId } from 'mongodb'
 
 export class UserSchema {
   _id?: ObjectId
@@ -21,12 +21,16 @@ export class UserSchema {
 
   constructor(data: Partial<UserSchema>) {
     const date = new Date()
-    objectAssign({
-      ...data,
-      created_at: data.created_at || date,
-      updated_at: data.updated_at || date,
-      verify: data.verify || UserVerifyStatus.unverified
-    }, this);
+
+    objectAssign(
+      {
+        ...data,
+        created_at: data.created_at || date,
+        updated_at: data.updated_at || date,
+        verify: data.verify || UserVerifyStatus.unverified
+      },
+      this
+    )
   }
 }
 
