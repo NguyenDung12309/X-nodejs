@@ -1,5 +1,15 @@
 {
+  "500": "Server error",
   "success": "thành công",
-  "emailExist": "email đã tồn tại",
-  "500": "Server error"
+  "validate": {
+    "common": {
+      "require": "{{field}} là bắt buộc",
+      "stringOnly": "{{field}} phải là chuỗi",
+      "exist": "{{field}} đã tồn tại",
+      "minMax": "{{field}} ít nhất phải có {{min}} ký tự và nhiều nhất {{max}} ký tự",
+      "invalid": "{{field}} không hợp lệ",
+      "matchField": "{{field}} và {{match}} phải giống nhau",
+      "iso8601": "{{field}} phải theo định dạng ngày tháng ISO 8601"
+    }
+  }
 }

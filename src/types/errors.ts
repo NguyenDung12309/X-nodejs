@@ -7,3 +7,15 @@ export class ErrorWithStatus {
     objectAssign(data, this)
   }
 }
+
+export type JoiErrorMessages = {
+  'any.required'?: string
+  'string.base'?: string
+  'string.email'?: string
+  'string.min'?: string
+  'string.max'?: string
+  'any.only'?: string
+  'any.empty'?: string
+  'string.empty'?: string
+  'date.format'?: string
+}
