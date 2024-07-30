@@ -1,3 +1,4 @@
+import { useI18n } from '@/helpers/i18n'
 import { databaseService } from './db.js'
 import { UserSchema } from '@/models/schemas/user.js'
 import { reqRegister } from '@/models/dto/register.js'
@@ -59,7 +60,7 @@ class UserService {
         const externalMessage = message({
           external: objectToString(
             new ErrorWithStatus({
-              message: __('emailExist'),
+              message: useI18n.__('validate.common.exist', { field: 'email' }),
               statusCode: HTTP_STATUS.CONFLICT
             })
           )
