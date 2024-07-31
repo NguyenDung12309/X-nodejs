@@ -9,11 +9,11 @@
     "eslint-config-prettier",
     "prettier"
   ],
+  "env": {
+    "node": true
+  },
   "rules": {
-    "@next/next/no-css-tags": "off",
-    "react/display-name": "off",
-    "react-hooks/exhaustive-deps": "off",
-    "react-hooks/rules-of-hooks": "off",
+    "no-console": "error",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
@@ -41,7 +41,6 @@
       },
       { "blankLine": "always", "prev": "*", "next": "export" }
     ],
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

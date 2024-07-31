@@ -38,6 +38,8 @@ export const validatorMiddleWare = function (validator: keyof IValidators) {
         ;(err as any).statusCode = statusCode
 
         next(err)
+
+        return
       }
 
       next(err)

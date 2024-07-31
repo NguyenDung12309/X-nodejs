@@ -1,23 +1,8 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
-import { reqRegister } from '@/models/dto/register'
+import { reqLogin, reqRegister } from '@/models/dto/register'
 import { userService } from '@/services/user'
-import { MiddleWare } from '@/types/type.js'
 import { __ } from 'i18n'
-
-export const loginValidate: MiddleWare = (req, res, next) => {
-  const body = req.body
-
-  const { email, password } = body
-
-  if (!email || !password) {
-    return res.status(400).json({
-      error: 'Missing email or password'
-    })
-  }
-
-  next()
-}
 
 export const registerValidate = joi.object<reqRegister>({
   email: joi
@@ -31,6 +16,7 @@ export const registerValidate = joi.object<reqRegister>({
         field: 'email'
       })
     ),
+
   name: joi
     .string()
     .max(100)
@@ -68,6 +54,29 @@ export const registerValidate = joi.object<reqRegister>({
     .messages(
       getCommonMessageValidate<reqRegister>({
         field: 'date_of_birth'
+      })
+    )
+})
+
+export const loginValidate = joi.object<reqLogin>({
+  email: joi
+    .string()
+    .email()
+    .required()
+    .trim()
+    .messages(
+      getCommonMessageValidate<reqLogin>({
+        field: 'email'
+      })
+    ),
+  password: joi
+    .string()
+    .required()
+    .trim()
+    .external(userService.checkPasswordExists)
+    .messages(
+      getCommonMessageValidate<reqLogin>({
+        field: 'password'
       })
     )
 })
