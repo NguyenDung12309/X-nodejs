@@ -2,6 +2,7 @@ import { Collection, Db, MongoClient } from 'mongodb'
 import 'dotenv/config'
 import { UserSchema } from '@/models/schemas/user'
 import { DatabaseName } from '@/constraints/database'
+import { RefreshTokenSchema } from '@/models/schemas/refreshToken'
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@x.grxx64n.mongodb.net/?retryWrites=true&w=majority&appName=X`
 
@@ -28,6 +29,10 @@ class DatabaseService {
 
   get users(): Collection<UserSchema> {
     return this.db.collection(DatabaseName.USERS)
+  }
+
+  get refreshToken(): Collection<RefreshTokenSchema> {
+    return this.db.collection(DatabaseName.REFRESH_TOKEN)
   }
 }
 

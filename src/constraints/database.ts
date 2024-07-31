@@ -1,5 +1,6 @@
 export enum DatabaseName {
-  USERS = 'users'
+  USERS = 'users',
+  REFRESH_TOKEN = 'refreshToken'
 }
 
 export const accessTokenExpireTime = '15m'
