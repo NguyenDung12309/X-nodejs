@@ -10,24 +10,33 @@ import { accessTokenExpireTime, refreshTokenExpireTime } from '@/constraints/dat
 import { objectToString } from '@/helpers/utils.js'
 import { HTTP_STATUS } from '@/constraints/httpStatus.js'
 import { ErrorWithStatus } from '@/types/errors.js'
+import { CustomHelpers } from 'joi'
 
 class UserService {
-  signAccessToken(user_Id: string) {
+  constructor() {
+    this.checkEmailExists = this.checkEmailExists.bind(this)
+  }
+
+  private signAccessToken(user_id: string) {
     return signToken({
-      payload: { user_Id, tokenType: TokenType.AccessToken },
+      payload: { user_id, tokenType: TokenType.AccessToken },
       options: {
         expiresIn: accessTokenExpireTime
       }
     })
   }
 
-  signRefreshToken(user_Id: string) {
+  private signRefreshToken(user_id: string) {
     return signToken({
-      payload: { user_Id, tokenType: TokenType.RefreshToken },
+      payload: { user_id, tokenType: TokenType.RefreshToken },
       options: {
         expiresIn: refreshTokenExpireTime
       }
     })
+  }
+
+  private signAccessAndRefreshToken(user_id: string) {
+    return Promise.all([userService.signAccessToken(user_id), userService.signRefreshToken(user_id)])
   }
 
   async createUser(payload: reqRegister) {
@@ -41,10 +50,7 @@ class UserService {
 
     const user_id = result.insertedId.toString()
 
-    const [accessToken, refreshToken] = await Promise.all([
-      userService.signAccessToken(user_id),
-      userService.signRefreshToken(user_id)
-    ])
+    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id)
 
     return {
       accessToken,
@@ -52,9 +58,22 @@ class UserService {
     }
   }
 
-  async checkEmailExists(email: string, { message }: { message: any }) {
+  findEmail(email: string) {
+    return databaseService.users.findOne({ email })
+  }
+
+  async login(user_id: string) {
+    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id)
+
+    return {
+      accessToken,
+      refreshToken
+    }
+  }
+
+  async checkEmailExists(email: string, { message }: CustomHelpers) {
     try {
-      const isExistEmail = await databaseService.users.findOne({ email })
+      const isExistEmail = await this.findEmail(email)
 
       if (isExistEmail) {
         const externalMessage = message({
@@ -70,8 +89,20 @@ class UserService {
       }
 
       return true
-    } catch (error) {
-      return error
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+
+  async checkPasswordExists(password: string, helper: CustomHelpers) {
+    try {
+      const { email } = helper.state.ancestors[0]
+
+      await this.checkEmailExists(email, helper)
+
+      return true
+    } catch (error: any) {
+      throw new Error(error)
     }
   }
 }

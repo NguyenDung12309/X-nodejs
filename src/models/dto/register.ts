@@ -5,3 +5,8 @@ export interface reqRegister {
   confirm_password: string
   date_of_birth: string
 }
+
+export interface reqLogin {
+  email: string
+  password: string
+}

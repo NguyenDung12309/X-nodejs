@@ -46,14 +46,8 @@
     "source.fixAll.eslint": "explicit"
   },
   "editor.tabSize": 2,
-  "eslint.validate": ["javascript", "javascriptreact", "html", "typescriptreact"],
-  "i18n-ally.localesPaths": ["packages/admin/locales", "packages/user/locales"],
-  "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[dotenv]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
+  "eslint.validate": ["javascript", "typescript", "javascriptreact", "html", "typescriptreact"],
+  "i18n-ally.localesPaths": ["src/locales", "src/locales"],
   "files.associations": {
     "*.css": "tailwindcss",
     "*.scss": "tailwindcss"
