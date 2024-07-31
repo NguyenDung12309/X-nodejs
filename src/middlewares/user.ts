@@ -73,7 +73,7 @@ export const loginValidate = joi.object<reqLogin>({
     .string()
     .required()
     .trim()
-    .external(userService.checkPasswordExists)
+    .external(userService.checkEmailPasswordExists)
     .messages(
       getCommonMessageValidate<reqLogin>({
         field: 'password'

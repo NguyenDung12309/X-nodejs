@@ -11,10 +11,14 @@ import { objectToString } from '@/helpers/utils.js'
 import { HTTP_STATUS } from '@/constraints/httpStatus.js'
 import { ErrorWithStatus } from '@/types/errors.js'
 import { CustomHelpers } from 'joi'
+import { RefreshTokenSchema } from '@/models/schemas/refreshToken.js'
+import { ObjectId } from 'mongodb'
 
 class UserService {
+  userInfo: UserSchema
   constructor() {
     this.checkEmailExists = this.checkEmailExists.bind(this)
+    this.checkEmailPasswordExists = this.checkEmailPasswordExists.bind(this)
   }
 
   private signAccessToken(user_id: string) {
@@ -62,8 +66,13 @@ class UserService {
     return databaseService.users.findOne({ email })
   }
 
-  async login(user_id: string) {
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id)
+  async login(userId: string) {
+    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(userId)
+
+    databaseService.refreshToken.insertOne(new RefreshTokenSchema({
+      token: refreshToken,
+      user_id: new ObjectId(userId)
+    }))
 
     return {
       accessToken,
@@ -72,38 +81,46 @@ class UserService {
   }
 
   async checkEmailExists(email: string, { message }: CustomHelpers) {
-    try {
-      const isExistEmail = await this.findEmail(email)
+    const isExistEmail = await this.findEmail(email)
 
-      if (isExistEmail) {
-        const externalMessage = message({
-          external: objectToString(
-            new ErrorWithStatus({
-              message: useI18n.__('validate.common.exist', { field: 'email' }),
-              statusCode: HTTP_STATUS.CONFLICT
-            })
-          )
-        })
+    if (isExistEmail) {
+      const externalMessage = message({
+        external: objectToString(
+          new ErrorWithStatus({
+            message: useI18n.__('validate.common.exist', { field: 'email' }),
+            statusCode: HTTP_STATUS.CONFLICT
+          })
+        )
+      })
 
-        return externalMessage
-      }
-
-      return true
-    } catch (error: any) {
-      throw new Error(error)
+      return externalMessage
     }
+
+    return email
   }
 
-  async checkPasswordExists(password: string, helper: CustomHelpers) {
-    try {
-      const { email } = helper.state.ancestors[0]
+  async checkEmailPasswordExists(password: string, helper: CustomHelpers) {
+    const { email } = helper.state.ancestors[0]
 
-      await this.checkEmailExists(email, helper)
+    const userInfo = await databaseService.users.findOne({ email, password: sha256(password) })
 
-      return true
-    } catch (error: any) {
-      throw new Error(error)
+    if (!userInfo) {
+      const externalMessage = helper.message({
+        external: objectToString(
+          new ErrorWithStatus({
+            message: useI18n.__('validate.common.notCorrect', { field: 'email hoặc password' }),
+            statusCode: HTTP_STATUS.UNAUTHORIZED
+          })
+        )
+      })
+      return externalMessage
     }
+
+
+
+    this.userInfo = userInfo
+
+    return password
   }
 }
 

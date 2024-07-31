@@ -1,5 +1,5 @@
 import { loginValidate } from '@/middlewares/user.js'
-import { registerController } from '@/controllers/user.js'
+import { loginController, registerController } from '@/controllers/user.js'
 import { reqLogin, reqRegister } from '@/models/dto/register'
 import { registerValidate } from './user'
 import { ObjectSchema } from 'joi'
@@ -12,6 +12,7 @@ export interface IValidators {
 
 export interface IRequestHandler {
   registerController: Controller<reqRegister>
+  loginController: Controller<reqLogin>
 }
 
 export const validators: IValidators = {
@@ -20,5 +21,6 @@ export const validators: IValidators = {
 }
 
 export const requestHandler: IRequestHandler = {
-  registerController
+  registerController,
+  loginController
 }

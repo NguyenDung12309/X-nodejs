@@ -6,6 +6,7 @@ import { stringToObject } from './utils'
 import { HTTP_STATUS } from '@/constraints/httpStatus'
 import { JoiErrorMessages } from '@/types/errors'
 import { useI18n } from './i18n'
+import { userService } from '@/services/user'
 
 export const validatorMiddleWare = function (validator: keyof IValidators) {
   if (!has(validators, validator)) throw new Error(`'${validator}' is not exist`)
@@ -13,7 +14,6 @@ export const validatorMiddleWare = function (validator: keyof IValidators) {
   return async function (req: Request, res: Response, next: NextFunction) {
     try {
       await validators[validator].validateAsync(req.body)
-
       next()
     } catch (err) {
       if (err instanceof Joi.ValidationError) {
@@ -35,7 +35,7 @@ export const validatorMiddleWare = function (validator: keyof IValidators) {
         })
 
         err.details = mapkupErrorDetail as unknown as ValidationErrorItem[]
-        ;(err as any).statusCode = statusCode
+          ; (err as any).statusCode = statusCode
 
         next(err)
 

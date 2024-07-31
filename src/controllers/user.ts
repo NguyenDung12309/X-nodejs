@@ -3,25 +3,16 @@ import { reqLogin, reqRegister } from '@/models/dto/register'
 import { userService } from '@/services/user.js'
 import { Controller } from '@/types/type.js'
 
-export const registerController: Controller<reqRegister> = async (req, res, next) => {
-  try {
-    // throw new Error('loi roi')
-    const result = await userService.createUser(req.body)
+export const registerController: Controller<reqRegister> = async (req, res) => {
+  const result = await userService.createUser(req.body)
 
-    return res.status(201).json({ message: useI18n.__('success'), ...result })
-  } catch (error) {
-    if (next) next(error)
-  }
+  return res.status(201).json({ message: useI18n.__('success'), ...result })
 }
 
-export const loginController: Controller<reqLogin> = async (req, res, next) => {
-  const { email } = req.body
+export const loginController: Controller<reqLogin> = async (req, res) => {
+  const userInfo = userService.userInfo
+  const userId = userInfo._id?.toString() as string
+  const { accessToken, refreshToken } = await userService.login(userId)
 
-  try {
-    const userInfo = await userService.findEmail(email)
-
-    return userInfo
-  } catch (error) {
-    if (next) next(error)
-  }
+  return res.status(201).json({ message: useI18n.__('success'), accessToken, refreshToken })
 }
