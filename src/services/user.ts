@@ -1,10 +1,10 @@
 import { useI18n } from '@/helpers/i18n'
 import { databaseService } from './db.js'
 import { UserSchema } from '@/models/schemas/user.js'
-import { reqRegister } from '@/models/dto/register.js'
+import { reqRegister, resToken } from '@/models/dto/register.js'
 import { __ } from 'i18n'
 import { sha256 } from '@/helpers/crypto.js'
-import { signToken } from '@/helpers/jwt.js'
+import { signToken, verifyToken } from '@/helpers/jwt.js'
 import { TokenType } from '@/types/type.js'
 import { accessTokenExpireTime, refreshTokenExpireTime } from '@/constraints/database.js'
 import { objectToString } from '@/helpers/utils.js'
@@ -15,9 +15,8 @@ import { RefreshTokenSchema } from '@/models/schemas/refreshToken.js'
 import { ObjectId } from 'mongodb'
 
 class UserService {
-  userInfo: UserSchema
+  userInfo: UserSchema | undefined
   constructor() {
-    this.checkEmailExists = this.checkEmailExists.bind(this)
     this.checkEmailPasswordExists = this.checkEmailPasswordExists.bind(this)
   }
 
@@ -43,7 +42,7 @@ class UserService {
     return Promise.all([userService.signAccessToken(user_id), userService.signRefreshToken(user_id)])
   }
 
-  async createUser(payload: reqRegister) {
+  async createUser(payload: reqRegister): Promise<resToken> {
     const result = await databaseService.users.insertOne(
       new UserSchema({
         ...payload,
@@ -54,11 +53,11 @@ class UserService {
 
     const user_id = result.insertedId.toString()
 
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id)
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id)
 
     return {
-      accessToken,
-      refreshToken
+      access_token,
+      refresh_token
     }
   }
 
@@ -66,17 +65,19 @@ class UserService {
     return databaseService.users.findOne({ email })
   }
 
-  async login(userId: string) {
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(userId)
+  async login(user_id: string) {
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id)
 
-    databaseService.refreshToken.insertOne(new RefreshTokenSchema({
-      token: refreshToken,
-      user_id: new ObjectId(userId)
-    }))
+    databaseService.refreshToken.insertOne(
+      new RefreshTokenSchema({
+        token: refresh_token,
+        user_id: new ObjectId(user_id)
+      })
+    )
 
     return {
-      accessToken,
-      refreshToken
+      access_token,
+      refresh_token
     }
   }
 
@@ -113,14 +114,39 @@ class UserService {
           })
         )
       })
+
       return externalMessage
     }
-
-
 
     this.userInfo = userInfo
 
     return password
+  }
+
+  async verifyTRefreshToken(token: string, helper: CustomHelpers) {
+    const [decode, result] = await Promise.all([
+      verifyToken<RefreshTokenSchema>({ token: token }),
+      databaseService.refreshToken.findOne({ token })
+    ])
+
+    if (!result || !decode) {
+      const externalMessage = helper.message({
+        external: objectToString(
+          new ErrorWithStatus({
+            message: useI18n.__('validate.common.invalid', { field: 'token' }),
+            statusCode: HTTP_STATUS.UNAUTHORIZED
+          })
+        )
+      })
+
+      return externalMessage
+    }
+
+    return token
+  }
+
+  resetUserInfo() {
+    this.userInfo = undefined
   }
 }
 

@@ -8,6 +8,8 @@ userRouter.post('/login', validatorMiddleWare('loginValidate'), wrapRequestHandl
 
 userRouter.post('/register', validatorMiddleWare('registerValidate'), wrapRequestHandler('registerController'))
 
+userRouter.post('/logout', validatorMiddleWare('logoutValidate'), wrapRequestHandler('logoutController'))
+
 userRouter.get('/tweets', (req, res) => {
   res.json({
     data: [
