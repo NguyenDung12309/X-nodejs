@@ -10,3 +10,12 @@ export interface reqLogin {
   email: string
   password: string
 }
+
+export interface resToken {
+  access_token: string
+  refresh_token: string
+}
+
+export interface reqLogout {
+  refresh_token: string
+}
