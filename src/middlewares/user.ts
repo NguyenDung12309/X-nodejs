@@ -1,7 +1,9 @@
-import { reqLogout } from './../models/dto/register'
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
-import { reqLogin, reqRegister } from '@/models/dto/register'
+import { reqLogin } from '@/models/dto/users/login'
+import { reqLogout } from '@/models/dto/users/logout'
+import { reqRegister } from '@/models/dto/users/register'
+import { reqAccessToken } from '@/models/dto/users/token'
 import { userService } from '@/services/user'
 import { __ } from 'i18n'
 
@@ -90,6 +92,19 @@ export const logoutValidate = joi.object<reqLogout>({
     .external(userService.verifyTRefreshToken)
     .messages(
       getCommonMessageValidate<reqLogout>({
+        field: 'refresh_token'
+      })
+    )
+})
+
+export const refreshTokenValidate = joi.object<reqLogout>({
+  refresh_token: joi
+    .string()
+    .required()
+    .trim()
+    .external(userService.verifyTRefreshToken)
+    .messages(
+      getCommonMessageValidate<reqAccessToken>({
         field: 'refresh_token'
       })
     )
