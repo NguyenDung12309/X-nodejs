@@ -7,7 +7,13 @@ import { HTTP_STATUS } from '@/constraints/httpStatus'
 import { JoiErrorMessages } from '@/types/errors'
 import { useI18n } from './i18n'
 
-export const validatorMiddleWare = function (validator: keyof IValidators, location?: keyof Request) {
+interface TValidatorMiddleWare {
+  validator: keyof IValidators
+  location?: keyof Request
+  initStatusCode?: number
+}
+
+export const validatorMiddleWare = function ({ validator, location, initStatusCode }: TValidatorMiddleWare) {
   if (!has(validators, validator)) throw new Error(`'${validator}' is not exist`)
 
   return async function (req: Request, res: Response, next: NextFunction) {
@@ -16,7 +22,7 @@ export const validatorMiddleWare = function (validator: keyof IValidators, locat
       next()
     } catch (err) {
       if (err instanceof Joi.ValidationError) {
-        let statusCode = HTTP_STATUS.UNPROCESSABLE_ENTITY
+        let statusCode = initStatusCode || HTTP_STATUS.UNPROCESSABLE_ENTITY
 
         const mapkupErrorDetail = err.details.map((detail) => {
           if (detail.message.includes('statusCode')) {
