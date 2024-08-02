@@ -40,6 +40,7 @@ interface User {
 - JWT access token thì không cần lưu vào database
 - refresh token thì lưu vào database để tăng tính bảo mật
 - Một user có nhiều refresh token nên tạo ra 1 collection riêng để lưu refresh token
+- Khi access_token hết hạn và gọi api lấy token mới. thực hiện xóa refresh_token cũ và gửi access_token, refresh token mới
 
 ```ts
 interface RefreshToken {

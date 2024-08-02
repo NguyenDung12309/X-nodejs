@@ -1,7 +1,6 @@
 import { useI18n } from '@/helpers/i18n'
 import { databaseService } from './db.js'
 import { UserSchema } from '@/models/schemas/user.js'
-import { reqRegister, resToken } from '@/models/dto/register.js'
 import { __ } from 'i18n'
 import { sha256 } from '@/helpers/crypto.js'
 import { signToken, verifyToken } from '@/helpers/jwt.js'
@@ -13,16 +12,24 @@ import { ErrorWithStatus } from '@/types/errors.js'
 import { CustomHelpers } from 'joi'
 import { RefreshTokenSchema } from '@/models/schemas/refreshToken.js'
 import { ObjectId } from 'mongodb'
+import { reqRegister } from '@/models/dto/users/register.js'
+import { resToken } from '@/models/dto/users/token.js'
+import { ENV_CONST } from '@/constraints/common.js'
 
 class UserService {
   userInfo: UserSchema | undefined
+  refreshTokenInfo: RefreshTokenSchema | undefined
+
   constructor() {
+    this.verifyTRefreshToken = this.verifyTRefreshToken.bind(this)
+    this.checkEmailExists = this.checkEmailExists.bind(this)
     this.checkEmailPasswordExists = this.checkEmailPasswordExists.bind(this)
   }
 
   private signAccessToken(user_id: string) {
     return signToken({
       payload: { user_id, tokenType: TokenType.AccessToken },
+      privateKey: ENV_CONST.accessKey || '',
       options: {
         expiresIn: accessTokenExpireTime
       }
@@ -32,6 +39,7 @@ class UserService {
   private signRefreshToken(user_id: string) {
     return signToken({
       payload: { user_id, tokenType: TokenType.RefreshToken },
+      privateKey: ENV_CONST.refreshKey || '',
       options: {
         expiresIn: refreshTokenExpireTime
       }
@@ -61,11 +69,17 @@ class UserService {
     }
   }
 
-  findEmail(email: string) {
-    return databaseService.users.findOne({ email })
+  async findUser(data: Partial<UserSchema>) {
+    const result = await databaseService.users.findOne(data)
+
+    if (result) {
+      this.userInfo = result
+    }
+
+    return result
   }
 
-  async login(user_id: string) {
+  async getAccessAndRefreshToken(user_id: string) {
     const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id)
 
     databaseService.refreshToken.insertOne(
@@ -82,7 +96,7 @@ class UserService {
   }
 
   async checkEmailExists(email: string, { message }: CustomHelpers) {
-    const isExistEmail = await this.findEmail(email)
+    const isExistEmail = await this.findUser({ email })
 
     if (isExistEmail) {
       const externalMessage = message({
@@ -103,7 +117,7 @@ class UserService {
   async checkEmailPasswordExists(password: string, helper: CustomHelpers) {
     const { email } = helper.state.ancestors[0]
 
-    const userInfo = await databaseService.users.findOne({ email, password: sha256(password) })
+    const userInfo = await this.findUser({ email, password: sha256(password) })
 
     if (!userInfo) {
       const externalMessage = helper.message({
@@ -118,15 +132,13 @@ class UserService {
       return externalMessage
     }
 
-    this.userInfo = userInfo
-
     return password
   }
 
   async verifyTRefreshToken(token: string, helper: CustomHelpers) {
     const [decode, result] = await Promise.all([
-      verifyToken<RefreshTokenSchema>({ token: token }),
-      databaseService.refreshToken.findOne({ token })
+      verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.refreshKey || '' }),
+      databaseService.refreshToken.findOne({ token: token.split(' ')[1] })
     ])
 
     if (!result || !decode) {
@@ -142,11 +154,17 @@ class UserService {
       return externalMessage
     }
 
+    this.refreshTokenInfo = result
+
     return token
   }
 
   resetUserInfo() {
     this.userInfo = undefined
+  }
+
+  resetRefreshToken() {
+    this.refreshTokenInfo = undefined
   }
 }
 

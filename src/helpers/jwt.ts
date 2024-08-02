@@ -9,11 +9,11 @@ const optional: SignOptions = {
 
 export const signToken = ({
   payload,
-  privateKey = process.env.SECRET_KEY as string,
+  privateKey,
   options
 }: {
   payload: string | object
-  privateKey?: string
+  privateKey: string
   options?: SignOptions
 }) => {
   return new Promise<string>((resolve, reject) => {
@@ -26,13 +26,7 @@ export const signToken = ({
   })
 }
 
-export const verifyToken = <T>({
-  token,
-  privateKey = process.env.SECRET_KEY as string
-}: {
-  token: string
-  privateKey?: string
-}) => {
+export const verifyToken = <T>({ token, privateKey }: { token: string; privateKey: string }) => {
   return new Promise<T>((resolve, reject) => {
     const newToken = token.split(' ')[1]
 

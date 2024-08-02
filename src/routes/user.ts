@@ -10,6 +10,12 @@ userRouter.post('/register', validatorMiddleWare('registerValidate'), wrapReques
 
 userRouter.post('/logout', validatorMiddleWare('logoutValidate'), wrapRequestHandler('logoutController'))
 
+userRouter.post(
+  '/refresh-token',
+  validatorMiddleWare('refreshTokenValidate'),
+  wrapRequestHandler('getNewAccessTokenController')
+)
+
 userRouter.get('/tweets', (req, res) => {
   res.json({
     data: [
