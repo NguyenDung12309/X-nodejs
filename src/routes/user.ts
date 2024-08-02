@@ -1,18 +1,27 @@
+import { HTTP_STATUS } from '@/constraints/httpStatus'
 import { wrapRequestHandler } from '@/helpers/handler'
 import { validatorMiddleWare } from '@/helpers/validate'
 import express from 'express'
 
 const userRouter = express.Router()
 
-userRouter.post('/login', validatorMiddleWare('loginValidate'), wrapRequestHandler('loginController'))
+userRouter.post('/login', validatorMiddleWare({ validator: 'loginValidate' }), wrapRequestHandler('loginController'))
 
-userRouter.post('/register', validatorMiddleWare('registerValidate'), wrapRequestHandler('registerController'))
+userRouter.post(
+  '/register',
+  validatorMiddleWare({ validator: 'registerValidate' }),
+  wrapRequestHandler('registerController')
+)
 
-userRouter.post('/logout', validatorMiddleWare('logoutValidate'), wrapRequestHandler('logoutController'))
+userRouter.post(
+  '/logout',
+  validatorMiddleWare({ validator: 'logoutValidate', initStatusCode: HTTP_STATUS.UNAUTHORIZED }),
+  wrapRequestHandler('logoutController')
+)
 
 userRouter.post(
   '/refresh-token',
-  validatorMiddleWare('refreshTokenValidate'),
+  validatorMiddleWare({ validator: 'refreshTokenValidate', initStatusCode: HTTP_STATUS.UNAUTHORIZED }),
   wrapRequestHandler('getNewAccessTokenController')
 )
 
