@@ -1,10 +1,17 @@
 import { reqLogin } from '@/models/dto/users/login'
 import { reqLogout } from '@/models/dto/users/logout'
 import { reqRegister } from '@/models/dto/users/register'
-import { reqAccessToken, reqVerifyEmail } from '@/models/dto/users/token'
+import { reqAccessToken, reqResendMailToken, reqVerifyEmail } from '@/models/dto/users/token'
 import { Controller } from '@/types/type'
 import { ObjectSchema } from 'joi'
-import { registerValidate, loginValidate, logoutValidate, refreshTokenValidate, verifyEmailValidate } from './validates'
+import {
+  registerValidate,
+  loginValidate,
+  logoutValidate,
+  refreshTokenValidate,
+  verifyEmailValidate,
+  accessTokenValidate
+} from './validates'
 import {
   registerController,
   loginController,
@@ -12,6 +19,7 @@ import {
   getNewAccessTokenController,
   verifyEmailController
 } from '@/controllers'
+import { resendMailTokenController } from '@/controllers/users/token'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -19,6 +27,7 @@ export interface IValidators {
   logoutValidate: ObjectSchema<reqLogout>
   refreshTokenValidate: ObjectSchema<reqAccessToken>
   verifyEmailValidate: ObjectSchema<reqVerifyEmail>
+  accessTokenValidate: ObjectSchema<reqResendMailToken>
 }
 
 export interface IRequestHandler {
@@ -27,6 +36,7 @@ export interface IRequestHandler {
   logoutController: Controller<reqLogout>
   getNewAccessTokenController: Controller<reqAccessToken>
   verifyEmailController: Controller<reqVerifyEmail>
+  resendMailTokenController: Controller<reqResendMailToken>
 }
 
 export const validators: IValidators = {
@@ -34,7 +44,8 @@ export const validators: IValidators = {
   loginValidate,
   logoutValidate,
   refreshTokenValidate,
-  verifyEmailValidate
+  verifyEmailValidate,
+  accessTokenValidate
 }
 
 export const requestHandler: IRequestHandler = {
@@ -42,5 +53,6 @@ export const requestHandler: IRequestHandler = {
   loginController,
   logoutController,
   getNewAccessTokenController,
-  verifyEmailController
+  verifyEmailController,
+  resendMailTokenController
 }

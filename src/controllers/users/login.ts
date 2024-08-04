@@ -12,5 +12,10 @@ export const loginController: Controller<reqLogin> = async (req, res) => {
   const userId = userInfo._id?.toString() as string
   const result = await userService.getAccessAndRefreshToken(userId)
 
-  return handleResponseSuccess<resToken>(res, { data: result })
+  return handleResponseSuccess<resToken>(res, {
+    data: {
+      access_token: result.accessToken,
+      refresh_token: result.refreshToken
+    }
+  })
 }
