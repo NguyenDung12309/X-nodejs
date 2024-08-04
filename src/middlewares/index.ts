@@ -1,22 +1,24 @@
-import { loginValidate, logoutValidate, refreshTokenValidate } from '@/middlewares/user.js'
-
-import { registerValidate } from './user'
-import { ObjectSchema } from 'joi'
-import { Controller } from '@/types/type'
-import { reqRegister } from '@/models/dto/users/register'
 import { reqLogin } from '@/models/dto/users/login'
 import { reqLogout } from '@/models/dto/users/logout'
-import { reqAccessToken } from '@/models/dto/users/token'
-import { registerController } from '@/controllers/users/register'
-import { loginController } from '@/controllers/users/login'
-import { logoutController } from '@/controllers/users/logout'
-import { getNewAccessTokenController } from '@/controllers/users/token'
+import { reqRegister } from '@/models/dto/users/register'
+import { reqAccessToken, reqVerifyEmail } from '@/models/dto/users/token'
+import { Controller } from '@/types/type'
+import { ObjectSchema } from 'joi'
+import { registerValidate, loginValidate, logoutValidate, refreshTokenValidate, verifyEmailValidate } from './validates'
+import {
+  registerController,
+  loginController,
+  logoutController,
+  getNewAccessTokenController,
+  verifyEmailController
+} from '@/controllers'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
   loginValidate: ObjectSchema<reqLogin>
   logoutValidate: ObjectSchema<reqLogout>
   refreshTokenValidate: ObjectSchema<reqAccessToken>
+  verifyEmailValidate: ObjectSchema<reqVerifyEmail>
 }
 
 export interface IRequestHandler {
@@ -24,18 +26,21 @@ export interface IRequestHandler {
   loginController: Controller<reqLogin>
   logoutController: Controller<reqLogout>
   getNewAccessTokenController: Controller<reqAccessToken>
+  verifyEmailController: Controller<reqVerifyEmail>
 }
 
 export const validators: IValidators = {
   registerValidate,
   loginValidate,
   logoutValidate,
-  refreshTokenValidate
+  refreshTokenValidate,
+  verifyEmailValidate
 }
 
 export const requestHandler: IRequestHandler = {
   registerController,
   loginController,
   logoutController,
-  getNewAccessTokenController
+  getNewAccessTokenController,
+  verifyEmailController
 }

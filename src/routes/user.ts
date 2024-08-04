@@ -25,6 +25,12 @@ userRouter.post(
   wrapRequestHandler('getNewAccessTokenController')
 )
 
+userRouter.post(
+  '/verify-email',
+  validatorMiddleWare({ validator: 'verifyEmailValidate', initStatusCode: HTTP_STATUS.BAD_REQUEST }),
+  wrapRequestHandler('verifyEmailController')
+)
+
 userRouter.get('/tweets', (req, res) => {
   res.json({
     data: [

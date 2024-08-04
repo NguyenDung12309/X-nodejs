@@ -1,11 +1,7 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
-import { reqLogin } from '@/models/dto/users/login'
-import { reqLogout } from '@/models/dto/users/logout'
 import { reqRegister } from '@/models/dto/users/register'
-import { reqAccessToken } from '@/models/dto/users/token'
 import { userService } from '@/services/user'
-import { __ } from 'i18n'
 
 export const registerValidate = joi.object<reqRegister>({
   email: joi
@@ -57,55 +53,6 @@ export const registerValidate = joi.object<reqRegister>({
     .messages(
       getCommonMessageValidate<reqRegister>({
         field: 'date_of_birth'
-      })
-    )
-})
-
-export const loginValidate = joi.object<reqLogin>({
-  email: joi
-    .string()
-    .email()
-    .required()
-    .trim()
-    .messages(
-      getCommonMessageValidate<reqLogin>({
-        field: 'email'
-      })
-    ),
-  password: joi
-    .string()
-    .required()
-    .trim()
-    .external(userService.checkEmailPasswordExists)
-    .messages(
-      getCommonMessageValidate<reqLogin>({
-        field: 'password'
-      })
-    )
-})
-
-export const logoutValidate = joi.object<reqLogout>({
-  refresh_token: joi
-    .string()
-    .required()
-    .trim()
-    .external(userService.verifyTRefreshToken)
-    .messages(
-      getCommonMessageValidate<reqLogout>({
-        field: 'refresh_token'
-      })
-    )
-})
-
-export const refreshTokenValidate = joi.object<reqLogout>({
-  refresh_token: joi
-    .string()
-    .required()
-    .trim()
-    .external(userService.verifyTRefreshToken)
-    .messages(
-      getCommonMessageValidate<reqAccessToken>({
-        field: 'refresh_token'
       })
     )
 })
