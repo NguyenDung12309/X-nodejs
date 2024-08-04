@@ -37,6 +37,18 @@ userRouter.post(
   wrapRequestHandler('resendMailTokenController')
 )
 
+userRouter.post(
+  '/resend-verify-email',
+  validatorMiddleWare({ validator: 'forgotPasswordTokenValidate' }),
+  wrapRequestHandler('resendMailTokenController')
+)
+
+userRouter.post(
+  '/verify-forgot-password',
+  validatorMiddleWare({ validator: 'forgotPasswordTokenValidate' }),
+  wrapRequestHandler('verifyForgotPasswordTokenController')
+)
+
 userRouter.get('/tweets', (req, res) => {
   res.json({
     data: [

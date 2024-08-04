@@ -14,11 +14,17 @@ export const wrapRequestHandler = (controller: keyof IRequestHandler) => {
   }
 }
 
-export const handleResponseSuccess = <T>(res: Response, responseValue: ResponseDto<T>) => {
-  const { message, data } = responseValue
+export const handleResponseSuccess = <T>(res: Response, responseValue?: Partial<ResponseDto<T>>) => {
+  const message = responseValue?.message
+
+  if (responseValue?.data) {
+    return res.status(HTTP_STATUS.OK).json({
+      message: message || useI18n.__('success'),
+      data: responseValue.data
+    })
+  }
 
   return res.status(HTTP_STATUS.OK).json({
-    message: message || useI18n.__('success'),
-    data
+    message: message || useI18n.__('success')
   })
 }

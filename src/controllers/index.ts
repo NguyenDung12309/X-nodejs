@@ -1,6 +1,14 @@
+import { verifyForgotPasswordTokenController } from './users/forgotPassword'
 import { loginController } from './users/login'
 import { logoutController } from './users/logout'
 import { registerController } from './users/register'
 import { getNewAccessTokenController, verifyEmailController } from './users/token'
 
-export { loginController, registerController, logoutController, getNewAccessTokenController, verifyEmailController }
+export {
+  loginController,
+  registerController,
+  logoutController,
+  getNewAccessTokenController,
+  verifyEmailController,
+  verifyForgotPasswordTokenController
+}

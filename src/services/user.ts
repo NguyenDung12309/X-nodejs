@@ -252,6 +252,29 @@ class UserService {
     return token
   }
 
+  async verifyForgotPasswordToken(token: string, helper: CustomHelpers) {
+    const decode = await verifyToken<RefreshTokenSchema>({
+      token: token,
+      privateKey: ENV_CONST.forgotPasswordKey || ''
+    })
+    const result = await this.findUser({ _id: new ObjectId(decode.user_id) })
+
+    if (!result || result.forgot_password_token !== token) {
+      const externalMessage = helper.message({
+        external: objectToString(
+          new ErrorWithStatus({
+            message: useI18n.__('validate.common.invalid', { field: 'token' }),
+            statusCode: HTTP_STATUS.UNAUTHORIZED
+          })
+        )
+      })
+
+      return externalMessage
+    }
+
+    return token
+  }
+
   resetUserInfo() {
     this.userInfo = undefined
   }
