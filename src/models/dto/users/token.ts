@@ -18,3 +18,7 @@ export interface reqResendMailToken {
 export interface resRessendMailToken {
   email_verify_token: string
 }
+
+export interface reqVerifyForgotPasswordToken {
+  forgot_password_token: string
+}
