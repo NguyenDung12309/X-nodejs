@@ -16,3 +16,9 @@ export enum TokenType {
   ForgotPasswordToken,
   EmailVerifyToken
 }
+
+export enum UserVerifyStatus {
+  unverified,
+  verified,
+  banned
+}

@@ -5,4 +5,6 @@ export enum DatabaseName {
 
 export const accessTokenExpireTime = '15m'
 
+export const emailExpireTime = '30m'
+
 export const refreshTokenExpireTime = '100d'
