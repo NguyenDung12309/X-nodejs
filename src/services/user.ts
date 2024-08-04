@@ -13,7 +13,6 @@ import { CustomHelpers } from 'joi'
 import { RefreshTokenSchema } from '@/models/schemas/refreshToken.js'
 import { ObjectId } from 'mongodb'
 import { reqRegister } from '@/models/dto/users/register.js'
-import { resToken } from '@/models/dto/users/token.js'
 import { ENV_CONST } from '@/constraints/common.js'
 
 class UserService {
@@ -25,11 +24,12 @@ class UserService {
     this.checkEmailExists = this.checkEmailExists.bind(this)
     this.checkEmailPasswordExists = this.checkEmailPasswordExists.bind(this)
     this.verifyEmailToken = this.verifyEmailToken.bind(this)
+    this.checkUserVerifyEmail = this.checkUserVerifyEmail.bind(this)
   }
 
-  private signAccessToken(user_id: string) {
+  signAccessToken(userId: string) {
     return signToken({
-      payload: { user_id, tokenType: TokenType.AccessToken },
+      payload: { user_id: userId, tokenType: TokenType.AccessToken },
       privateKey: ENV_CONST.accessKey || '',
       options: {
         expiresIn: accessTokenExpireTime
@@ -37,9 +37,9 @@ class UserService {
     })
   }
 
-  private signRefreshToken(user_id: string) {
+  signRefreshToken(userId: string) {
     return signToken({
-      payload: { user_id, tokenType: TokenType.RefreshToken },
+      payload: { user_id: userId, tokenType: TokenType.RefreshToken },
       privateKey: ENV_CONST.refreshKey || '',
       options: {
         expiresIn: refreshTokenExpireTime
@@ -47,9 +47,9 @@ class UserService {
     })
   }
 
-  private signEmailVerifyToken(user_id: string) {
+  signEmailVerifyToken(userId: string) {
     return signToken({
-      payload: { user_id, tokenType: TokenType.EmailVerifyToken },
+      payload: { user_id: userId, tokenType: TokenType.EmailVerifyToken },
       privateKey: ENV_CONST.verifyEmailKey || '',
       options: {
         expiresIn: emailExpireTime
@@ -57,11 +57,11 @@ class UserService {
     })
   }
 
-  private signAccessAndRefreshToken(user_id: string) {
-    return Promise.all([userService.signAccessToken(user_id), userService.signRefreshToken(user_id)])
+  signAccessAndRefreshToken(userId: string) {
+    return Promise.all([userService.signAccessToken(userId), userService.signRefreshToken(userId)])
   }
 
-  async createUser(payload: reqRegister): Promise<resToken> {
+  async createUser(payload: reqRegister) {
     const userId = new ObjectId().toString()
     const token = await this.signEmailVerifyToken(userId)
 
@@ -78,11 +78,11 @@ class UserService {
 
     const user_id = result.insertedId.toString()
 
-    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id)
+    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id)
 
     return {
-      access_token,
-      refresh_token
+      accessToken,
+      refreshToken
     }
   }
 
@@ -96,19 +96,19 @@ class UserService {
     return result
   }
 
-  async getAccessAndRefreshToken(user_id: string) {
-    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id)
+  async getAccessAndRefreshToken(userId: string) {
+    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(userId)
 
     databaseService.refreshToken.insertOne(
       new RefreshTokenSchema({
-        token: refresh_token,
-        user_id: new ObjectId(user_id)
+        token: refreshToken,
+        user_id: new ObjectId(userId)
       })
     )
 
     return {
-      access_token,
-      refresh_token
+      accessToken,
+      refreshToken
     }
   }
 
@@ -207,6 +207,47 @@ class UserService {
     }
 
     this.userInfo = result
+
+    return token
+  }
+
+  async verifyAcessToken(token: string, helper: CustomHelpers) {
+    const decode = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.accessKey || '' })
+    const result = await this.findUser({ _id: new ObjectId(decode.user_id) })
+
+    if (!result || !decode) {
+      const externalMessage = helper.message({
+        external: objectToString(
+          new ErrorWithStatus({
+            message: useI18n.__('validate.common.invalid', { field: 'token' }),
+            statusCode: HTTP_STATUS.UNAUTHORIZED
+          })
+        )
+      })
+
+      return externalMessage
+    }
+
+    this.userInfo = result
+
+    return token
+  }
+
+  async checkUserVerifyEmail(token: string, helper: CustomHelpers) {
+    await this.verifyAcessToken(token, helper)
+
+    if (this.userInfo?.verify === UserVerifyStatus.verified) {
+      const externalMessage = helper.message({
+        external: objectToString(
+          new ErrorWithStatus({
+            message: useI18n.__('validate.common.emailVerify'),
+            statusCode: HTTP_STATUS.BAD_REQUEST
+          })
+        )
+      })
+
+      return externalMessage
+    }
 
     return token
   }

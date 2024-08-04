@@ -31,6 +31,12 @@ userRouter.post(
   wrapRequestHandler('verifyEmailController')
 )
 
+userRouter.post(
+  '/resend-verify-email',
+  validatorMiddleWare({ validator: 'accessTokenValidate', location: 'headers' }),
+  wrapRequestHandler('resendMailTokenController')
+)
+
 userRouter.get('/tweets', (req, res) => {
   res.json({
     data: [

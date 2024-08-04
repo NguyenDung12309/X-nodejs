@@ -1,21 +1,20 @@
-import { HTTP_STATUS } from '@/constraints/httpStatus'
 import { handleResponseSuccess } from '@/helpers/handler'
-import { useI18n } from '@/helpers/i18n'
-import { reqAccessToken, reqVerifyEmail, resToken } from '@/models/dto/users/token'
+import {
+  reqAccessToken,
+  reqResendMailToken,
+  reqVerifyEmail,
+  resRessendMailToken,
+  resToken
+} from '@/models/dto/users/token'
+import { UserSchema } from '@/models/schemas/user'
 import { databaseService } from '@/services/db'
 import { userService } from '@/services/user'
-import { ErrorWithStatus } from '@/types/errors'
 import { Controller, UserVerifyStatus } from '@/types/type'
+import { ObjectId } from 'mongodb'
 
 export const getNewAccessTokenController: Controller<reqAccessToken> = async (req, res) => {
-  const user_id = userService.refreshTokenInfo?.user_id
+  const user_id = userService.refreshTokenInfo?.user_id as ObjectId
 
-  if (!user_id) {
-    throw new ErrorWithStatus({
-      message: useI18n.__('validate.common.notCorrect', { field: 'user_id' }),
-      statusCode: HTTP_STATUS.UNAUTHORIZED
-    })
-  }
   const token = req.body.refresh_token.split(' ')[1]
 
   const [_, result] = await Promise.all([
@@ -24,19 +23,15 @@ export const getNewAccessTokenController: Controller<reqAccessToken> = async (re
   ])
 
   return handleResponseSuccess<resToken>(res, {
-    data: result
+    data: {
+      access_token: result.accessToken,
+      refresh_token: result.refreshToken
+    }
   })
 }
 
 export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res) => {
-  const userInfo = userService.userInfo
-
-  if (!userInfo || !userInfo._id) {
-    throw new ErrorWithStatus({
-      message: useI18n.__('validate.common.notCorrect', { field: 'user_id' }),
-      statusCode: HTTP_STATUS.UNAUTHORIZED
-    })
-  }
+  const userInfo = userService.userInfo as UserSchema
 
   const [_, token] = await Promise.all([
     databaseService.users.updateOne(
@@ -46,17 +41,47 @@ export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res
       {
         $set: {
           email_verify_token: '',
-          updated_at: new Date(),
           verify: UserVerifyStatus.verified
+        },
+        $currentDate: {
+          updated_at: true
         }
       }
     ),
-    userService.getAccessAndRefreshToken(userInfo?._id.toString())
+    userService.getAccessAndRefreshToken((userInfo?._id as ObjectId).toString())
   ])
 
   return handleResponseSuccess<resToken>(res, {
     data: {
-      ...token
+      access_token: token.accessToken,
+      refresh_token: token.refreshToken
+    }
+  })
+}
+
+export const resendMailTokenController: Controller<reqResendMailToken> = async (req, res) => {
+  const userInfo = userService.userInfo as UserSchema
+
+  const newVerifyToken = await userService.signEmailVerifyToken((userInfo?._id as ObjectId).toString())
+
+  await databaseService.users.updateOne(
+    {
+      _id: userInfo?._id
+    },
+    {
+      $set: {
+        email_verify_token: newVerifyToken,
+        verify: UserVerifyStatus.unverified
+      },
+      $currentDate: {
+        updated_at: true
+      }
+    }
+  )
+
+  return handleResponseSuccess<resRessendMailToken>(res, {
+    data: {
+      email_verify_token: newVerifyToken
     }
   })
 }
