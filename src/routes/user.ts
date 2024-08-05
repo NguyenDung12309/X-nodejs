@@ -33,19 +33,23 @@ userRouter.post(
 
 userRouter.post(
   '/resend-verify-email',
-  validatorMiddleWare({ validator: 'accessTokenValidate', location: 'headers' }),
+  validatorMiddleWare({
+    validator: 'accessTokenValidate',
+    location: 'headers',
+    initStatusCode: HTTP_STATUS.UNAUTHORIZED
+  }),
   wrapRequestHandler('resendMailTokenController')
 )
 
 userRouter.post(
-  '/resend-verify-email',
-  validatorMiddleWare({ validator: 'forgotPasswordTokenValidate' }),
-  wrapRequestHandler('resendMailTokenController')
+  '/forgot-password',
+  validatorMiddleWare({ validator: 'forgotPasswordValidate', initStatusCode: HTTP_STATUS.BAD_REQUEST }),
+  wrapRequestHandler('forgotPasswordController')
 )
 
 userRouter.post(
   '/verify-forgot-password',
-  validatorMiddleWare({ validator: 'forgotPasswordTokenValidate' }),
+  validatorMiddleWare({ validator: 'forgotPasswordTokenValidate', initStatusCode: HTTP_STATUS.UNAUTHORIZED }),
   wrapRequestHandler('verifyForgotPasswordTokenController')
 )
 
