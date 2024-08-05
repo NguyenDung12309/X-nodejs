@@ -11,7 +11,7 @@ export interface reqVerifyEmail {
   email_verify_token: string
 }
 
-export interface reqResendMailToken {
+export interface reqAuthorization {
   authorization: string
 }
 

@@ -3,7 +3,7 @@ import { reqLogout } from '@/models/dto/users/logout'
 import { reqRegister } from '@/models/dto/users/register'
 import {
   reqAccessToken,
-  reqResendMailToken,
+  reqAuthorization,
   reqVerifyEmail,
   reqVerifyForgotPasswordToken
 } from '@/models/dto/users/token'
@@ -15,9 +15,10 @@ import {
   logoutValidate,
   refreshTokenValidate,
   verifyEmailValidate,
-  accessTokenValidate,
+  resendVerifyEmailValidate,
   forgotPasswordTokenValidate,
-  forgotPasswordValidate
+  forgotPasswordValidate,
+  accessTokenValidate
 } from './validates'
 import {
   registerController,
@@ -30,6 +31,7 @@ import {
 import { resendMailTokenController } from '@/controllers/users/token'
 import { reqForgotPassword } from '@/models/dto/users/forgotPassword'
 import { forgotPasswordController } from '@/controllers/users/forgotPassword'
+import { getMeController } from '@/controllers/users/me'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -37,9 +39,10 @@ export interface IValidators {
   logoutValidate: ObjectSchema<reqLogout>
   refreshTokenValidate: ObjectSchema<reqAccessToken>
   verifyEmailValidate: ObjectSchema<reqVerifyEmail>
-  accessTokenValidate: ObjectSchema<reqResendMailToken>
+  resendVerifyEmailValidate: ObjectSchema<reqAuthorization>
   forgotPasswordTokenValidate: ObjectSchema<reqVerifyForgotPasswordToken>
   forgotPasswordValidate: ObjectSchema<reqForgotPassword>
+  accessTokenValidate: ObjectSchema<reqAuthorization>
 }
 
 export interface IRequestHandler {
@@ -48,9 +51,10 @@ export interface IRequestHandler {
   logoutController: Controller<reqLogout>
   getNewAccessTokenController: Controller<reqAccessToken>
   verifyEmailController: Controller<reqVerifyEmail>
-  resendMailTokenController: Controller<reqResendMailToken>
+  resendMailTokenController: Controller<reqAuthorization>
   verifyForgotPasswordTokenController: Controller<reqVerifyForgotPasswordToken>
   forgotPasswordController: Controller<reqForgotPassword>
+  getMeController: Controller<reqAuthorization>
 }
 
 export const validators: IValidators = {
@@ -59,9 +63,10 @@ export const validators: IValidators = {
   logoutValidate,
   refreshTokenValidate,
   verifyEmailValidate,
-  accessTokenValidate,
+  resendVerifyEmailValidate,
   forgotPasswordTokenValidate,
-  forgotPasswordValidate
+  forgotPasswordValidate,
+  accessTokenValidate
 }
 
 export const requestHandler: IRequestHandler = {
@@ -72,5 +77,6 @@ export const requestHandler: IRequestHandler = {
   verifyEmailController,
   resendMailTokenController,
   verifyForgotPasswordTokenController,
-  forgotPasswordController
+  forgotPasswordController,
+  getMeController
 }

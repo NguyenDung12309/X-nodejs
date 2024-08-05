@@ -1,7 +1,7 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
 import { reqLogout } from '@/models/dto/users/logout'
-import { reqAccessToken, reqResendMailToken } from '@/models/dto/users/token'
+import { reqAccessToken, reqAuthorization } from '@/models/dto/users/token'
 import { userService } from '@/services/user'
 
 export const refreshTokenValidate = joi.object<reqLogout>({
@@ -17,14 +17,14 @@ export const refreshTokenValidate = joi.object<reqLogout>({
     )
 })
 
-export const accessTokenValidate = joi.object<reqResendMailToken>({
+export const accessTokenValidate = joi.object<reqAuthorization>({
   authorization: joi
     .string()
     .required()
     .trim()
-    .external(userService.checkUserVerifyEmail)
+    .external(userService.verifyAccessToken)
     .messages(
-      getCommonMessageValidate<reqResendMailToken>({
+      getCommonMessageValidate<reqAuthorization>({
         field: 'authorization'
       })
     )

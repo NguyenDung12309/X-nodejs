@@ -32,6 +32,7 @@ class UserService {
     this.checkUserVerifyEmail = this.checkUserVerifyEmail.bind(this)
     this.checkEmailNotExists = this.checkEmailNotExists.bind(this)
     this.verifyForgotPasswordToken = this.verifyForgotPasswordToken.bind(this)
+    this.verifyAccessToken = this.verifyAccessToken.bind(this)
   }
 
   signAccessToken(userId: string) {
@@ -249,7 +250,7 @@ class UserService {
     return token
   }
 
-  async verifyAcessToken(token: string, helper: CustomHelpers) {
+  async verifyAccessToken(token: string, helper: CustomHelpers) {
     const decode = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.accessKey || '' })
     const result = await this.findUser({ _id: new ObjectId(decode.user_id) })
 
@@ -272,7 +273,7 @@ class UserService {
   }
 
   async checkUserVerifyEmail(token: string, helper: CustomHelpers) {
-    await this.verifyAcessToken(token, helper)
+    await this.verifyAccessToken(token, helper)
 
     if (this.userInfo?.verify === UserVerifyStatus.verified) {
       const externalMessage = helper.message({
