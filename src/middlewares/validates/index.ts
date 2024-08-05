@@ -3,7 +3,7 @@ import { refreshTokenValidate, accessTokenValidate } from './user/token'
 import { logoutValidate } from './user/logout'
 import { registerValidate } from './user/register'
 import { loginValidate } from './user/login'
-import { forgotPasswordTokenValidate } from './user/forgotPassword'
+import { forgotPasswordTokenValidate, forgotPasswordValidate } from './user/forgotPassword'
 
 export {
   loginValidate,
@@ -12,5 +12,6 @@ export {
   refreshTokenValidate,
   verifyEmailValidate,
   accessTokenValidate,
-  forgotPasswordTokenValidate
+  forgotPasswordTokenValidate,
+  forgotPasswordValidate
 }

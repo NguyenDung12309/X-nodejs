@@ -5,7 +5,12 @@ import { __ } from 'i18n'
 import { sha256 } from '@/helpers/crypto.js'
 import { signToken, verifyToken } from '@/helpers/jwt.js'
 import { TokenType, UserVerifyStatus } from '@/types/type.js'
-import { accessTokenExpireTime, emailExpireTime, refreshTokenExpireTime } from '@/constraints/database.js'
+import {
+  accessTokenExpireTime,
+  emailExpireTime,
+  forgotPasswordExpireTime,
+  refreshTokenExpireTime
+} from '@/constraints/database.js'
 import { objectToString } from '@/helpers/utils.js'
 import { HTTP_STATUS } from '@/constraints/httpStatus.js'
 import { ErrorWithStatus } from '@/types/errors.js'
@@ -25,6 +30,8 @@ class UserService {
     this.checkEmailPasswordExists = this.checkEmailPasswordExists.bind(this)
     this.verifyEmailToken = this.verifyEmailToken.bind(this)
     this.checkUserVerifyEmail = this.checkUserVerifyEmail.bind(this)
+    this.checkEmailNotExists = this.checkEmailNotExists.bind(this)
+    this.verifyForgotPasswordToken = this.verifyForgotPasswordToken.bind(this)
   }
 
   signAccessToken(userId: string) {
@@ -53,6 +60,16 @@ class UserService {
       privateKey: ENV_CONST.verifyEmailKey || '',
       options: {
         expiresIn: emailExpireTime
+      }
+    })
+  }
+
+  signForgotPasswordToken(userId: string) {
+    return signToken({
+      payload: { user_id: userId, tokenType: TokenType.ForgotPasswordToken },
+      privateKey: ENV_CONST.forgotPasswordKey || '',
+      options: {
+        expiresIn: forgotPasswordExpireTime
       }
     })
   }
@@ -127,6 +144,27 @@ class UserService {
 
       return externalMessage
     }
+
+    return email
+  }
+
+  async checkEmailNotExists(email: string, helper: CustomHelpers) {
+    const isExistEmail = await this.findUser({ email })
+
+    if (!isExistEmail) {
+      const externalMessage = helper.message({
+        external: objectToString(
+          new ErrorWithStatus({
+            message: useI18n.__('validate.common.notExist', { field: 'email' }),
+            statusCode: HTTP_STATUS.BAD_REQUEST
+          })
+        )
+      })
+
+      return externalMessage
+    }
+
+    this.userInfo = isExistEmail
 
     return email
   }
@@ -259,7 +297,7 @@ class UserService {
     })
     const result = await this.findUser({ _id: new ObjectId(decode.user_id) })
 
-    if (!result || result.forgot_password_token !== token) {
+    if (!result || `Bearer ${result.forgot_password_token}` !== token) {
       const externalMessage = helper.message({
         external: objectToString(
           new ErrorWithStatus({

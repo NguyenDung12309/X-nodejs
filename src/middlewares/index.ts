@@ -16,7 +16,8 @@ import {
   refreshTokenValidate,
   verifyEmailValidate,
   accessTokenValidate,
-  forgotPasswordTokenValidate
+  forgotPasswordTokenValidate,
+  forgotPasswordValidate
 } from './validates'
 import {
   registerController,
@@ -27,6 +28,8 @@ import {
   verifyForgotPasswordTokenController
 } from '@/controllers'
 import { resendMailTokenController } from '@/controllers/users/token'
+import { reqForgotPassword } from '@/models/dto/users/forgotPassword'
+import { forgotPasswordController } from '@/controllers/users/forgotPassword'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -36,6 +39,7 @@ export interface IValidators {
   verifyEmailValidate: ObjectSchema<reqVerifyEmail>
   accessTokenValidate: ObjectSchema<reqResendMailToken>
   forgotPasswordTokenValidate: ObjectSchema<reqVerifyForgotPasswordToken>
+  forgotPasswordValidate: ObjectSchema<reqForgotPassword>
 }
 
 export interface IRequestHandler {
@@ -46,6 +50,7 @@ export interface IRequestHandler {
   verifyEmailController: Controller<reqVerifyEmail>
   resendMailTokenController: Controller<reqResendMailToken>
   verifyForgotPasswordTokenController: Controller<reqVerifyForgotPasswordToken>
+  forgotPasswordController: Controller<reqForgotPassword>
 }
 
 export const validators: IValidators = {
@@ -55,7 +60,8 @@ export const validators: IValidators = {
   refreshTokenValidate,
   verifyEmailValidate,
   accessTokenValidate,
-  forgotPasswordTokenValidate
+  forgotPasswordTokenValidate,
+  forgotPasswordValidate
 }
 
 export const requestHandler: IRequestHandler = {
@@ -65,5 +71,6 @@ export const requestHandler: IRequestHandler = {
   getNewAccessTokenController,
   verifyEmailController,
   resendMailTokenController,
-  verifyForgotPasswordTokenController
+  verifyForgotPasswordTokenController,
+  forgotPasswordController
 }
