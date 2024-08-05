@@ -34,7 +34,7 @@ userRouter.post(
 userRouter.post(
   '/resend-verify-email',
   validatorMiddleWare({
-    validator: 'accessTokenValidate',
+    validator: 'resendVerifyEmailValidate',
     location: 'headers',
     initStatusCode: HTTP_STATUS.UNAUTHORIZED
   }),
@@ -51,6 +51,16 @@ userRouter.post(
   '/verify-forgot-password',
   validatorMiddleWare({ validator: 'forgotPasswordTokenValidate', initStatusCode: HTTP_STATUS.UNAUTHORIZED }),
   wrapRequestHandler('verifyForgotPasswordTokenController')
+)
+
+userRouter.get(
+  '/me',
+  validatorMiddleWare({
+    validator: 'accessTokenValidate',
+    location: 'headers',
+    initStatusCode: HTTP_STATUS.UNAUTHORIZED
+  }),
+  wrapRequestHandler('getMeController')
 )
 
 userRouter.get('/tweets', (req, res) => {

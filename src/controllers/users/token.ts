@@ -1,7 +1,7 @@
 import { handleResponseSuccess } from '@/helpers/handler'
 import {
   reqAccessToken,
-  reqResendMailToken,
+  reqAuthorization,
   reqVerifyEmail,
   resRessendMailToken,
   resToken
@@ -59,7 +59,7 @@ export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res
   })
 }
 
-export const resendMailTokenController: Controller<reqResendMailToken> = async (req, res) => {
+export const resendMailTokenController: Controller<reqAuthorization> = async (req, res) => {
   const userInfo = userService.userInfo as UserSchema
 
   const newVerifyToken = await userService.signEmailVerifyToken((userInfo?._id as ObjectId).toString())
