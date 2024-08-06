@@ -13,13 +13,16 @@ import { Controller, UserVerifyStatus } from '@/types/type'
 import { ObjectId } from 'mongodb'
 
 export const getNewAccessTokenController: Controller<reqAccessToken> = async (req, res) => {
-  const user_id = userService.refreshTokenInfo?.user_id as ObjectId
+  const refreshTokenInfo = userService.refreshTokenInfo
 
   const token = req.body.refresh_token.split(' ')[1]
 
   const [_, result] = await Promise.all([
     databaseService.refreshToken.deleteOne({ token }),
-    userService.getAccessAndRefreshToken(user_id.toString())
+    userService.getAccessAndRefreshToken({
+      user_id: refreshTokenInfo?.user_id as ObjectId,
+      verify: refreshTokenInfo?.verify as UserVerifyStatus
+    })
   ])
 
   return handleResponseSuccess<resToken>(res, {
@@ -48,7 +51,10 @@ export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res
         }
       }
     ),
-    userService.getAccessAndRefreshToken((userInfo?._id as ObjectId).toString())
+    userService.getAccessAndRefreshToken({
+      user_id: userInfo?._id as ObjectId,
+      verify: userInfo?.verify as UserVerifyStatus
+    })
   ])
 
   return handleResponseSuccess<resToken>(res, {
@@ -62,7 +68,10 @@ export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res
 export const resendMailTokenController: Controller<reqAuthorization> = async (req, res) => {
   const userInfo = userService.userInfo as UserSchema
 
-  const newVerifyToken = await userService.signEmailVerifyToken((userInfo?._id as ObjectId).toString())
+  const newVerifyToken = await userService.signEmailVerifyToken({
+    user_id: userInfo._id as ObjectId,
+    verify: userInfo.verify as UserVerifyStatus
+  })
 
   await databaseService.users.updateOne(
     {

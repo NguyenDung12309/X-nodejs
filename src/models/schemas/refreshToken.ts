@@ -1,10 +1,12 @@
 import { objectAssign } from '@/helpers/utils'
+import { UserVerifyStatus } from '@/types/type'
 import { ObjectId } from 'mongodb'
 
 export class RefreshTokenSchema {
-  _id: ObjectId
+  _id?: ObjectId
   token: string
-  created_at: Date
+  created_at?: Date
+  verify: UserVerifyStatus
   user_id: ObjectId
 
   constructor(data: Partial<RefreshTokenSchema>) {

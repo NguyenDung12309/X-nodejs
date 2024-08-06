@@ -20,6 +20,8 @@ import { ObjectId } from 'mongodb'
 import { reqRegister } from '@/models/dto/users/register.js'
 import { ENV_CONST } from '@/constraints/common.js'
 
+interface ITokenProps extends Pick<RefreshTokenSchema, 'verify' | 'user_id'> {}
+
 class UserService {
   userInfo: UserSchema | undefined
   refreshTokenInfo: RefreshTokenSchema | undefined
@@ -35,9 +37,9 @@ class UserService {
     this.verifyAccessToken = this.verifyAccessToken.bind(this)
   }
 
-  signAccessToken(userId: string) {
+  signAccessToken({ user_id, verify }: ITokenProps) {
     return signToken({
-      payload: { user_id: userId, tokenType: TokenType.AccessToken },
+      payload: { user_id, verify, tokenType: TokenType.AccessToken },
       privateKey: ENV_CONST.accessKey || '',
       options: {
         expiresIn: accessTokenExpireTime
@@ -45,9 +47,9 @@ class UserService {
     })
   }
 
-  signRefreshToken(userId: string) {
+  signRefreshToken({ user_id, verify }: ITokenProps) {
     return signToken({
-      payload: { user_id: userId, tokenType: TokenType.RefreshToken },
+      payload: { user_id, verify, tokenType: TokenType.RefreshToken },
       privateKey: ENV_CONST.refreshKey || '',
       options: {
         expiresIn: refreshTokenExpireTime
@@ -55,9 +57,9 @@ class UserService {
     })
   }
 
-  signEmailVerifyToken(userId: string) {
+  signEmailVerifyToken({ user_id, verify }: ITokenProps) {
     return signToken({
-      payload: { user_id: userId, tokenType: TokenType.EmailVerifyToken },
+      payload: { user_id, verify, tokenType: TokenType.EmailVerifyToken },
       privateKey: ENV_CONST.verifyEmailKey || '',
       options: {
         expiresIn: emailExpireTime
@@ -65,9 +67,9 @@ class UserService {
     })
   }
 
-  signForgotPasswordToken(userId: string) {
+  signForgotPasswordToken({ user_id, verify }: ITokenProps) {
     return signToken({
-      payload: { user_id: userId, tokenType: TokenType.ForgotPasswordToken },
+      payload: { user_id, verify, tokenType: TokenType.ForgotPasswordToken },
       privateKey: ENV_CONST.forgotPasswordKey || '',
       options: {
         expiresIn: forgotPasswordExpireTime
@@ -75,28 +77,27 @@ class UserService {
     })
   }
 
-  signAccessAndRefreshToken(userId: string) {
-    return Promise.all([userService.signAccessToken(userId), userService.signRefreshToken(userId)])
+  signAccessAndRefreshToken(data: ITokenProps) {
+    return Promise.all([userService.signAccessToken(data), userService.signRefreshToken(data)])
   }
 
   async createUser(payload: reqRegister) {
-    const userId = new ObjectId().toString()
-    const token = await this.signEmailVerifyToken(userId)
+    const userId = new ObjectId()
+    const verify = UserVerifyStatus.unverified
+    const token = await this.signEmailVerifyToken({ user_id: userId, verify })
 
-    const result = await databaseService.users.insertOne(
+    await databaseService.users.insertOne(
       new UserSchema({
         ...payload,
-        _id: new ObjectId(userId),
+        _id: userId,
         date_of_birth: new Date(payload.date_of_birth),
         password: sha256(payload.password),
         email_verify_token: token,
-        verify: UserVerifyStatus.unverified
+        verify
       })
     )
 
-    const user_id = result.insertedId.toString()
-
-    const { accessToken, refreshToken } = await this.getAccessAndRefreshToken(user_id)
+    const { accessToken, refreshToken } = await this.getAccessAndRefreshToken({ user_id: userId, verify })
 
     return {
       accessToken,
@@ -114,13 +115,14 @@ class UserService {
     return result
   }
 
-  async getAccessAndRefreshToken(userId: string) {
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(userId)
+  async getAccessAndRefreshToken(data: ITokenProps) {
+    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(data)
 
     databaseService.refreshToken.insertOne(
       new RefreshTokenSchema({
         token: refreshToken,
-        user_id: new ObjectId(userId)
+        verify: data.verify,
+        user_id: data.user_id
       })
     )
 
@@ -273,9 +275,13 @@ class UserService {
   }
 
   async checkUserVerifyEmail(token: string, helper: CustomHelpers) {
-    await this.verifyAccessToken(token, helper)
+    const result = await this.verifyAccessToken(token, helper)
 
-    if (this.userInfo?.verify === UserVerifyStatus.verified) {
+    if (typeof result != 'string') {
+      return result
+    }
+
+    if (this.userInfo?.verify !== UserVerifyStatus.unverified) {
       const externalMessage = helper.message({
         external: objectToString(
           new ErrorWithStatus({

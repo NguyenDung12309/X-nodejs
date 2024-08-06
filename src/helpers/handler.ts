@@ -3,6 +3,9 @@ import { IRequestHandler, requestHandler } from '@/middlewares'
 import { ResponseDto } from '@/models/dto'
 import { NextFunction, Request, Response } from 'express'
 import { useI18n } from './i18n'
+import { apiAccessPermissions } from '@/constraints/api'
+import { UserVerifyStatus } from '@/types/type'
+import { ErrorWithStatus } from '@/types/errors'
 
 export const wrapRequestHandler = (controller: keyof IRequestHandler) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -27,4 +30,20 @@ export const handleResponseSuccess = <T>(res: Response, responseValue?: Partial<
   return res.status(HTTP_STATUS.OK).json({
     message: message || useI18n.__('success')
   })
+}
+
+export const checkPermission = (url: string, userStatus: UserVerifyStatus) => {
+  const permissions = apiAccessPermissions[url]
+
+  if (!permissions.includes(userStatus)) {
+    return new ErrorWithStatus({
+      message:
+        userStatus === UserVerifyStatus.banned
+          ? useI18n.__('validate.common.banned')
+          : useI18n.__('validate.common.notEmailVerify'),
+      statusCode: HTTP_STATUS.FORBIDDEN
+    })
+  }
+
+  return true
 }
