@@ -96,7 +96,7 @@ class UserService {
 
     const user_id = result.insertedId.toString()
 
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id)
+    const { accessToken, refreshToken } = await this.getAccessAndRefreshToken(user_id)
 
     return {
       accessToken,

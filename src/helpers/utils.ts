@@ -1,9 +1,16 @@
 import { pick } from 'lodash'
 
 export const objectAssign = (data: object, source: any): void => {
-  const filteredData = pick(data, Object.keys(source))
+  if (data === undefined) {
+    for (const key of Object.keys(source)) {
+      source[key] = null
+    }
+  } else {
+    // Nếu data có giá trị, lọc và gán giá trị cho các thuộc tính của source
+    const filteredData = pick(data, Object.keys(source))
 
-  Object.assign(source, filteredData)
+    Object.assign(source, filteredData)
+  }
 }
 
 export const objectToString = (obj: any) => {
