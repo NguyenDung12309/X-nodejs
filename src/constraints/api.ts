@@ -1,6 +1,6 @@
 import { UserVerifyStatus } from '@/types/type'
 
-const API_CONST = {
+export const API_CONST = {
   register: '/register',
   logout: '/logout',
   login: '/login',

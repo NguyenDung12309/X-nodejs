@@ -1,3 +1,4 @@
+import { API_CONST } from '@/constraints/api'
 import { HTTP_STATUS } from '@/constraints/httpStatus'
 import { wrapRequestHandler } from '@/helpers/handler'
 import { validatorMiddleWare } from '@/helpers/validate'
@@ -5,34 +6,38 @@ import express from 'express'
 
 const userRouter = express.Router()
 
-userRouter.post('/login', validatorMiddleWare({ validator: 'loginValidate' }), wrapRequestHandler('loginController'))
+userRouter.post(
+  API_CONST.login,
+  validatorMiddleWare({ validator: 'loginValidate' }),
+  wrapRequestHandler('loginController')
+)
 
 userRouter.post(
-  '/register',
+  API_CONST.register,
   validatorMiddleWare({ validator: 'registerValidate' }),
   wrapRequestHandler('registerController')
 )
 
 userRouter.post(
-  '/logout',
+  API_CONST.logout,
   validatorMiddleWare({ validator: 'logoutValidate', initStatusCode: HTTP_STATUS.UNAUTHORIZED }),
   wrapRequestHandler('logoutController')
 )
 
 userRouter.post(
-  '/refresh-token',
+  API_CONST.refreshToken,
   validatorMiddleWare({ validator: 'refreshTokenValidate', initStatusCode: HTTP_STATUS.UNAUTHORIZED }),
   wrapRequestHandler('getNewAccessTokenController')
 )
 
 userRouter.post(
-  '/verify-email',
+  API_CONST.verifyEmail,
   validatorMiddleWare({ validator: 'verifyEmailValidate', initStatusCode: HTTP_STATUS.BAD_REQUEST }),
   wrapRequestHandler('verifyEmailController')
 )
 
 userRouter.post(
-  '/resend-verify-email',
+  API_CONST.resendVerifyEmail,
   validatorMiddleWare({
     validator: 'resendVerifyEmailValidate',
     location: 'headers',
@@ -42,19 +47,19 @@ userRouter.post(
 )
 
 userRouter.post(
-  '/forgot-password',
+  API_CONST.forgotPassword,
   validatorMiddleWare({ validator: 'forgotPasswordValidate', initStatusCode: HTTP_STATUS.BAD_REQUEST }),
   wrapRequestHandler('forgotPasswordController')
 )
 
 userRouter.post(
-  '/verify-forgot-password',
+  API_CONST.verifyForgotPassword,
   validatorMiddleWare({ validator: 'forgotPasswordTokenValidate', initStatusCode: HTTP_STATUS.UNAUTHORIZED }),
   wrapRequestHandler('verifyForgotPasswordTokenController')
 )
 
 userRouter.get(
-  '/me',
+  API_CONST.me,
   validatorMiddleWare({
     validator: 'accessTokenValidate',
     location: 'headers',
@@ -63,15 +68,24 @@ userRouter.get(
   wrapRequestHandler('getMeController')
 )
 
-userRouter.get('/tweets', (req, res) => {
-  res.json({
-    data: [
-      {
-        id: 1,
-        text: 'hello world'
-      }
-    ]
-  })
-})
+userRouter.get(
+  API_CONST.me,
+  validatorMiddleWare({
+    validator: 'accessTokenValidate',
+    location: 'headers',
+    initStatusCode: HTTP_STATUS.UNAUTHORIZED
+  }),
+  wrapRequestHandler('getMeController')
+)
+
+userRouter.get(
+  API_CONST.updateProfile,
+  validatorMiddleWare({
+    validator: 'accessTokenValidate',
+    location: 'headers',
+    initStatusCode: HTTP_STATUS.UNAUTHORIZED
+  }),
+  wrapRequestHandler('getMeController')
+)
 
 export default userRouter
