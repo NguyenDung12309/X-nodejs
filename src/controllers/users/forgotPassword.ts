@@ -4,12 +4,15 @@ import { reqVerifyForgotPasswordToken, resToken } from '@/models/dto/users/token
 import { UserSchema } from '@/models/schemas/user'
 import { databaseService } from '@/services/db'
 import { userService } from '@/services/user'
-import { Controller } from '@/types/type'
+import { Controller, UserVerifyStatus } from '@/types/type'
 import { ObjectId } from 'mongodb'
 
 export const forgotPasswordController: Controller<reqForgotPassword> = async (req, res) => {
   const userInfo = userService.userInfo as UserSchema
-  const token = await userService.signForgotPasswordToken((userInfo._id as ObjectId)?.toString())
+  const token = await userService.signForgotPasswordToken({
+    user_id: userInfo._id as ObjectId,
+    verify: userInfo.verify as UserVerifyStatus
+  })
 
   await databaseService.users.updateOne(
     {

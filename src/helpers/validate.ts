@@ -4,8 +4,12 @@ import { has } from 'lodash'
 import Joi, { ValidationErrorItem } from 'joi'
 import { stringToObject } from './utils'
 import { HTTP_STATUS } from '@/constraints/httpStatus'
-import { JoiErrorMessages } from '@/types/errors'
+import { ErrorWithStatus, JoiErrorMessages } from '@/types/errors'
 import { useI18n } from './i18n'
+import { userService } from '@/services/user'
+import { checkPermission } from './handler'
+import { apiAccessPermissions } from '@/constraints/api'
+import { UserVerifyStatus } from '@/types/type'
 
 interface TValidatorMiddleWare {
   validator: keyof IValidators
@@ -19,6 +23,15 @@ export const validatorMiddleWare = function ({ validator, location, initStatusCo
   return async function (req: Request, res: Response, next: NextFunction) {
     try {
       await validators[validator].validateAsync(req[location || 'body'])
+
+      if (apiAccessPermissions[req.url] && userService.userInfo) {
+        const isHasPermission = checkPermission(req.url, userService.userInfo.verify as UserVerifyStatus)
+
+        if (isHasPermission instanceof ErrorWithStatus) {
+          throw isHasPermission
+        }
+      }
+
       next()
     } catch (err) {
       if (err instanceof Joi.ValidationError) {

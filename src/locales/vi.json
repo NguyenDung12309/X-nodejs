@@ -11,8 +11,10 @@
       "matchField": "{{field}} và {{match}} phải giống nhau",
       "iso8601": "{{field}} phải theo định dạng ngày tháng ISO 8601",
       "notCorrect": "{{field}} không đúng",
-      "emailVerify": "tài khoản này đã xác thực email",
-      "notExist": "{{field}} không tồn tại"
+      "emailVerify": "tài khoản này đã xác thực email hoặc đã bị cấm",
+      "notExist": "{{field}} không tồn tại",
+      "notEmailVerify": "tài khoản này chưa xác thực email",
+      "banned": "tài khoản này đã bị cấm"
     }
   }
 }
