@@ -1,16 +1,20 @@
 import { UserVerifyStatus } from '@/types/type'
 
-const API_CONST = {
+export const USER_API_CONST = {
+  updateProfile: '/update-profile',
+  me: '/me',
+  resendVerifyEmail: '/resend-verify-email'
+}
+
+export const API_CONST = {
   register: '/register',
   logout: '/logout',
   login: '/login',
   refreshToken: '/refresh-token',
   verifyEmail: '/verify-email',
-  resendVerifyEmail: '/resend-verify-email',
   forgotPassword: '/forgot-password',
   verifyForgotPassword: '/verify-forgot-password',
-  me: '/me',
-  updateProfile: '/update-profile'
+  ...USER_API_CONST
 }
 
 const verifyOnly = [UserVerifyStatus.verified]
