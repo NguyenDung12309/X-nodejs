@@ -37,16 +37,6 @@ userRouter.post(
 )
 
 userRouter.post(
-  API_CONST.resendVerifyEmail,
-  validatorMiddleWare({
-    validator: 'resendVerifyEmailValidate',
-    location: 'headers',
-    initStatusCode: HTTP_STATUS.UNAUTHORIZED
-  }),
-  wrapRequestHandler('resendMailTokenController')
-)
-
-userRouter.post(
   API_CONST.forgotPassword,
   validatorMiddleWare({ validator: 'forgotPasswordValidate', initStatusCode: HTTP_STATUS.BAD_REQUEST }),
   wrapRequestHandler('forgotPasswordController')
@@ -58,34 +48,24 @@ userRouter.post(
   wrapRequestHandler('verifyForgotPasswordTokenController')
 )
 
-userRouter.get(
-  API_CONST.me,
+userRouter.post(
+  API_CONST.resendVerifyEmail,
   validatorMiddleWare({
-    validator: 'accessTokenValidate',
+    validator: 'resendVerifyEmailValidate',
     location: 'headers',
     initStatusCode: HTTP_STATUS.UNAUTHORIZED
   }),
-  wrapRequestHandler('getMeController')
+  wrapRequestHandler('resendMailTokenController')
 )
 
-userRouter.get(
-  API_CONST.me,
-  validatorMiddleWare({
-    validator: 'accessTokenValidate',
-    location: 'headers',
-    initStatusCode: HTTP_STATUS.UNAUTHORIZED
-  }),
-  wrapRequestHandler('getMeController')
-)
+userRouter.get(API_CONST.me, wrapRequestHandler('getMeController'))
 
-userRouter.get(
+userRouter.patch(
   API_CONST.updateProfile,
   validatorMiddleWare({
-    validator: 'accessTokenValidate',
-    location: 'headers',
-    initStatusCode: HTTP_STATUS.UNAUTHORIZED
+    validator: 'updateProfileValidate'
   }),
-  wrapRequestHandler('getMeController')
+  wrapRequestHandler('updateProfileController')
 )
 
 export default userRouter

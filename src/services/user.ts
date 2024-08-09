@@ -275,12 +275,6 @@ class UserService {
   }
 
   async checkUserVerifyEmail(token: string, helper: CustomHelpers) {
-    const result = await this.verifyAccessToken(token, helper)
-
-    if (typeof result != 'string') {
-      return result
-    }
-
     if (this.userInfo?.verify !== UserVerifyStatus.unverified) {
       const externalMessage = helper.message({
         external: objectToString(

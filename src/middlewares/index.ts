@@ -26,12 +26,15 @@ import {
   logoutController,
   getNewAccessTokenController,
   verifyEmailController,
-  verifyForgotPasswordTokenController
+  verifyForgotPasswordTokenController,
+  updateProfileController
 } from '@/controllers'
 import { resendMailTokenController } from '@/controllers/users/token'
 import { reqForgotPassword } from '@/models/dto/users/forgotPassword'
 import { forgotPasswordController } from '@/controllers/users/forgotPassword'
 import { getMeController } from '@/controllers/users/me'
+import { reqUpdateProfile } from '@/models/dto/users/updateProfile'
+import { updateProfileValidate } from './validates/user/updateProfile'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -43,6 +46,7 @@ export interface IValidators {
   forgotPasswordTokenValidate: ObjectSchema<reqVerifyForgotPasswordToken>
   forgotPasswordValidate: ObjectSchema<reqForgotPassword>
   accessTokenValidate: ObjectSchema<reqAuthorization>
+  updateProfileValidate: ObjectSchema<reqUpdateProfile>
 }
 
 export interface IRequestHandler {
@@ -55,6 +59,7 @@ export interface IRequestHandler {
   verifyForgotPasswordTokenController: Controller<reqVerifyForgotPasswordToken>
   forgotPasswordController: Controller<reqForgotPassword>
   getMeController: Controller<reqAuthorization>
+  updateProfileController: Controller<reqUpdateProfile>
 }
 
 export const validators: IValidators = {
@@ -66,7 +71,8 @@ export const validators: IValidators = {
   resendVerifyEmailValidate,
   forgotPasswordTokenValidate,
   forgotPasswordValidate,
-  accessTokenValidate
+  accessTokenValidate,
+  updateProfileValidate
 }
 
 export const requestHandler: IRequestHandler = {
@@ -78,5 +84,6 @@ export const requestHandler: IRequestHandler = {
   resendMailTokenController,
   verifyForgotPasswordTokenController,
   forgotPasswordController,
-  getMeController
+  getMeController,
+  updateProfileController
 }

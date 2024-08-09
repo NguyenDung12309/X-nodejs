@@ -28,8 +28,8 @@ export const updateProfileValidate = joi.object<reqUpdateProfile>({
       })
     ),
   date_of_birth: joi
-    .string()
-    .trim()
+    .date()
+    .iso()
     .messages(
       getCommonMessageValidate<reqUpdateProfile>({
         field: 'date_of_birth'
