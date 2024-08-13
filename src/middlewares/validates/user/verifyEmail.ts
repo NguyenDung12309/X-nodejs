@@ -20,8 +20,6 @@ export const verifyEmailValidate = joi.object<reqVerifyEmail>({
 export const resendVerifyEmailValidate = joi.object<reqAuthorization>({
   authorization: joi
     .string()
-    .required()
-    .trim()
     .external(checkUserVerifyEmail)
     .messages(
       getCommonMessageValidate<reqAuthorization>({

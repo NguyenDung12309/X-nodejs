@@ -1,13 +1,16 @@
 import express from 'express'
-import userRouter from './routes/user.js'
 import { databaseService } from './services/db.js'
 import { defaultErrorHandler } from './middlewares/error.js'
 import { useI18n } from './helpers/i18n.js'
 import { USER_API_CONST } from './constraints/api.js'
 import { validatorMiddleWare } from './helpers/validate.js'
 import { HTTP_STATUS } from './constraints/httpStatus.js'
+import { tokenRouter } from './routes/token.js'
+import { authRouter } from './routes/auth.js'
+import { userRouter } from './routes/user.js'
 const app = express()
 const port = 3000
+const routers = [userRouter, tokenRouter, authRouter]
 
 app.use(express.json())
 databaseService.connect()
@@ -30,7 +33,7 @@ app.use(async (req, res, next) => {
   next()
 })
 
-app.use('/api', userRouter)
+routers.forEach((router) => app.use('/api', router))
 
 app.use(defaultErrorHandler)
 

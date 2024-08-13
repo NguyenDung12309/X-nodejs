@@ -25,7 +25,7 @@ import {
 } from '@/controllers'
 import { resendMailTokenController } from '@/controllers/token/token'
 import { reqForgotPassword } from '@/models/dto/users/forgotPassword'
-import { forgotPasswordController } from '@/controllers/users/forgotPassword'
+import { forgotPasswordController } from '@/controllers/auth/forgotPassword'
 import { getMeController } from '@/controllers/users/me'
 import { reqMeProfile } from '@/models/dto/users/meProfile'
 import { meProfileValidate } from './validates/user/meProfile'
