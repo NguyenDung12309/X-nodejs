@@ -1,9 +1,9 @@
 import { joi } from '@/helpers/joi'
-import { getCommonMessageValidate } from '@/helpers/validate'
 import { reqForgotPassword } from '@/models/dto/users/forgotPassword'
 import { checkEmailNotExists } from './custom'
 import { verifyForgotPasswordToken } from '../token/custom'
 import { reqVerifyForgotPasswordToken } from '@/models/dto/token/token'
+import { getCommonMessageValidate } from '@/helpers/message'
 
 export const forgotPasswordValidate = joi.object<reqForgotPassword>({
   email: joi

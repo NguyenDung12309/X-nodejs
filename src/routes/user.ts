@@ -7,6 +7,8 @@ const router = express.Router()
 
 router.get(API_CONST.me, wrapRequestHandler('getMeController'))
 
+router.get(API_CONST.userProfile, wrapRequestHandler('userProfileController'))
+
 router.patch(
   API_CONST.meProfile,
   validatorMiddleWare({

@@ -1,5 +1,5 @@
 import { joi } from '@/helpers/joi'
-import { getCommonMessageValidate } from '@/helpers/validate'
+import { getCommonMessageValidate } from '@/helpers/message'
 import { reqMeProfile } from '@/models/dto/users/meProfile'
 
 export const meProfileValidate = joi.object<reqMeProfile>({
