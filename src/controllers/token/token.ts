@@ -5,21 +5,22 @@ import {
   reqVerifyEmail,
   resRessendMailToken,
   resToken
-} from '@/models/dto/users/token'
+} from '@/models/dto/token/token'
 import { UserSchema } from '@/models/schemas/user'
 import { databaseService } from '@/services/db'
+import { tokenService } from '@/services/token'
 import { userService } from '@/services/user'
 import { Controller, UserVerifyStatus } from '@/types/type'
 import { ObjectId } from 'mongodb'
 
 export const getNewAccessTokenController: Controller<reqAccessToken> = async (req, res) => {
-  const refreshTokenInfo = userService.refreshTokenInfo
+  const refreshTokenInfo = tokenService.refreshTokenInfo
 
-  const token = req.body.refresh_token.split(' ')[1]
+  const token = req.body.refresh_token
 
   const [_, result] = await Promise.all([
     databaseService.refreshToken.deleteOne({ token }),
-    userService.getAccessAndRefreshToken({
+    tokenService.createAccessAndRefreshToken({
       user_id: refreshTokenInfo?.user_id as ObjectId,
       verify: refreshTokenInfo?.verify as UserVerifyStatus
     })
@@ -37,21 +38,11 @@ export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res
   const userInfo = userService.userInfo as UserSchema
 
   const [_, token] = await Promise.all([
-    databaseService.users.updateOne(
-      {
-        _id: userInfo?._id
-      },
-      {
-        $set: {
-          email_verify_token: '',
-          verify: UserVerifyStatus.verified
-        },
-        $currentDate: {
-          updated_at: true
-        }
-      }
-    ),
-    userService.getAccessAndRefreshToken({
+    userService.updateUser({
+      email_verify_token: '',
+      verify: UserVerifyStatus.verified
+    }),
+    tokenService.createAccessAndRefreshToken({
       user_id: userInfo?._id as ObjectId,
       verify: userInfo?.verify as UserVerifyStatus
     })
@@ -68,25 +59,15 @@ export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res
 export const resendMailTokenController: Controller<reqAuthorization> = async (req, res) => {
   const userInfo = userService.userInfo as UserSchema
 
-  const newVerifyToken = await userService.signEmailVerifyToken({
+  const newVerifyToken = await tokenService.signEmailVerifyToken({
     user_id: userInfo._id as ObjectId,
     verify: userInfo.verify as UserVerifyStatus
   })
 
-  await databaseService.users.updateOne(
-    {
-      _id: userInfo?._id
-    },
-    {
-      $set: {
-        email_verify_token: newVerifyToken,
-        verify: UserVerifyStatus.unverified
-      },
-      $currentDate: {
-        updated_at: true
-      }
-    }
-  )
+  await userService.updateUser({
+    email_verify_token: newVerifyToken,
+    verify: UserVerifyStatus.unverified
+  })
 
   return handleResponseSuccess<resRessendMailToken>(res, {
     data: {

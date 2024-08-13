@@ -61,11 +61,11 @@ userRouter.post(
 userRouter.get(API_CONST.me, wrapRequestHandler('getMeController'))
 
 userRouter.patch(
-  API_CONST.updateProfile,
+  API_CONST.meProfile,
   validatorMiddleWare({
-    validator: 'updateProfileValidate'
+    validator: 'meProfileValidate'
   }),
-  wrapRequestHandler('updateProfileController')
+  wrapRequestHandler('meProfileController')
 )
 
 export default userRouter

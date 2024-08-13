@@ -1,6 +1,6 @@
 import { handleResponseSuccess } from '@/helpers/handler'
+import { reqAuthorization } from '@/models/dto/token/token'
 import { UserDto } from '@/models/dto/users/me'
-import { reqAuthorization } from '@/models/dto/users/token'
 import { UserSchema } from '@/models/schemas/user'
 import { userService } from '@/services/user'
 import { Controller } from '@/types/type'

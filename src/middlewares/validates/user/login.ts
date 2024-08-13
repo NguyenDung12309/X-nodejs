@@ -1,7 +1,7 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
 import { reqLogin } from '@/models/dto/users/login'
-import { userService } from '@/services/user'
+import { checkEmailPasswordExists } from './custom'
 
 export const loginValidate = joi.object<reqLogin>({
   email: joi
@@ -18,7 +18,7 @@ export const loginValidate = joi.object<reqLogin>({
     .string()
     .required()
     .trim()
-    .external(userService.checkEmailPasswordExists)
+    .external(checkEmailPasswordExists)
     .messages(
       getCommonMessageValidate<reqLogin>({
         field: 'password'

@@ -28,7 +28,7 @@ export const signToken = ({
 
 export const verifyToken = <T>({ token, privateKey }: { token: string; privateKey: string }) => {
   return new Promise<T>((resolve, reject) => {
-    const newToken = token.split(' ')[1]
+    const newToken = token.includes('Bearer') ? token.split(' ')[1] : token
 
     jwt.verify(newToken, privateKey, (error, decoded) => {
       if (error) {

@@ -17,10 +17,10 @@ interface TValidatorMiddleWare {
   initStatusCode?: number
 }
 
-export const validatorMiddleWare = function ({ validator, location, initStatusCode }: TValidatorMiddleWare) {
+export const validatorMiddleWare = ({ validator, location, initStatusCode }: TValidatorMiddleWare) => {
   if (!has(validators, validator)) throw new Error(`'${validator}' is not exist`)
 
-  return async function (req: Request, res: Response, next: NextFunction) {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await validators[validator].validateAsync(req[location || 'body'])
 

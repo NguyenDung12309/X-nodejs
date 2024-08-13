@@ -1,7 +1,7 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
 import { reqRegister } from '@/models/dto/users/register'
-import { userService } from '@/services/user'
+import { checkEmailExists } from './custom'
 
 export const registerValidate = joi.object<reqRegister>({
   email: joi
@@ -9,7 +9,7 @@ export const registerValidate = joi.object<reqRegister>({
     .email()
     .required()
     .trim()
-    .external(userService.checkEmailExists)
+    .external(checkEmailExists)
     .messages(
       getCommonMessageValidate<reqRegister>({
         field: 'email'

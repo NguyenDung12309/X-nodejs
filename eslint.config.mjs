@@ -1,5 +1,6 @@
 import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import prettier from 'eslint-plugin-prettier'
+import preferArrow from 'eslint-plugin-prefer-arrow'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import path from 'node:path'
@@ -26,7 +27,8 @@ export default [
   {
     plugins: {
       '@typescript-eslint': typescriptEslint,
-      prettier
+      prettier,
+      'prefer-arrow': preferArrow
     },
 
     languageOptions: {
@@ -38,6 +40,30 @@ export default [
     },
 
     rules: {
+      'prefer-arrow/prefer-arrow-functions': [
+        'error',
+        {
+          disallowPrototype: true,
+          singleReturnOnly: false,
+          classPropertiesAllowed: false
+        }
+      ],
+
+      'prefer-arrow-callback': [
+        'error',
+        {
+          allowNamedFunctions: true
+        }
+      ],
+
+      'func-style': [
+        'error',
+        'expression',
+        {
+          allowArrowFunctions: true
+        }
+      ],
+
       'no-console': 'error',
       '@typescript-eslint/ban-types': 'off',
 

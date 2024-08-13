@@ -1,12 +1,6 @@
 import { reqLogin } from '@/models/dto/users/login'
 import { reqLogout } from '@/models/dto/users/logout'
 import { reqRegister } from '@/models/dto/users/register'
-import {
-  reqAccessToken,
-  reqAuthorization,
-  reqVerifyEmail,
-  reqVerifyForgotPasswordToken
-} from '@/models/dto/users/token'
 import { Controller } from '@/types/type'
 import { ObjectSchema } from 'joi'
 import {
@@ -27,14 +21,20 @@ import {
   getNewAccessTokenController,
   verifyEmailController,
   verifyForgotPasswordTokenController,
-  updateProfileController
+  meProfileController
 } from '@/controllers'
-import { resendMailTokenController } from '@/controllers/users/token'
+import { resendMailTokenController } from '@/controllers/token/token'
 import { reqForgotPassword } from '@/models/dto/users/forgotPassword'
 import { forgotPasswordController } from '@/controllers/users/forgotPassword'
 import { getMeController } from '@/controllers/users/me'
-import { reqUpdateProfile } from '@/models/dto/users/updateProfile'
-import { updateProfileValidate } from './validates/user/updateProfile'
+import { reqMeProfile } from '@/models/dto/users/meProfile'
+import { meProfileValidate } from './validates/user/meProfile'
+import {
+  reqAccessToken,
+  reqAuthorization,
+  reqVerifyEmail,
+  reqVerifyForgotPasswordToken
+} from '@/models/dto/token/token'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -46,7 +46,7 @@ export interface IValidators {
   forgotPasswordTokenValidate: ObjectSchema<reqVerifyForgotPasswordToken>
   forgotPasswordValidate: ObjectSchema<reqForgotPassword>
   accessTokenValidate: ObjectSchema<reqAuthorization>
-  updateProfileValidate: ObjectSchema<reqUpdateProfile>
+  meProfileValidate: ObjectSchema<reqMeProfile>
 }
 
 export interface IRequestHandler {
@@ -59,7 +59,7 @@ export interface IRequestHandler {
   verifyForgotPasswordTokenController: Controller<reqVerifyForgotPasswordToken>
   forgotPasswordController: Controller<reqForgotPassword>
   getMeController: Controller<reqAuthorization>
-  updateProfileController: Controller<reqUpdateProfile>
+  meProfileController: Controller<reqMeProfile>
 }
 
 export const validators: IValidators = {
@@ -72,7 +72,7 @@ export const validators: IValidators = {
   forgotPasswordTokenValidate,
   forgotPasswordValidate,
   accessTokenValidate,
-  updateProfileValidate
+  meProfileValidate
 }
 
 export const requestHandler: IRequestHandler = {
@@ -85,5 +85,5 @@ export const requestHandler: IRequestHandler = {
   verifyForgotPasswordTokenController,
   forgotPasswordController,
   getMeController,
-  updateProfileController
+  meProfileController
 }

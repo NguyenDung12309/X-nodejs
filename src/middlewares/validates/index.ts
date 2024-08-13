@@ -1,5 +1,5 @@
 import { resendVerifyEmailValidate, verifyEmailValidate } from './user/verifyEmail'
-import { refreshTokenValidate, accessTokenValidate } from './user/token'
+import { refreshTokenValidate, accessTokenValidate } from './token/token'
 import { logoutValidate } from './user/logout'
 import { registerValidate } from './user/register'
 import { loginValidate } from './user/login'
