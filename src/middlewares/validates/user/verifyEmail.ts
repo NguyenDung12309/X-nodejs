@@ -1,8 +1,8 @@
 import { joi } from '@/helpers/joi'
-import { getCommonMessageValidate } from '@/helpers/validate'
 import { verifyEmailToken } from '../token/custom'
 import { checkUserVerifyEmail } from './custom'
 import { reqAuthorization, reqVerifyEmail } from '@/models/dto/token/token'
+import { getCommonMessageValidate } from '@/helpers/message'
 
 export const verifyEmailValidate = joi.object<reqVerifyEmail>({
   email_verify_token: joi

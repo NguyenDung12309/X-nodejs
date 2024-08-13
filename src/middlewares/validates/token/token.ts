@@ -1,8 +1,8 @@
 import { joi } from '@/helpers/joi'
-import { getCommonMessageValidate } from '@/helpers/validate'
 import { reqLogout } from '@/models/dto/users/logout'
 import { verifyAccessToken, verifyTRefreshToken } from './custom'
 import { reqAccessToken, reqAuthorization } from '@/models/dto/token/token'
+import { getCommonMessageValidate } from '@/helpers/message'
 
 export const refreshTokenValidate = joi.object<reqLogout>({
   refresh_token: joi

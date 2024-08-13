@@ -1,7 +1,7 @@
 import { joi } from '@/helpers/joi'
-import { getCommonMessageValidate } from '@/helpers/validate'
 import { reqRegister } from '@/models/dto/users/register'
 import { checkEmailExists } from './custom'
+import { getCommonMessageValidate } from '@/helpers/message'
 
 export const registerValidate = joi.object<reqRegister>({
   email: joi

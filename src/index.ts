@@ -18,7 +18,7 @@ databaseService.connect()
 app.use(useI18n.init)
 
 app.use(async (req, res, next) => {
-  const url = req.url.replace('/api', '')
+  const url = req.path.replace('/api', '')
 
   if (Object.values(USER_API_CONST).includes(url)) {
     const middleWare = await validatorMiddleWare({
