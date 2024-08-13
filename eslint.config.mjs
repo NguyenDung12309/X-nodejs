@@ -1,6 +1,8 @@
 import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import prettier from 'eslint-plugin-prettier'
 import preferArrow from 'eslint-plugin-prefer-arrow'
+import _import from 'eslint-plugin-import'
+import { fixupPluginRules } from '@eslint/compat'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import path from 'node:path'
@@ -28,7 +30,8 @@ export default [
     plugins: {
       '@typescript-eslint': typescriptEslint,
       prettier,
-      'prefer-arrow': preferArrow
+      'prefer-arrow': preferArrow,
+      import: fixupPluginRules(_import)
     },
 
     languageOptions: {
@@ -40,6 +43,7 @@ export default [
     },
 
     rules: {
+      'import/no-default-export': 'error',
       'prefer-arrow/prefer-arrow-functions': [
         'error',
         {
