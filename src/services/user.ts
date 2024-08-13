@@ -1,95 +1,34 @@
-import { useI18n } from '@/helpers/i18n'
 import { databaseService } from './db.js'
 import { UserSchema } from '@/models/schemas/user.js'
 import { __ } from 'i18n'
 import { sha256 } from '@/helpers/crypto.js'
-import { signToken, verifyToken } from '@/helpers/jwt.js'
-import { TokenType, UserVerifyStatus } from '@/types/type.js'
-import {
-  accessTokenExpireTime,
-  emailExpireTime,
-  forgotPasswordExpireTime,
-  refreshTokenExpireTime
-} from '@/constraints/database.js'
-import { objectToString } from '@/helpers/utils.js'
-import { HTTP_STATUS } from '@/constraints/httpStatus.js'
-import { ErrorWithStatus } from '@/types/errors.js'
-import { CustomHelpers } from 'joi'
-import { RefreshTokenSchema } from '@/models/schemas/refreshToken.js'
-import { ObjectId } from 'mongodb'
-import { reqRegister } from '@/models/dto/users/register.js'
-import { ENV_CONST } from '@/constraints/common.js'
+import { UserVerifyStatus } from '@/types/type.js'
 
-interface ITokenProps extends Pick<RefreshTokenSchema, 'verify' | 'user_id'> {}
+import { Document, ObjectId } from 'mongodb'
+import { reqRegister } from '@/models/dto/users/register.js'
+import { tokenService } from './token.js'
 
 class UserService {
   userInfo: UserSchema | undefined
-  refreshTokenInfo: RefreshTokenSchema | undefined
 
-  constructor() {
-    this.verifyTRefreshToken = this.verifyTRefreshToken.bind(this)
-    this.checkEmailExists = this.checkEmailExists.bind(this)
-    this.checkEmailPasswordExists = this.checkEmailPasswordExists.bind(this)
-    this.verifyEmailToken = this.verifyEmailToken.bind(this)
-    this.checkUserVerifyEmail = this.checkUserVerifyEmail.bind(this)
-    this.checkEmailNotExists = this.checkEmailNotExists.bind(this)
-    this.verifyForgotPasswordToken = this.verifyForgotPasswordToken.bind(this)
-    this.verifyAccessToken = this.verifyAccessToken.bind(this)
+  findUser = async (data: Partial<UserSchema>) => {
+    const result = await databaseService.users.findOne(data)
+
+    if (result) this.userInfo = result
+
+    return result
   }
 
-  signAccessToken({ user_id, verify }: ITokenProps) {
-    return signToken({
-      payload: { user_id, verify, tokenType: TokenType.AccessToken },
-      privateKey: ENV_CONST.accessKey || '',
-      options: {
-        expiresIn: accessTokenExpireTime
-      }
-    })
-  }
-
-  signRefreshToken({ user_id, verify }: ITokenProps) {
-    return signToken({
-      payload: { user_id, verify, tokenType: TokenType.RefreshToken },
-      privateKey: ENV_CONST.refreshKey || '',
-      options: {
-        expiresIn: refreshTokenExpireTime
-      }
-    })
-  }
-
-  signEmailVerifyToken({ user_id, verify }: ITokenProps) {
-    return signToken({
-      payload: { user_id, verify, tokenType: TokenType.EmailVerifyToken },
-      privateKey: ENV_CONST.verifyEmailKey || '',
-      options: {
-        expiresIn: emailExpireTime
-      }
-    })
-  }
-
-  signForgotPasswordToken({ user_id, verify }: ITokenProps) {
-    return signToken({
-      payload: { user_id, verify, tokenType: TokenType.ForgotPasswordToken },
-      privateKey: ENV_CONST.forgotPasswordKey || '',
-      options: {
-        expiresIn: forgotPasswordExpireTime
-      }
-    })
-  }
-
-  signAccessAndRefreshToken(data: ITokenProps) {
-    return Promise.all([userService.signAccessToken(data), userService.signRefreshToken(data)])
-  }
-
-  async createUser(payload: reqRegister) {
+  createUser = async (payload: reqRegister) => {
     const userId = new ObjectId()
     const verify = UserVerifyStatus.unverified
-    const token = await this.signEmailVerifyToken({ user_id: userId, verify })
+    const token = await tokenService.signEmailVerifyToken({ user_id: userId, verify })
 
     await databaseService.users.insertOne(
       new UserSchema({
         ...payload,
         _id: userId,
+        username: `user${userId.toString()}`,
         date_of_birth: new Date(payload.date_of_birth),
         password: sha256(payload.password),
         email_verify_token: token,
@@ -97,229 +36,51 @@ class UserService {
       })
     )
 
-    const { accessToken, refreshToken } = await this.getAccessAndRefreshToken({ user_id: userId, verify })
-
-    return {
-      accessToken,
-      refreshToken
-    }
+    return tokenService.createAccessAndRefreshToken({ user_id: userId, verify })
   }
 
-  async findUser(data: Partial<UserSchema>) {
-    const result = await databaseService.users.findOne(data)
-
-    if (result) {
-      this.userInfo = result
-    }
-
-    return result
-  }
-
-  async getAccessAndRefreshToken(data: ITokenProps) {
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(data)
-
-    databaseService.refreshToken.insertOne(
-      new RefreshTokenSchema({
-        token: refreshToken,
-        verify: data.verify,
-        user_id: data.user_id
-      })
+  updateUser = (data: Partial<UserSchema>) => {
+    return databaseService.users.updateOne(
+      {
+        _id: this.userInfo?._id
+      },
+      {
+        $set: data,
+        $currentDate: {
+          updated_at: true
+        }
+      }
     )
-
-    return {
-      accessToken,
-      refreshToken
-    }
   }
 
-  async checkEmailExists(email: string, { message }: CustomHelpers) {
-    const isExistEmail = await this.findUser({ email })
-
-    if (isExistEmail) {
-      const externalMessage = message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.exist', { field: 'email' }),
-            statusCode: HTTP_STATUS.CONFLICT
-          })
-        )
-      })
-
-      return externalMessage
+  updateUserWithProjection = (data: Partial<UserSchema>, projection?: Document) => {
+    if (!projection) {
+      projection = {
+        password: 0,
+        email_verify_token: 0,
+        forgot_password_token: 0
+      }
     }
 
-    return email
+    return databaseService.users.findOneAndUpdate(
+      {
+        _id: this.userInfo?._id
+      },
+      {
+        $set: data,
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after',
+        projection: projection
+      }
+    )
   }
 
-  async checkEmailNotExists(email: string, helper: CustomHelpers) {
-    const isExistEmail = await this.findUser({ email })
-
-    if (!isExistEmail) {
-      const externalMessage = helper.message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.notExist', { field: 'email' }),
-            statusCode: HTTP_STATUS.BAD_REQUEST
-          })
-        )
-      })
-
-      return externalMessage
-    }
-
-    this.userInfo = isExistEmail
-
-    return email
-  }
-
-  async checkEmailPasswordExists(password: string, helper: CustomHelpers) {
-    const { email } = helper.state.ancestors[0]
-
-    const userInfo = await this.findUser({ email, password: sha256(password) })
-
-    if (!userInfo) {
-      const externalMessage = helper.message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.notCorrect', { field: 'email hoặc password' }),
-            statusCode: HTTP_STATUS.UNAUTHORIZED
-          })
-        )
-      })
-
-      return externalMessage
-    }
-
-    return password
-  }
-
-  async verifyTRefreshToken(token: string, helper: CustomHelpers) {
-    const [decode, result] = await Promise.all([
-      verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.refreshKey || '' }),
-      databaseService.refreshToken.findOne({ token: token.split(' ')[1] })
-    ])
-
-    if (!result || !decode) {
-      const externalMessage = helper.message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.invalid', { field: 'token' }),
-            statusCode: HTTP_STATUS.UNAUTHORIZED
-          })
-        )
-      })
-
-      return externalMessage
-    }
-
-    this.refreshTokenInfo = result
-
-    return token
-  }
-
-  async verifyEmailToken(token: string, helper: CustomHelpers) {
-    const decode = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.verifyEmailKey || '' })
-    const result = await this.findUser({ _id: new ObjectId(decode.user_id) })
-
-    if (!result || !decode) {
-      const externalMessage = helper.message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.invalid', { field: 'token' }),
-            statusCode: HTTP_STATUS.UNAUTHORIZED
-          })
-        )
-      })
-
-      return externalMessage
-    }
-
-    if (result && !result.email_verify_token) {
-      const externalMessage = helper.message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.emailVerify'),
-            statusCode: HTTP_STATUS.BAD_REQUEST
-          })
-        )
-      })
-
-      return externalMessage
-    }
-
-    this.userInfo = result
-
-    return token
-  }
-
-  async verifyAccessToken(token: string, helper: CustomHelpers) {
-    const decode = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.accessKey || '' })
-    const result = await this.findUser({ _id: new ObjectId(decode.user_id) })
-
-    if (!result || !decode) {
-      const externalMessage = helper.message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.invalid', { field: 'token' }),
-            statusCode: HTTP_STATUS.UNAUTHORIZED
-          })
-        )
-      })
-
-      return externalMessage
-    }
-
-    this.userInfo = result
-
-    return token
-  }
-
-  async checkUserVerifyEmail(token: string, helper: CustomHelpers) {
-    if (this.userInfo?.verify !== UserVerifyStatus.unverified) {
-      const externalMessage = helper.message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.emailVerify'),
-            statusCode: HTTP_STATUS.BAD_REQUEST
-          })
-        )
-      })
-
-      return externalMessage
-    }
-
-    return token
-  }
-
-  async verifyForgotPasswordToken(token: string, helper: CustomHelpers) {
-    const decode = await verifyToken<RefreshTokenSchema>({
-      token: token,
-      privateKey: ENV_CONST.forgotPasswordKey || ''
-    })
-    const result = await this.findUser({ _id: new ObjectId(decode.user_id) })
-
-    if (!result || `Bearer ${result.forgot_password_token}` !== token) {
-      const externalMessage = helper.message({
-        external: objectToString(
-          new ErrorWithStatus({
-            message: useI18n.__('validate.common.invalid', { field: 'token' }),
-            statusCode: HTTP_STATUS.UNAUTHORIZED
-          })
-        )
-      })
-
-      return externalMessage
-    }
-
-    return token
-  }
-
-  resetUserInfo() {
+  resetUserInfo = () => {
     this.userInfo = undefined
-  }
-
-  resetRefreshToken() {
-    this.refreshTokenInfo = undefined
   }
 }
 

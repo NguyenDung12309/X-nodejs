@@ -1,14 +1,15 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
-import { reqAuthorization, reqVerifyEmail } from '@/models/dto/users/token'
-import { userService } from '@/services/user'
+import { verifyEmailToken } from '../token/custom'
+import { checkUserVerifyEmail } from './custom'
+import { reqAuthorization, reqVerifyEmail } from '@/models/dto/token/token'
 
 export const verifyEmailValidate = joi.object<reqVerifyEmail>({
   email_verify_token: joi
     .string()
     .required()
     .trim()
-    .external(userService.verifyEmailToken)
+    .external(verifyEmailToken)
     .messages(
       getCommonMessageValidate<reqVerifyEmail>({
         field: 'email_verify_token'
@@ -21,7 +22,7 @@ export const resendVerifyEmailValidate = joi.object<reqAuthorization>({
     .string()
     .required()
     .trim()
-    .external(userService.checkUserVerifyEmail)
+    .external(checkUserVerifyEmail)
     .messages(
       getCommonMessageValidate<reqAuthorization>({
         field: 'authorization'

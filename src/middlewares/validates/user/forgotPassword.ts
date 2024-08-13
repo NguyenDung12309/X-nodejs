@@ -1,8 +1,9 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
 import { reqForgotPassword } from '@/models/dto/users/forgotPassword'
-import { reqVerifyForgotPasswordToken } from '@/models/dto/users/token'
-import { userService } from '@/services/user'
+import { checkEmailNotExists } from './custom'
+import { verifyForgotPasswordToken } from '../token/custom'
+import { reqVerifyForgotPasswordToken } from '@/models/dto/token/token'
 
 export const forgotPasswordValidate = joi.object<reqForgotPassword>({
   email: joi
@@ -10,7 +11,7 @@ export const forgotPasswordValidate = joi.object<reqForgotPassword>({
     .email()
     .required()
     .trim()
-    .external(userService.checkEmailNotExists)
+    .external(checkEmailNotExists)
     .messages(
       getCommonMessageValidate<reqForgotPassword>({
         field: 'email'
@@ -23,7 +24,7 @@ export const forgotPasswordTokenValidate = joi.object<reqVerifyForgotPasswordTok
     .string()
     .required()
     .trim()
-    .external(userService.verifyForgotPasswordToken)
+    .external(verifyForgotPasswordToken)
     .messages(
       getCommonMessageValidate<reqVerifyForgotPasswordToken>({
         field: 'forgot_password_token'

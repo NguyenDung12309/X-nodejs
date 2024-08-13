@@ -1,15 +1,15 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
 import { reqLogout } from '@/models/dto/users/logout'
-import { reqAccessToken, reqAuthorization } from '@/models/dto/users/token'
-import { userService } from '@/services/user'
+import { verifyAccessToken, verifyTRefreshToken } from './custom'
+import { reqAccessToken, reqAuthorization } from '@/models/dto/token/token'
 
 export const refreshTokenValidate = joi.object<reqLogout>({
   refresh_token: joi
     .string()
     .required()
     .trim()
-    .external(userService.verifyTRefreshToken)
+    .external(verifyTRefreshToken)
     .messages(
       getCommonMessageValidate<reqAccessToken>({
         field: 'refresh_token'
@@ -22,7 +22,7 @@ export const accessTokenValidate = joi.object<reqAuthorization>({
     .string()
     .required()
     .trim()
-    .external(userService.verifyAccessToken)
+    .external(verifyAccessToken)
     .messages(
       getCommonMessageValidate<reqAuthorization>({
         field: 'authorization'

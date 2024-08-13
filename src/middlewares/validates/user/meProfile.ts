@@ -1,13 +1,13 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/validate'
-import { reqUpdateProfile } from '@/models/dto/users/updateProfile'
+import { reqMeProfile } from '@/models/dto/users/meProfile'
 
-export const updateProfileValidate = joi.object<reqUpdateProfile>({
+export const meProfileValidate = joi.object<reqMeProfile>({
   avatar: joi
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqUpdateProfile>({
+      getCommonMessageValidate<reqMeProfile>({
         field: 'avatar'
       })
     ),
@@ -15,7 +15,7 @@ export const updateProfileValidate = joi.object<reqUpdateProfile>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqUpdateProfile>({
+      getCommonMessageValidate<reqMeProfile>({
         field: 'bio'
       })
     ),
@@ -23,7 +23,7 @@ export const updateProfileValidate = joi.object<reqUpdateProfile>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqUpdateProfile>({
+      getCommonMessageValidate<reqMeProfile>({
         field: 'cover_photo'
       })
     ),
@@ -31,7 +31,7 @@ export const updateProfileValidate = joi.object<reqUpdateProfile>({
     .date()
     .iso()
     .messages(
-      getCommonMessageValidate<reqUpdateProfile>({
+      getCommonMessageValidate<reqMeProfile>({
         field: 'date_of_birth'
       })
     ),
@@ -40,7 +40,7 @@ export const updateProfileValidate = joi.object<reqUpdateProfile>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqUpdateProfile>({
+      getCommonMessageValidate<reqMeProfile>({
         field: 'location'
       })
     ),
@@ -48,7 +48,7 @@ export const updateProfileValidate = joi.object<reqUpdateProfile>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqUpdateProfile>({
+      getCommonMessageValidate<reqMeProfile>({
         field: 'name'
       })
     ),
@@ -56,7 +56,7 @@ export const updateProfileValidate = joi.object<reqUpdateProfile>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqUpdateProfile>({
+      getCommonMessageValidate<reqMeProfile>({
         field: 'username'
       })
     ),
@@ -64,7 +64,7 @@ export const updateProfileValidate = joi.object<reqUpdateProfile>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqUpdateProfile>({
+      getCommonMessageValidate<reqMeProfile>({
         field: 'website'
       })
     )
