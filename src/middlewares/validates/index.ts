@@ -4,8 +4,7 @@ import { reqRegister } from '@/models/dto/auth/register'
 import { reqLogin } from '@/models/dto/auth/login'
 
 import { reqForgotPassword } from '@/models/dto/auth/forgotPassword'
-import { reqMeProfile } from '@/models/dto/users/meProfile'
-import { meProfileValidate } from './user/meProfile'
+import { meUpdateValidate } from './user/meUpdate'
 import { forgotPasswordValidate, loginValidate, logoutValidate, registerValidate } from './auth'
 import { accessTokenValidate, forgotPasswordTokenValidate, refreshTokenValidate, verifyEmailValidate } from './token'
 import {
@@ -14,6 +13,9 @@ import {
   reqRefreshToken,
   reqVerifyEmailToken
 } from '@/models/dto/token/token'
+import { reqMeUpdate } from '@/models/dto/users'
+import { reqUserProfile } from '@/models/dto/users/userProfile'
+import { userProfileValidate } from './user/userProfile'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -25,7 +27,8 @@ export interface IValidators {
   forgotPasswordTokenValidate: ObjectSchema<reqForgotPasswordToken>
   forgotPasswordValidate: ObjectSchema<reqForgotPassword>
   accessTokenValidate: ObjectSchema<reqAuthorization>
-  meProfileValidate: ObjectSchema<reqMeProfile>
+  meUpdateValidate: ObjectSchema<reqMeUpdate>
+  userProfileValidate: ObjectSchema<reqUserProfile>
 }
 
 export const validators: IValidators = {
@@ -38,5 +41,6 @@ export const validators: IValidators = {
   forgotPasswordTokenValidate,
   forgotPasswordValidate,
   accessTokenValidate,
-  meProfileValidate
+  meUpdateValidate,
+  userProfileValidate
 }

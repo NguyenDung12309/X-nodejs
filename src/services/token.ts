@@ -9,6 +9,9 @@ import { signToken } from '@/helpers/jwt'
 import { RefreshTokenSchema } from '@/models/schemas/refreshToken'
 import { TokenType } from '@/types/type'
 import { databaseService } from './db'
+import { ErrorWithStatus } from '@/types/errors'
+import { useI18n } from '@/helpers/i18n'
+import { HTTP_STATUS } from '@/constraints/httpStatus'
 
 interface ITokenProps extends Pick<RefreshTokenSchema, 'verify' | 'user_id'> {}
 
@@ -68,7 +71,16 @@ export class TokenService {
   findRefreshToken = async (data: Partial<RefreshTokenSchema>) => {
     const result = await databaseService.refreshToken.findOne(data)
 
-    if (result) this.refreshTokenInfo = result
+    if (!result) {
+      this.resetRefreshToken()
+
+      throw new ErrorWithStatus({
+        message: useI18n.__('validate.common.notExist', { field: 'token' }),
+        statusCode: HTTP_STATUS.NOT_FOUND
+      })
+    }
+
+    this.refreshTokenInfo = result
 
     return result
   }

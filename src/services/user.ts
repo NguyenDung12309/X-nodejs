@@ -7,14 +7,29 @@ import { UserVerifyStatus } from '@/types/type.js'
 import { Document, ObjectId } from 'mongodb'
 import { reqRegister } from '@/models/dto/auth/register.js'
 import { tokenService } from './token.js'
+import { omit } from 'lodash'
+import { UserDto } from '@/models/dto/users/me.js'
+import { ErrorWithStatus } from '@/types/errors.js'
+import { useI18n } from '@/helpers/i18n.js'
+import { HTTP_STATUS } from '@/constraints/httpStatus.js'
 
 class UserService {
-  userInfo: UserSchema | undefined
+  userInfo: UserDto | undefined
 
   findUser = async (data: Partial<UserSchema>) => {
     const result = await databaseService.users.findOne(data)
+    const omitResult = omit(result, ['email_verify_token', 'password', 'forgot_password_token'])
 
-    if (result) this.userInfo = result
+    if (!result) {
+      this.resetUserInfo()
+
+      throw new ErrorWithStatus({
+        message: useI18n.__('validate.common.notExist', { field: 'username' }),
+        statusCode: HTTP_STATUS.NOT_FOUND
+      })
+    }
+
+    this.userInfo = omitResult
 
     return result
   }

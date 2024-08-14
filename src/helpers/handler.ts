@@ -1,6 +1,6 @@
 import { HTTP_STATUS } from '@/constraints/httpStatus'
 import { ResponseDto } from '@/models/dto'
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Response } from 'express'
 import { useI18n } from './i18n'
 import { apiAccessPermissions } from '@/constraints/api'
 import { UserVerifyStatus } from '@/types/type'
@@ -8,7 +8,7 @@ import { ErrorWithStatus } from '@/types/errors'
 import { controllers, IRequestHandler } from '@/controllers'
 
 export const wrapRequestHandler = (controller: keyof IRequestHandler) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: any, res: Response, next: NextFunction) => {
     try {
       await controllers[controller](req, res, next)
     } catch (error) {
