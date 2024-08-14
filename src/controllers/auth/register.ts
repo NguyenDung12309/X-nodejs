@@ -1,6 +1,6 @@
 import { handleResponseSuccess } from '@/helpers/handler'
 import { resToken } from '@/models/dto/token/token'
-import { reqRegister } from '@/models/dto/users/register'
+import { reqRegister } from '@/models/dto/auth/register'
 import { userService } from '@/services/user'
 import { Controller } from '@/types/type'
 

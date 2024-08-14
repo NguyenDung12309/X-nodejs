@@ -1,7 +1,7 @@
 import { joi } from '@/helpers/joi'
-import { reqLogin } from '@/models/dto/users/login'
-import { checkEmailPasswordExists } from './custom'
+import { reqLogin } from '@/models/dto/auth/login'
 import { getCommonMessageValidate } from '@/helpers/message'
+import { checkEmailPasswordExists } from './custom'
 
 export const loginValidate = joi.object<reqLogin>({
   email: joi

@@ -5,7 +5,7 @@ import { sha256 } from '@/helpers/crypto.js'
 import { UserVerifyStatus } from '@/types/type.js'
 
 import { Document, ObjectId } from 'mongodb'
-import { reqRegister } from '@/models/dto/users/register.js'
+import { reqRegister } from '@/models/dto/auth/register.js'
 import { tokenService } from './token.js'
 
 class UserService {

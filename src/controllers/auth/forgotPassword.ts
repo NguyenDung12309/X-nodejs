@@ -1,6 +1,6 @@
 import { handleResponseSuccess } from '@/helpers/handler'
-import { reqVerifyForgotPasswordToken, resToken } from '@/models/dto/token/token'
-import { reqForgotPassword, resForgotPassword } from '@/models/dto/users/forgotPassword'
+import { reqForgotPassword } from '@/models/dto/auth/forgotPassword'
+import { reqForgotPasswordToken, resAuthToken, resForgotPasswordToken } from '@/models/dto/token/token'
 import { UserSchema } from '@/models/schemas/user'
 import { tokenService } from '@/services/token'
 import { userService } from '@/services/user'
@@ -18,13 +18,13 @@ export const forgotPasswordController: Controller<reqForgotPassword> = async (re
     forgot_password_token: token
   })
 
-  return handleResponseSuccess<resForgotPassword>(res, {
+  return handleResponseSuccess<resForgotPasswordToken>(res, {
     data: {
       forgot_password_token: token
     }
   })
 }
 
-export const verifyForgotPasswordTokenController: Controller<reqVerifyForgotPasswordToken> = async (req, res) => {
-  return handleResponseSuccess<resToken>(res)
+export const verifyForgotPasswordTokenController: Controller<reqForgotPasswordToken> = async (req, res) => {
+  return handleResponseSuccess<resAuthToken>(res)
 }

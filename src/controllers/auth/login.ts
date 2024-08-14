@@ -1,6 +1,6 @@
 import { handleResponseSuccess } from '@/helpers/handler'
-import { resToken } from '@/models/dto/token/token'
-import { reqLogin } from '@/models/dto/users/login'
+import { reqLogin } from '@/models/dto/auth/login'
+import { resAuthToken } from '@/models/dto/token/token'
 import { UserSchema } from '@/models/schemas/user'
 import { tokenService } from '@/services/token'
 import { userService } from '@/services/user'
@@ -15,7 +15,7 @@ export const loginController: Controller<reqLogin> = async (req, res) => {
     verify: userInfo.verify as UserVerifyStatus
   })
 
-  return handleResponseSuccess<resToken>(res, {
+  return handleResponseSuccess<resAuthToken>(res, {
     data: {
       access_token: result.accessToken,
       refresh_token: result.refreshToken
