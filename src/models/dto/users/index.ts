@@ -1,3 +1,3 @@
 export * from './me'
 
-export * from './meProfile'
+export * from './meUpdate'
