@@ -1,11 +1,12 @@
 import { handleResponseSuccess } from '@/helpers/handler'
 import {
-  reqAccessToken,
   reqAuthorization,
-  reqVerifyEmail,
-  resRessendMailToken,
-  resToken
+  reqRefreshToken,
+  reqVerifyEmailToken,
+  resAuthToken,
+  resVerifyMailToken
 } from '@/models/dto/token/token'
+
 import { UserSchema } from '@/models/schemas/user'
 import { databaseService } from '@/services/db'
 import { tokenService } from '@/services/token'
@@ -13,7 +14,7 @@ import { userService } from '@/services/user'
 import { Controller, UserVerifyStatus } from '@/types/type'
 import { ObjectId } from 'mongodb'
 
-export const getNewAccessTokenController: Controller<reqAccessToken> = async (req, res) => {
+export const getNewAccessTokenController: Controller<reqRefreshToken> = async (req, res) => {
   const refreshTokenInfo = tokenService.refreshTokenInfo
 
   const token = req.body.refresh_token
@@ -26,7 +27,7 @@ export const getNewAccessTokenController: Controller<reqAccessToken> = async (re
     })
   ])
 
-  return handleResponseSuccess<resToken>(res, {
+  return handleResponseSuccess<resAuthToken>(res, {
     data: {
       access_token: result.accessToken,
       refresh_token: result.refreshToken
@@ -34,7 +35,7 @@ export const getNewAccessTokenController: Controller<reqAccessToken> = async (re
   })
 }
 
-export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res) => {
+export const verifyEmailController: Controller<reqVerifyEmailToken> = async (req, res) => {
   const userInfo = userService.userInfo as UserSchema
 
   const [_, token] = await Promise.all([
@@ -48,7 +49,7 @@ export const verifyEmailController: Controller<reqVerifyEmail> = async (req, res
     })
   ])
 
-  return handleResponseSuccess<resToken>(res, {
+  return handleResponseSuccess<resAuthToken>(res, {
     data: {
       access_token: token.accessToken,
       refresh_token: token.refreshToken
@@ -69,7 +70,7 @@ export const resendMailTokenController: Controller<reqAuthorization> = async (re
     verify: UserVerifyStatus.unverified
   })
 
-  return handleResponseSuccess<resRessendMailToken>(res, {
+  return handleResponseSuccess<resVerifyMailToken>(res, {
     data: {
       email_verify_token: newVerifyToken
     }
