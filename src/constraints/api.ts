@@ -3,7 +3,8 @@ import { UserVerifyStatus } from '@/types/type'
 export const USER_API_CONST = {
   meUpdate: '/me-update',
   me: '/me',
-  resendVerifyEmail: '/resend-verify-email'
+  resendVerifyEmail: '/resend-verify-email',
+  follow: '/follow'
 }
 
 export const API_CONST = {
@@ -24,5 +25,6 @@ const verifyAndUnVerify = [UserVerifyStatus.verified, UserVerifyStatus.unverifie
 export const apiAccessPermissions = {
   [API_CONST.login]: verifyAndUnVerify,
   [API_CONST.me]: verifyAndUnVerify,
-  [API_CONST.meUpdate]: verifyOnly
+  [API_CONST.meUpdate]: verifyOnly,
+  [API_CONST.follow]: verifyOnly
 }

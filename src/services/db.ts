@@ -3,6 +3,7 @@ import 'dotenv/config'
 import { UserSchema } from '@/models/schemas/user'
 import { DatabaseName } from '@/constraints/database'
 import { RefreshTokenSchema } from '@/models/schemas/refreshToken'
+import { FollowSchema } from '@/models/schemas/follow'
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@x.grxx64n.mongodb.net/?retryWrites=true&w=majority&appName=X`
 
@@ -33,6 +34,10 @@ class DatabaseService {
 
   get refreshToken(): Collection<RefreshTokenSchema> {
     return this.db.collection(DatabaseName.REFRESH_TOKEN)
+  }
+
+  get follow(): Collection<FollowSchema> {
+    return this.db.collection(DatabaseName.FOLLOW)
   }
 }
 
