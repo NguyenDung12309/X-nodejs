@@ -1,5 +1,5 @@
 import { handleResponseSuccess } from '@/helpers/handler'
-import { reqLogout } from '@/models/dto/users/logout'
+import { reqLogout } from '@/models/dto/auth/logout'
 import { databaseService } from '@/services/db'
 import { tokenService } from '@/services/token'
 import { userService } from '@/services/user'

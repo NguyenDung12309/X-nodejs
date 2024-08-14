@@ -1,31 +1,28 @@
-import { resendVerifyEmailValidate, verifyEmailValidate } from './user/verifyEmail'
-import { refreshTokenValidate, accessTokenValidate } from './token/token'
-import { logoutValidate } from './user/logout'
-import { registerValidate } from './user/register'
-import { loginValidate } from './user/login'
-import { forgotPasswordTokenValidate, forgotPasswordValidate } from './user/forgotPassword'
+import { resendVerifyEmailValidate } from './user/verifyEmail'
 import { ObjectSchema } from 'joi'
-import { reqRegister } from '@/models/dto/users/register'
-import { reqLogin } from '@/models/dto/users/login'
-import {
-  reqAccessToken,
-  reqAuthorization,
-  reqVerifyEmail,
-  reqVerifyForgotPasswordToken
-} from '@/models/dto/token/token'
-import { reqForgotPassword } from '@/models/dto/users/forgotPassword'
-import { reqLogout } from '@/models/dto/users/logout'
+import { reqRegister } from '@/models/dto/auth/register'
+import { reqLogin } from '@/models/dto/auth/login'
+
+import { reqForgotPassword } from '@/models/dto/auth/forgotPassword'
 import { reqMeProfile } from '@/models/dto/users/meProfile'
 import { meProfileValidate } from './user/meProfile'
+import { forgotPasswordValidate, loginValidate, logoutValidate, registerValidate } from './auth'
+import { accessTokenValidate, forgotPasswordTokenValidate, refreshTokenValidate, verifyEmailValidate } from './token'
+import {
+  reqAuthorization,
+  reqForgotPasswordToken,
+  reqRefreshToken,
+  reqVerifyEmailToken
+} from '@/models/dto/token/token'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
   loginValidate: ObjectSchema<reqLogin>
-  logoutValidate: ObjectSchema<reqLogout>
-  refreshTokenValidate: ObjectSchema<reqAccessToken>
-  verifyEmailValidate: ObjectSchema<reqVerifyEmail>
+  logoutValidate: ObjectSchema<reqRefreshToken>
+  refreshTokenValidate: ObjectSchema<reqRefreshToken>
+  verifyEmailValidate: ObjectSchema<reqVerifyEmailToken>
   resendVerifyEmailValidate: ObjectSchema<reqAuthorization>
-  forgotPasswordTokenValidate: ObjectSchema<reqVerifyForgotPasswordToken>
+  forgotPasswordTokenValidate: ObjectSchema<reqForgotPasswordToken>
   forgotPasswordValidate: ObjectSchema<reqForgotPassword>
   accessTokenValidate: ObjectSchema<reqAuthorization>
   meProfileValidate: ObjectSchema<reqMeProfile>

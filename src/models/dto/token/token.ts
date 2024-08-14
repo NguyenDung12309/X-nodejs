@@ -1,13 +1,17 @@
-export interface reqAccessToken {
+export interface reqRefreshToken {
   refresh_token: string
 }
 
-export interface resToken {
+export interface resAuthToken {
   access_token: string
   refresh_token: string
 }
 
-export interface reqVerifyEmail {
+export interface reqVerifyEmailToken {
+  email_verify_token: string
+}
+
+export interface resVerifyMailToken {
   email_verify_token: string
 }
 
@@ -15,10 +19,10 @@ export interface reqAuthorization {
   authorization: string
 }
 
-export interface resRessendMailToken {
-  email_verify_token: string
+export interface reqForgotPasswordToken {
+  forgot_password_token: string
 }
 
-export interface reqVerifyForgotPasswordToken {
+export interface resForgotPasswordToken {
   forgot_password_token: string
 }
