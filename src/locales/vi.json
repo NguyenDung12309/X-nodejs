@@ -14,7 +14,8 @@
       "emailVerify": "tài khoản này đã xác thực email hoặc đã bị cấm",
       "notExist": "{{field}} không tồn tại",
       "notEmailVerify": "tài khoản này chưa xác thực email",
-      "banned": "tài khoản này đã bị cấm"
+      "banned": "tài khoản này đã bị cấm",
+      "followed": "đã follow tài khoản này"
     }
   }
 }

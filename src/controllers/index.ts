@@ -19,6 +19,8 @@ import {
 import { reqMeUpdate } from '@/models/dto/users'
 import { meUpdateController } from './users/meUpdate'
 import { reqUserProfile } from '@/models/dto/users/userProfile'
+import { reqFollow } from '@/models/dto/follow/follow'
+import { followController } from './follow/follow'
 
 export interface IRequestHandler {
   registerController: Controller<reqRegister>
@@ -32,6 +34,7 @@ export interface IRequestHandler {
   getMeController: Controller<reqAuthorization>
   meUpdateController: Controller<reqMeUpdate>
   userProfileController: Controller<any, reqUserProfile>
+  followController: Controller<reqFollow>
 }
 
 export const controllers: IRequestHandler = {
@@ -45,5 +48,6 @@ export const controllers: IRequestHandler = {
   forgotPasswordController,
   resendMailTokenController,
   getMeController,
-  userProfileController
+  userProfileController,
+  followController
 }

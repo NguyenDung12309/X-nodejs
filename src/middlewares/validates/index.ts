@@ -16,6 +16,8 @@ import {
 import { reqMeUpdate } from '@/models/dto/users'
 import { reqUserProfile } from '@/models/dto/users/userProfile'
 import { userProfileValidate } from './user/userProfile'
+import { reqFollow } from '@/models/dto/follow/follow'
+import { followValidate } from './follow'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -29,6 +31,7 @@ export interface IValidators {
   accessTokenValidate: ObjectSchema<reqAuthorization>
   meUpdateValidate: ObjectSchema<reqMeUpdate>
   userProfileValidate: ObjectSchema<reqUserProfile>
+  followValidate: ObjectSchema<reqFollow>
 }
 
 export const validators: IValidators = {
@@ -42,5 +45,6 @@ export const validators: IValidators = {
   forgotPasswordValidate,
   accessTokenValidate,
   meUpdateValidate,
-  userProfileValidate
+  userProfileValidate,
+  followValidate
 }
