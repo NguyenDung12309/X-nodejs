@@ -11,16 +11,44 @@ import { ObjectId } from 'mongodb'
 export const isFollow = async (followerId: string, helper: CustomHelpers) => {
   const { _id } = userService.userInfo as UserSchema
 
-  const result = await followService.findFollowDocument({
+  await followService.findFollower(followerId)
+
+  const followDocument = await followService.findFollowDocument({
     user_id: _id as ObjectId,
     followed_user_id: followerId
   })
 
-  if (result) {
+  if (followDocument) {
     const externalMessage = helper.message({
       external: objectToString(
         new ErrorWithStatus({
           message: useI18n.__('validate.common.followed'),
+          statusCode: HTTP_STATUS.CONFLICT
+        })
+      )
+    })
+
+    return externalMessage
+  }
+
+  return followerId
+}
+
+export const isNotFollow = async (followerId: string, helper: CustomHelpers) => {
+  const { _id } = userService.userInfo as UserSchema
+
+  await followService.findFollower(followerId)
+
+  const followDocument = await followService.findFollowDocument({
+    user_id: _id as ObjectId,
+    followed_user_id: followerId
+  })
+
+  if (!followDocument) {
+    const externalMessage = helper.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.notFollowed'),
           statusCode: HTTP_STATUS.CONFLICT
         })
       )

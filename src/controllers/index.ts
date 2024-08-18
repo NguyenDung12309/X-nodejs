@@ -21,6 +21,8 @@ import { meUpdateController } from './users/meUpdate'
 import { reqUserProfile } from '@/models/dto/users/userProfile'
 import { reqFollow } from '@/models/dto/follow/follow'
 import { followController } from './follow/follow'
+import { unFollowController } from './follow/unFollow'
+import { reqUnFollow } from '@/models/dto/follow/unFollow'
 
 export interface IRequestHandler {
   registerController: Controller<reqRegister>
@@ -35,6 +37,7 @@ export interface IRequestHandler {
   meUpdateController: Controller<reqMeUpdate>
   userProfileController: Controller<any, reqUserProfile>
   followController: Controller<reqFollow>
+  unFollowController: Controller<reqUnFollow>
 }
 
 export const controllers: IRequestHandler = {
@@ -49,5 +52,6 @@ export const controllers: IRequestHandler = {
   resendMailTokenController,
   getMeController,
   userProfileController,
-  followController
+  followController,
+  unFollowController
 }

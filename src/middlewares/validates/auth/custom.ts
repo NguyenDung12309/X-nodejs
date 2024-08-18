@@ -47,7 +47,7 @@ export const checkEmailPasswordExists = async (password: string, helper: CustomH
 }
 
 export const checkEmailExists = async (email: string, { message }: CustomHelpers) => {
-  const isExistEmail = await userService.findUser({ email })
+  const isExistEmail = await userService.findUser({ email }, true)
 
   if (isExistEmail) {
     const externalMessage = message({

@@ -18,6 +18,8 @@ import { reqUserProfile } from '@/models/dto/users/userProfile'
 import { userProfileValidate } from './user/userProfile'
 import { reqFollow } from '@/models/dto/follow/follow'
 import { followValidate } from './follow'
+import { unFollowValidate } from './follow/unFollow'
+import { reqUnFollow } from '@/models/dto/follow/unFollow'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -32,6 +34,7 @@ export interface IValidators {
   meUpdateValidate: ObjectSchema<reqMeUpdate>
   userProfileValidate: ObjectSchema<reqUserProfile>
   followValidate: ObjectSchema<reqFollow>
+  unFollowValidate: ObjectSchema<reqUnFollow>
 }
 
 export const validators: IValidators = {
@@ -46,5 +49,6 @@ export const validators: IValidators = {
   accessTokenValidate,
   meUpdateValidate,
   userProfileValidate,
-  followValidate
+  followValidate,
+  unFollowValidate
 }
