@@ -8,9 +8,10 @@ import { HTTP_STATUS } from './constraints/httpStatus.js'
 import { tokenRouter } from './routes/token.js'
 import { authRouter } from './routes/auth.js'
 import { userRouter } from './routes/user.js'
+import { followRouter } from './routes/follow.js'
 const app = express()
 const port = 3000
-const routers = [userRouter, tokenRouter, authRouter]
+const routers = [userRouter, tokenRouter, authRouter, followRouter]
 
 app.use(express.json())
 databaseService.connect()

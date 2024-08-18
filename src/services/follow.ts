@@ -5,9 +5,11 @@ import { omit } from 'lodash'
 import { ErrorWithStatus } from '@/types/errors'
 import { useI18n } from '@/helpers/i18n'
 import { HTTP_STATUS } from '@/constraints/httpStatus'
+import { FollowSchema } from '@/models/schemas/follow'
 
 class FollowService {
   followerInfo: UserDto | undefined
+  documentFollowerInfo: FollowSchema | undefined
 
   findFollower = async (followerId: string) => {
     const result = await databaseService.users.findOne({ _id: new ObjectId(followerId) })
@@ -34,10 +36,16 @@ class FollowService {
     user_id: string | ObjectId
     followed_user_id: string | ObjectId
   }) => {
-    return databaseService.follow.findOne({
+    const result = await databaseService.follow.findOne({
       user_id: new ObjectId(user_id),
       followed_user_id: new ObjectId(followed_user_id)
     })
+
+    if (result) {
+      this.documentFollowerInfo = result
+    }
+
+    return result
   }
 
   resetFollowerInfo = () => {

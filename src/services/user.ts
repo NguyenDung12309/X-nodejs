@@ -16,11 +16,11 @@ import { HTTP_STATUS } from '@/constraints/httpStatus.js'
 class UserService {
   userInfo: UserDto | undefined
 
-  findUser = async (data: Partial<UserSchema>) => {
+  findUser = async (data: Partial<UserSchema>, noError?: boolean) => {
     const result = await databaseService.users.findOne(data)
     const omitResult = omit(result, ['email_verify_token', 'password', 'forgot_password_token'])
 
-    if (!result) {
+    if (!result && !noError) {
       this.resetUserInfo()
 
       throw new ErrorWithStatus({
