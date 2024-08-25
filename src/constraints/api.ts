@@ -16,6 +16,7 @@ export const API_CONST = {
   forgotPassword: '/forgot-password',
   verifyForgotPassword: '/verify-forgot-password',
   userProfile: '/user-profile/',
+  resetPassword: '/reset-password',
   ...USER_API_CONST
 }
 

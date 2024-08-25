@@ -20,6 +20,8 @@ import { reqFollow } from '@/models/dto/follow/follow'
 import { followValidate } from './follow'
 import { unFollowValidate } from './follow/unFollow'
 import { reqUnFollow } from '@/models/dto/follow/unFollow'
+import { reqResetPassword } from '@/models/dto/auth/resetPassword'
+import { resetPasswordValidate } from './auth/resetPassword'
 
 export interface IValidators {
   registerValidate: ObjectSchema<reqRegister>
@@ -35,6 +37,7 @@ export interface IValidators {
   userProfileValidate: ObjectSchema<reqUserProfile>
   followValidate: ObjectSchema<reqFollow>
   unFollowValidate: ObjectSchema<reqUnFollow>
+  resetPasswordValidate: ObjectSchema<reqResetPassword>
 }
 
 export const validators: IValidators = {
@@ -50,5 +53,6 @@ export const validators: IValidators = {
   meUpdateValidate,
   userProfileValidate,
   followValidate,
-  unFollowValidate
+  unFollowValidate,
+  resetPasswordValidate
 }
