@@ -9,9 +9,10 @@ import { tokenRouter } from './routes/token.js'
 import { authRouter } from './routes/auth.js'
 import { userRouter } from './routes/user.js'
 import { followRouter } from './routes/follow.js'
+import { mediaRouter } from './routes/media.js'
 const app = express()
 const port = 3000
-const routers = [userRouter, tokenRouter, authRouter, followRouter]
+const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter]
 
 app.use(express.json())
 databaseService.connect()

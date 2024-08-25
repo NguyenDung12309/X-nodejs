@@ -25,6 +25,7 @@ import { unFollowController } from './follow/unFollow'
 import { reqUnFollow } from '@/models/dto/follow/unFollow'
 import { reqResetPassword } from '@/models/dto/auth/resetPassword'
 import { resetPasswordController } from './auth/resetPassword'
+import { uploadSingleImageController } from './media/singleImage'
 
 export interface IRequestHandler {
   registerController: Controller<reqRegister>
@@ -41,6 +42,7 @@ export interface IRequestHandler {
   followController: Controller<reqFollow>
   unFollowController: Controller<reqUnFollow>
   resetPasswordController: Controller<reqResetPassword>
+  uploadSingleImageController: Controller<any>
 }
 
 export const controllers: IRequestHandler = {
@@ -57,5 +59,6 @@ export const controllers: IRequestHandler = {
   userProfileController,
   followController,
   unFollowController,
-  resetPasswordController
+  resetPasswordController,
+  uploadSingleImageController
 }
