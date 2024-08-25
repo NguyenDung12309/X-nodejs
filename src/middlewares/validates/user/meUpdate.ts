@@ -1,6 +1,8 @@
+import { REGEX_USERNAME } from '@/constraints/regex'
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/message'
 import { reqMeUpdate } from '@/models/dto/users/meUpdate'
+import { checkUserNameExist } from './custom'
 
 export const meUpdateValidate = joi.object<reqMeUpdate>({
   avatar: joi
@@ -55,6 +57,9 @@ export const meUpdateValidate = joi.object<reqMeUpdate>({
   username: joi
     .string()
     .trim()
+    .regex(REGEX_USERNAME)
+    .external(checkUserNameExist)
+    .required()
     .messages(
       getCommonMessageValidate<reqMeUpdate>({
         field: 'username'

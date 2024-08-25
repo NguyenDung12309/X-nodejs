@@ -27,7 +27,8 @@ export const getCommonMessageValidate = <T>(param: {
       max: param.max || ''
     }),
     'any.only': useI18n.__('validate.common.matchField', { field: fieldName || '', match: matchFieldName || '' }),
-    'date.format': useI18n.__('validate.common.iso8601', { field: fieldName || '' })
+    'date.format': useI18n.__('validate.common.iso8601', { field: fieldName || '' }),
+    'string.pattern.base': useI18n.__('validate.common.regex', { field: fieldName || '' })
   }
 
   return customMessages
