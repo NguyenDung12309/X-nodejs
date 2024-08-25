@@ -32,4 +32,7 @@ router.post(
   wrapRequestHandler('verifyForgotPasswordTokenController')
 )
 
+router.post(API_CONST.resetPassword, validatorMiddleWare({ validator: 'resetPasswordValidate' }))
+wrapRequestHandler('resetPasswordController')
+
 export const authRouter = router

@@ -23,6 +23,8 @@ import { reqFollow } from '@/models/dto/follow/follow'
 import { followController } from './follow/follow'
 import { unFollowController } from './follow/unFollow'
 import { reqUnFollow } from '@/models/dto/follow/unFollow'
+import { reqResetPassword } from '@/models/dto/auth/resetPassword'
+import { resetPasswordController } from './auth/resetPassword'
 
 export interface IRequestHandler {
   registerController: Controller<reqRegister>
@@ -38,6 +40,7 @@ export interface IRequestHandler {
   userProfileController: Controller<any, reqUserProfile>
   followController: Controller<reqFollow>
   unFollowController: Controller<reqUnFollow>
+  resetPasswordController: Controller<reqResetPassword>
 }
 
 export const controllers: IRequestHandler = {
@@ -53,5 +56,6 @@ export const controllers: IRequestHandler = {
   getMeController,
   userProfileController,
   followController,
-  unFollowController
+  unFollowController,
+  resetPasswordController
 }
