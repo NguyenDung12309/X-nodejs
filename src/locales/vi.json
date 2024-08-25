@@ -16,7 +16,8 @@
       "notEmailVerify": "tài khoản này chưa xác thực email",
       "banned": "tài khoản này đã bị cấm",
       "followed": "đã follow tài khoản này",
-      "notFollowed": "chưa follow tài khoản này"
+      "notFollowed": "chưa follow tài khoản này",
+      "regex": "format không hợp lệ"
     }
   }
 }

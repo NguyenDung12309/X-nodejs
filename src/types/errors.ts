@@ -18,4 +18,5 @@ export type JoiErrorMessages = {
   'any.empty'?: string
   'string.empty'?: string
   'date.format'?: string
+  'string.pattern.base'?: string
 }

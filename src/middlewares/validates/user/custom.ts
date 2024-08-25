@@ -22,3 +22,20 @@ export const checkUserVerifyEmail = async (token: string, helper: CustomHelpers)
 
   return token
 }
+
+export const checkUserNameExist = async (username: string, helper: CustomHelpers) => {
+  if (userService.userInfo?.username === username) {
+    const externalMessage = helper.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.exist', { field: 'username' }),
+          statusCode: HTTP_STATUS.CONFLICT
+        })
+      )
+    })
+
+    return externalMessage
+  }
+
+  return username
+}
