@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-interface RequestTypes<TBody, TQuery = unknown> extends Request<{}, any, TBody, TQuery> {}
+export interface RequestTypes<TBody, TQuery = unknown> extends Request<{}, any, TBody, TQuery> {}
 
 export type MiddleWare = (req: Request, res: Response, next: NextFunction) => void
 
