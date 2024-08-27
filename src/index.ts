@@ -10,8 +10,9 @@ import { authRouter } from './routes/auth.js'
 import { userRouter } from './routes/user.js'
 import { followRouter } from './routes/follow.js'
 import { mediaRouter } from './routes/media.js'
+import { port } from './constraints/common.js'
 const app = express()
-const port = 3000
+
 const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter]
 
 app.use(express.json())

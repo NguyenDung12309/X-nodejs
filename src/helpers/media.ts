@@ -1,11 +1,11 @@
 import { RequestTypes } from '@/types/type'
-import formidable from 'formidable'
-import path from 'path'
+import formidable, { File } from 'formidable'
 import { useI18n } from './i18n'
+import { UPLOAD_TEMP_DIR } from '@/constraints/path'
 
 export const handleUploadSingleMedia = (req: RequestTypes<unknown, unknown>) => {
   const form = formidable({
-    uploadDir: path.resolve('uploads'),
+    uploadDir: UPLOAD_TEMP_DIR,
     maxFiles: 1,
     keepExtensions: true,
     maxFileSize: 300 * 1024, // 300KB
@@ -20,7 +20,7 @@ export const handleUploadSingleMedia = (req: RequestTypes<unknown, unknown>) => 
     }
   })
 
-  return new Promise((resolve, reject) => {
+  return new Promise<File>((resolve, reject) => {
     form.parse(req, (err, _, files) => {
       if (err) {
         return reject(err)
@@ -29,8 +29,9 @@ export const handleUploadSingleMedia = (req: RequestTypes<unknown, unknown>) => 
       if (!files.image) {
         return reject(new Error(useI18n.__('validate.common.invalid', { field: 'file' })))
       }
+      const result = files.image[0]
 
-      resolve(files)
+      resolve(result)
     })
   })
 }
