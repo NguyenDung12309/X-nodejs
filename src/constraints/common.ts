@@ -6,3 +6,5 @@ export const ENV_CONST = {
   verifyEmailKey: process.env.VERIFY_EMAIL_TOKEN_SECRET_KEY,
   forgotPasswordKey: process.env.FORGOT_PASSWORD_TOKEN_SECRET_KEY
 }
+
+export const port = 3000
