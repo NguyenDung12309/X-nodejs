@@ -1,6 +1,5 @@
 import express from 'express'
 import { databaseService } from './services/db.js'
-import { defaultErrorHandler } from './middlewares/error.js'
 import { useI18n } from './helpers/i18n.js'
 import { USER_API_CONST } from './constraints/api.js'
 import { validatorMiddleWare } from './helpers/validate.js'
@@ -11,13 +10,19 @@ import { userRouter } from './routes/user.js'
 import { followRouter } from './routes/follow.js'
 import { mediaRouter } from './routes/media.js'
 import { port } from './constraints/common.js'
+import { mediaService } from './services/media.js'
+import { defaultErrorHandler } from './middlewares/error.js'
+import { UPLOAD_DIR } from './constraints/path.js'
 const app = express()
 
 const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter]
 
 app.use(express.json())
-databaseService.connect()
 
+databaseService.connect()
+mediaService.createUploadFolder()
+
+app.use('/uploads', express.static(UPLOAD_DIR))
 app.use(useI18n.init)
 
 app.use(async (req, res, next) => {
