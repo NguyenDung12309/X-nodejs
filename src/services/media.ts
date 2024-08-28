@@ -1,4 +1,4 @@
-import { UPLOAD_DIR } from '@/constraints/path'
+import { UPLOAD_DIR, UPLOAD_TEMP_DIR } from '@/constraints/path'
 import { handleUploadSingleMedia } from '@/helpers/media'
 import { Request } from 'express'
 import sharp from 'sharp'
@@ -20,6 +20,16 @@ class MediaService {
     fs.unlinkSync(file.filepath)
 
     return process.env.MEDIA_URL + '/' + fileName + '.jpg'
+  }
+
+  createUploadFolder() {
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR)
+    }
+
+    if (!fs.existsSync(UPLOAD_TEMP_DIR)) {
+      fs.mkdirSync(UPLOAD_TEMP_DIR)
+    }
   }
 }
 
