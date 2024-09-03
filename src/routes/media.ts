@@ -4,6 +4,6 @@ import express from 'express'
 
 const router = express.Router()
 
-router.post(API_CONST.uploadSingleMedia, wrapRequestHandler('uploadSingleImageController'))
+router.post(API_CONST.uploadMedia, wrapRequestHandler('uploadImageController'))
 
 export const mediaRouter = router

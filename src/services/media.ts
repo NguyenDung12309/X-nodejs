@@ -1,25 +1,35 @@
 import { UPLOAD_DIR, UPLOAD_TEMP_DIR } from '@/constraints/path'
-import { handleUploadSingleMedia } from '@/helpers/media'
 import { Request } from 'express'
 import sharp from 'sharp'
 import 'dotenv/config'
 import fs from 'fs'
+import { handleUploadMedia } from '@/helpers/media'
+import { Media, MediaType } from '@/models/dto/media/uploadImage'
 
 class MediaService {
-  async handleUploadSingleImage(req: Request) {
-    const file = await handleUploadSingleMedia(req)
+  async handleUploadImage(req: Request) {
+    const files = await handleUploadMedia(req)
 
-    const fileName = file.newFilename.split('.')[0]
+    const result = await Promise.all(
+      files.map(async (file): Promise<Media> => {
+        const fileName = file.newFilename.split('.')[0]
 
-    sharp.cache(false)
+        sharp.cache(false)
 
-    await sharp(file.filepath)
-      .jpeg()
-      .toFile(UPLOAD_DIR + '/' + fileName + '.jpg')
+        await sharp(file.filepath)
+          .jpeg()
+          .toFile(UPLOAD_DIR + '/' + fileName + '.jpg')
 
-    fs.unlinkSync(file.filepath)
+        fs.unlinkSync(file.filepath)
 
-    return process.env.MEDIA_URL + '/' + fileName + '.jpg'
+        return {
+          url: process.env.MEDIA_URL + '/' + fileName + '.jpg',
+          type: MediaType.Video
+        }
+      })
+    )
+
+    return result
   }
 
   createUploadFolder() {
