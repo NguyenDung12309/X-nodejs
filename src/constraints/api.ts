@@ -5,7 +5,7 @@ export const USER_API_CONST = {
   me: '/me',
   resendVerifyEmail: '/resend-verify-email',
   follow: '/follow',
-  uploadSingleMedia: '/upload-single-media'
+  uploadMedia: '/upload-media'
 }
 
 export const API_CONST = {
@@ -29,5 +29,5 @@ export const apiAccessPermissions = {
   [API_CONST.me]: verifyAndUnVerify,
   [API_CONST.meUpdate]: verifyOnly,
   [API_CONST.follow]: verifyOnly,
-  [API_CONST.uploadSingleMedia]: verifyOnly
+  [API_CONST.uploadMedia]: verifyOnly
 }
