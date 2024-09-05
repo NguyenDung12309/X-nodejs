@@ -12,7 +12,7 @@ import { mediaRouter } from './routes/media.js'
 import { port } from './constraints/common.js'
 import { mediaService } from './services/media.js'
 import { defaultErrorHandler } from './middlewares/error.js'
-import { UPLOAD_DIR } from './constraints/path.js'
+import { UPLOAD_IMAGE_DIR, UPLOAD_IMAGE_PATH, UPLOAD_VIDEO_DIR, UPLOAD_VIDEO_PATH } from './constraints/path.js'
 const app = express()
 
 const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter]
@@ -22,7 +22,9 @@ app.use(express.json())
 databaseService.connect()
 mediaService.createUploadFolder()
 
-app.use('/uploads', express.static(UPLOAD_DIR))
+app.use('/' + UPLOAD_IMAGE_PATH, express.static(UPLOAD_IMAGE_DIR))
+app.use('/' + UPLOAD_VIDEO_PATH, express.static(UPLOAD_VIDEO_DIR))
+
 app.use(useI18n.init)
 
 app.use(async (req, res, next) => {
