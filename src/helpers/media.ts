@@ -44,7 +44,7 @@ export const handleUploadVideo = (req: RequestTypes<unknown, unknown>) => {
     keepExtensions: true,
     maxFileSize: 50 * 1024 * 1024, // 50MB
     filter: ({ name, originalFilename: _, mimetype }) => {
-      const valid = name === 'video' && Boolean(mimetype?.includes('mp4'))
+      const valid = name === 'videos' && Boolean(mimetype?.includes('mp4'))
 
       if (!valid) {
         form.emit('error' as any, new Error(useI18n.__('validate.common.invalid', { field: 'file' })) as any)
@@ -60,10 +60,10 @@ export const handleUploadVideo = (req: RequestTypes<unknown, unknown>) => {
         return reject(err)
       }
 
-      if (!files.video) {
+      if (!files.videos) {
         return reject(new Error(useI18n.__('validate.common.invalid', { field: 'file' })))
       }
-      const result = files.video
+      const result = files.videos
 
       resolve(result)
     })
