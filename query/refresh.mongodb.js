@@ -18,38 +18,46 @@ const refreshTokenCollection = db.getCollection('refreshToken')
 refreshTokenCollection.remove({})
 
 // add validate
-// db.runCommand({
-//   collMod: 'refreshToken',
-//   validator: {
-//     $jsonSchema: {
-//       bsonType: 'object',
-//       required: ['_id', 'token', 'created_at', 'verify', 'user_id'],
-//       properties: {
-//         _id: {
-//           bsonType: 'objectId',
-//           description: 'Phải là một ObjectId và bắt buộc'
-//         },
-//         token: {
-//           bsonType: 'string',
-//           description: 'Phải là một chuỗi và bắt buộc'
-//         },
-//         created_at: {
-//           bsonType: 'date',
-//           description: 'Phải là một ngày tháng và bắt buộc'
-//         },
-//         user_id: {
-//           bsonType: 'objectId',
-//           description: 'Phải là một ObjectId và bắt buộc'
-//         },
-//         verify: {
-//           bsonType: 'int',
-//           enum: [0, 1, 2],
-//           description: 'Phải là một trong các giá trị: 0 (unverified), 1 (verified), 2 (banned)'
-//         }
-//       },
-//       additionalProperties: false
-//     }
-//   },
-//   validationLevel: 'strict',
-//   validationAction: 'error'
-// })
+db.runCommand({
+  collMod: 'refreshToken',
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['_id', 'token', 'created_at', 'verify', 'user_id', 'exp', 'iat'],
+      properties: {
+        _id: {
+          bsonType: 'objectId',
+          description: 'Phải là một ObjectId và bắt buộc'
+        },
+        token: {
+          bsonType: 'string',
+          description: 'Phải là một chuỗi và bắt buộc'
+        },
+        created_at: {
+          bsonType: 'date',
+          description: 'Phải là một ngày tháng và bắt buộc'
+        },
+        user_id: {
+          bsonType: 'objectId',
+          description: 'Phải là một ObjectId và bắt buộc'
+        },
+        verify: {
+          bsonType: 'int',
+          enum: [0, 1, 2],
+          description: 'Phải là một trong các giá trị: 0 (unverified), 1 (verified), 2 (banned)'
+        },
+        exp: {
+          bsonType: 'date',
+          description: 'Phải là một ngày tháng và bắt buộc'
+        },
+        iat: {
+          bsonType: 'date',
+          description: 'Phải là một ngày tháng và bắt buộc'
+        }
+      },
+      additionalProperties: false
+    }
+  },
+  validationLevel: 'strict',
+  validationAction: 'error'
+})
