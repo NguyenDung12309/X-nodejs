@@ -19,7 +19,11 @@ const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter]
 
 app.use(express.json())
 
-databaseService.connect()
+databaseService.connect().then(() => {
+  databaseService.indexUsers()
+  databaseService.indexRefreshToken()
+  databaseService.indexFollow()
+})
 mediaService.createUploadFolder()
 
 app.use('/' + UPLOAD_IMAGE_PATH, express.static(UPLOAD_IMAGE_DIR))

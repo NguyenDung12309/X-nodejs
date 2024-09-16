@@ -13,17 +13,23 @@ import { tokenService } from '@/services/token'
 import { userService } from '@/services/user'
 import { Controller, UserVerifyStatus } from '@/types/type'
 import { ObjectId } from 'mongodb'
+import { verifyToken } from '@/helpers/jwt'
+import { RefreshTokenSchema } from '@/models/schemas/refreshToken'
+import { ENV_CONST } from '@/constraints/common'
 
 export const getNewAccessTokenController: Controller<reqRefreshToken> = async (req, res) => {
   const refreshTokenInfo = tokenService.refreshTokenInfo
 
   const token = req.body.refresh_token
+  const { exp, iat } = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.refreshKey || '' })
 
   const [_, result] = await Promise.all([
     databaseService.refreshToken.deleteOne({ token }),
     tokenService.createAccessAndRefreshToken({
       user_id: refreshTokenInfo?.user_id as ObjectId,
-      verify: refreshTokenInfo?.verify as UserVerifyStatus
+      verify: refreshTokenInfo?.verify as UserVerifyStatus,
+      exp: exp,
+      iat: iat
     })
   ])
 
