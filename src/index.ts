@@ -13,9 +13,10 @@ import { port } from './constraints/common.js'
 import { mediaService } from './services/media.js'
 import { defaultErrorHandler } from './middlewares/error.js'
 import { UPLOAD_IMAGE_DIR, UPLOAD_IMAGE_PATH, UPLOAD_VIDEO_DIR, UPLOAD_VIDEO_PATH } from './constraints/path.js'
+import { tweetRouter } from './routes/tweet.js'
 const app = express()
 
-const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter]
+const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter, tweetRouter]
 
 app.use(express.json())
 
