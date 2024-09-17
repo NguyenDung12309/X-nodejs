@@ -3,8 +3,8 @@ import { Request } from 'express'
 import sharp from 'sharp'
 import 'dotenv/config'
 import fs from 'fs'
-import { Media, MediaType } from '@/models/dto/media/uploadImage'
 import { handleUploadImage, handleUploadVideo } from '@/helpers/media'
+import { Media, MediaType } from '@/types/type'
 
 class MediaService {
   async handleUploadImage(req: Request) {
