@@ -1,9 +1,9 @@
 import { joi } from '@/helpers/joi'
-import { reqForgotPassword } from '@/models/dto/auth/forgotPassword'
+import { ReqForgotPassword } from '@/models/dto/auth/forgotPassword'
 import { getCommonMessageValidate } from '@/helpers/message'
 import { checkEmailNotExists } from './custom'
 
-export const forgotPasswordValidate = joi.object<reqForgotPassword>({
+export const forgotPasswordValidate = joi.object<ReqForgotPassword>({
   email: joi
     .string()
     .email()
@@ -11,7 +11,7 @@ export const forgotPasswordValidate = joi.object<reqForgotPassword>({
     .trim()
     .external(checkEmailNotExists)
     .messages(
-      getCommonMessageValidate<reqForgotPassword>({
+      getCommonMessageValidate<ReqForgotPassword>({
         field: 'email'
       })
     )

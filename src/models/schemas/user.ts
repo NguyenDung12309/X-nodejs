@@ -27,7 +27,7 @@ export class UserSchema {
         ...data,
         created_at: data.created_at || date,
         updated_at: data.updated_at || date,
-        verify: data.verify || UserVerifyStatus.unverified
+        verify: data.verify ?? UserVerifyStatus.unverified
       },
       this
     )

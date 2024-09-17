@@ -1,8 +1,8 @@
-export interface reqUploadVideo {
+export interface ReqUploadVideo {
   video: File
 }
 
-export interface resUploadVideo {
+export interface ResUploadVideo {
   video_url: string
 }
 

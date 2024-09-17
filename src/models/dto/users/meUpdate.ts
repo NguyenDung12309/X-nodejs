@@ -1,4 +1,4 @@
-export interface reqMeUpdate {
+export interface ReqMeUpdate {
   name?: string
   bio?: string
   location?: string

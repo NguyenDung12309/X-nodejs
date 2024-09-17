@@ -1,16 +1,16 @@
 import { joi } from '@/helpers/joi'
-import { reqLogin } from '@/models/dto/auth/login'
+import { ReqLogin } from '@/models/dto/auth/login'
 import { getCommonMessageValidate } from '@/helpers/message'
 import { checkEmailPasswordExists } from './custom'
 
-export const loginValidate = joi.object<reqLogin>({
+export const loginValidate = joi.object<ReqLogin>({
   email: joi
     .string()
     .email()
     .required()
     .trim()
     .messages(
-      getCommonMessageValidate<reqLogin>({
+      getCommonMessageValidate<ReqLogin>({
         field: 'email'
       })
     ),
@@ -20,7 +20,7 @@ export const loginValidate = joi.object<reqLogin>({
     .trim()
     .external(checkEmailPasswordExists)
     .messages(
-      getCommonMessageValidate<reqLogin>({
+      getCommonMessageValidate<ReqLogin>({
         field: 'password'
       })
     )

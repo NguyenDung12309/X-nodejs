@@ -1,9 +1,9 @@
 import { joi } from '@/helpers/joi'
-import { reqRegister } from '@/models/dto/auth/register'
+import { ReqRegister } from '@/models/dto/auth/register'
 import { getCommonMessageValidate } from '@/helpers/message'
 import { checkEmailExists } from './custom'
 
-export const registerValidate = joi.object<reqRegister>({
+export const registerValidate = joi.object<ReqRegister>({
   email: joi
     .string()
     .email()
@@ -11,7 +11,7 @@ export const registerValidate = joi.object<reqRegister>({
     .trim()
     .external(checkEmailExists)
     .messages(
-      getCommonMessageValidate<reqRegister>({
+      getCommonMessageValidate<ReqRegister>({
         field: 'email'
       })
     ),
@@ -22,7 +22,7 @@ export const registerValidate = joi.object<reqRegister>({
     .required()
     .trim()
     .messages(
-      getCommonMessageValidate<reqRegister>({
+      getCommonMessageValidate<ReqRegister>({
         field: 'name',
         min: '1',
         max: '100'
@@ -35,14 +35,14 @@ export const registerValidate = joi.object<reqRegister>({
     .max(50)
     .trim()
     .messages(
-      getCommonMessageValidate<reqRegister>({
+      getCommonMessageValidate<ReqRegister>({
         field: 'password',
         min: '6',
         max: '50'
       })
     ),
   confirm_password: joi.valid(joi.ref('password')).messages(
-    getCommonMessageValidate<reqRegister>({
+    getCommonMessageValidate<ReqRegister>({
       field: 'confirm_password',
       matchField: 'password'
     })
@@ -51,7 +51,7 @@ export const registerValidate = joi.object<reqRegister>({
     .date()
     .iso()
     .messages(
-      getCommonMessageValidate<reqRegister>({
+      getCommonMessageValidate<ReqRegister>({
         field: 'date_of_birth'
       })
     )

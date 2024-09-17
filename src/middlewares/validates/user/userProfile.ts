@@ -1,13 +1,13 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/message'
-import { reqUserProfile } from '@/models/dto/users/userProfile'
+import { ReqUserProfile } from '@/models/dto/users/userProfile'
 
-export const userProfileValidate = joi.object<reqUserProfile>({
+export const userProfileValidate = joi.object<ReqUserProfile>({
   username: joi
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqUserProfile>({
+      getCommonMessageValidate<ReqUserProfile>({
         field: 'username'
       })
     )

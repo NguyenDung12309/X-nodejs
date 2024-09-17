@@ -1,3 +1,3 @@
-export interface reqUserProfile {
+export interface ReqUserProfile {
   username: string
 }

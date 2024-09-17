@@ -1,4 +1,4 @@
-export interface reqLogin {
+export interface ReqLogin {
   email: string
   password: string
 }

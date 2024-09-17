@@ -22,13 +22,13 @@ export const handleResponseSuccess = <T>(res: Response, responseValue?: Partial<
 
   if (responseValue?.data) {
     return res.status(HTTP_STATUS.OK).json({
-      message: message || useI18n.__('success'),
+      message: message ?? useI18n.__('success'),
       data: responseValue.data
     })
   }
 
   return res.status(HTTP_STATUS.OK).json({
-    message: message || useI18n.__('success')
+    message: message ?? useI18n.__('success')
   })
 }
 

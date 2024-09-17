@@ -1,16 +1,16 @@
 import { joi } from '@/helpers/joi'
 import { verifyTRefreshToken } from './custom'
 import { getCommonMessageValidate } from '@/helpers/message'
-import { reqRefreshToken } from '@/models/dto/token/token'
+import { ReqRefreshToken } from '@/models/dto/token/token'
 
-export const refreshTokenValidate = joi.object<reqRefreshToken>({
+export const refreshTokenValidate = joi.object<ReqRefreshToken>({
   refresh_token: joi
     .string()
     .required()
     .trim()
     .external(verifyTRefreshToken)
     .messages(
-      getCommonMessageValidate<reqRefreshToken>({
+      getCommonMessageValidate<ReqRefreshToken>({
         field: 'refresh_token'
       })
     )
