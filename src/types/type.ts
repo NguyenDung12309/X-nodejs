@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import e, { NextFunction, Request, Response } from 'express'
 
 export interface RequestTypes<TBody, TQuery = unknown> extends Request<{}, any, TBody, TQuery> {}
 
@@ -10,7 +10,7 @@ export type Controller<TBody, TQuery = unknown> = (
   req: RequestTypes<TBody, TQuery>,
   res: Response,
   next?: NextFunction
-) => void
+) => Promise<e.Response<any, Record<string, any>>>
 
 export enum TokenType {
   AccessToken,

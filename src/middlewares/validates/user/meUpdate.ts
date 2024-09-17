@@ -1,15 +1,15 @@
 import { REGEX_USERNAME } from '@/constraints/regex'
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/message'
-import { reqMeUpdate } from '@/models/dto/users/meUpdate'
+import { ReqMeUpdate } from '@/models/dto/users/meUpdate'
 import { checkUserNameExist } from './custom'
 
-export const meUpdateValidate = joi.object<reqMeUpdate>({
+export const meUpdateValidate = joi.object<ReqMeUpdate>({
   avatar: joi
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqMeUpdate>({
+      getCommonMessageValidate<ReqMeUpdate>({
         field: 'avatar'
       })
     ),
@@ -17,7 +17,7 @@ export const meUpdateValidate = joi.object<reqMeUpdate>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqMeUpdate>({
+      getCommonMessageValidate<ReqMeUpdate>({
         field: 'bio'
       })
     ),
@@ -25,7 +25,7 @@ export const meUpdateValidate = joi.object<reqMeUpdate>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqMeUpdate>({
+      getCommonMessageValidate<ReqMeUpdate>({
         field: 'cover_photo'
       })
     ),
@@ -33,7 +33,7 @@ export const meUpdateValidate = joi.object<reqMeUpdate>({
     .date()
     .iso()
     .messages(
-      getCommonMessageValidate<reqMeUpdate>({
+      getCommonMessageValidate<ReqMeUpdate>({
         field: 'date_of_birth'
       })
     ),
@@ -42,7 +42,7 @@ export const meUpdateValidate = joi.object<reqMeUpdate>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqMeUpdate>({
+      getCommonMessageValidate<ReqMeUpdate>({
         field: 'location'
       })
     ),
@@ -50,7 +50,7 @@ export const meUpdateValidate = joi.object<reqMeUpdate>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqMeUpdate>({
+      getCommonMessageValidate<ReqMeUpdate>({
         field: 'name'
       })
     ),
@@ -61,7 +61,7 @@ export const meUpdateValidate = joi.object<reqMeUpdate>({
     .external(checkUserNameExist)
     .required()
     .messages(
-      getCommonMessageValidate<reqMeUpdate>({
+      getCommonMessageValidate<ReqMeUpdate>({
         field: 'username'
       })
     ),
@@ -69,7 +69,7 @@ export const meUpdateValidate = joi.object<reqMeUpdate>({
     .string()
     .trim()
     .messages(
-      getCommonMessageValidate<reqMeUpdate>({
+      getCommonMessageValidate<ReqMeUpdate>({
         field: 'website'
       })
     )

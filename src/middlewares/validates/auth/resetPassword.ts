@@ -1,8 +1,8 @@
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/message'
-import { reqResetPassword } from '@/models/dto/auth/resetPassword'
+import { ReqResetPassword } from '@/models/dto/auth/resetPassword'
 
-export const resetPasswordValidate = joi.object<reqResetPassword>({
+export const resetPasswordValidate = joi.object<ReqResetPassword>({
   password: joi
     .string()
     .required()
@@ -10,14 +10,14 @@ export const resetPasswordValidate = joi.object<reqResetPassword>({
     .max(50)
     .trim()
     .messages(
-      getCommonMessageValidate<reqResetPassword>({
+      getCommonMessageValidate<ReqResetPassword>({
         field: 'password',
         min: '6',
         max: '50'
       })
     ),
   confirm_password: joi.valid(joi.ref('password')).messages(
-    getCommonMessageValidate<reqResetPassword>({
+    getCommonMessageValidate<ReqResetPassword>({
       field: 'confirm_password',
       matchField: 'password'
     })

@@ -1,3 +1,3 @@
-export interface reqForgotPassword {
+export interface ReqForgotPassword {
   email: string
 }

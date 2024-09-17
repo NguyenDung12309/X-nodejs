@@ -1,14 +1,14 @@
 import { joi } from '@/helpers/joi'
 import { checkUserVerifyEmail } from './custom'
-import { reqAuthorization } from '@/models/dto/token/token'
+import { ReqAuthorization } from '@/models/dto/token/token'
 import { getCommonMessageValidate } from '@/helpers/message'
 
-export const resendVerifyEmailValidate = joi.object<reqAuthorization>({
+export const resendVerifyEmailValidate = joi.object<ReqAuthorization>({
   authorization: joi
     .string()
     .external(checkUserVerifyEmail)
     .messages(
-      getCommonMessageValidate<reqAuthorization>({
+      getCommonMessageValidate<ReqAuthorization>({
         field: 'authorization'
       })
     )

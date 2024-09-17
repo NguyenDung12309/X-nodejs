@@ -1,4 +1,4 @@
-export interface reqRegister {
+export interface ReqRegister {
   email: string
   password: string
   name: string

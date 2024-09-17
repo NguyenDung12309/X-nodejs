@@ -6,47 +6,47 @@ import { logoutController } from './auth/logout'
 import { getMeController } from './users/me'
 import { registerController } from './auth/register'
 import { userProfileController } from './users/userProfile'
-import { reqRegister } from '@/models/dto/auth/register'
-import { reqLogin } from '@/models/dto/auth/login'
+import { ReqRegister } from '@/models/dto/auth/register'
+import { ReqLogin } from '@/models/dto/auth/login'
 
-import { reqForgotPassword } from '@/models/dto/auth/forgotPassword'
+import { ReqForgotPassword } from '@/models/dto/auth/forgotPassword'
 import {
-  reqAuthorization,
-  reqForgotPasswordToken,
-  reqRefreshToken,
-  reqVerifyEmailToken
+  ReqAuthorization,
+  ReqForgotPasswordToken,
+  ReqRefreshToken,
+  ReqVerifyEmailToken
 } from '@/models/dto/token/token'
-import { reqMeUpdate } from '@/models/dto/users'
+import { ReqMeUpdate } from '@/models/dto/users'
 import { meUpdateController } from './users/meUpdate'
-import { reqUserProfile } from '@/models/dto/users/userProfile'
-import { reqFollow } from '@/models/dto/follow/follow'
+import { ReqUserProfile } from '@/models/dto/users/userProfile'
+import { ReqFollow } from '@/models/dto/follow/follow'
 import { followController } from './follow/follow'
 import { unFollowController } from './follow/unFollow'
-import { reqUnFollow } from '@/models/dto/follow/unFollow'
-import { reqResetPassword } from '@/models/dto/auth/resetPassword'
+import { ReqUnFollow } from '@/models/dto/follow/unFollow'
+import { ReqResetPassword } from '@/models/dto/auth/resetPassword'
 import { resetPasswordController } from './auth/resetPassword'
 import { uploadImageController } from './media/uploadImage'
-import { reqUploadVideo } from '@/models/dto/media/uploadVideo'
-import { reqUploadImage } from '@/models/dto/media/uploadImage'
+import { ReqUploadVideo } from '@/models/dto/media/uploadVideo'
+import { ReqUploadImage } from '@/models/dto/media/uploadImage'
 import { uploadVideoController } from './media/uploadVideo'
 
 export interface IRequestHandler {
-  registerController: Controller<reqRegister>
-  loginController: Controller<reqLogin>
-  logoutController: Controller<reqRefreshToken>
-  getNewAccessTokenController: Controller<reqRefreshToken>
-  verifyEmailController: Controller<reqVerifyEmailToken>
-  resendMailTokenController: Controller<reqAuthorization>
-  verifyForgotPasswordTokenController: Controller<reqForgotPasswordToken>
-  forgotPasswordController: Controller<reqForgotPassword>
-  getMeController: Controller<reqAuthorization>
-  meUpdateController: Controller<reqMeUpdate>
-  userProfileController: Controller<any, reqUserProfile>
-  followController: Controller<reqFollow>
-  unFollowController: Controller<reqUnFollow>
-  resetPasswordController: Controller<reqResetPassword>
-  uploadImageController: Controller<reqUploadImage>
-  uploadVideoController: Controller<reqUploadVideo>
+  registerController: Controller<ReqRegister>
+  loginController: Controller<ReqLogin>
+  logoutController: Controller<ReqRefreshToken>
+  getNewAccessTokenController: Controller<ReqRefreshToken>
+  verifyEmailController: Controller<ReqVerifyEmailToken>
+  resendMailTokenController: Controller<ReqAuthorization>
+  verifyForgotPasswordTokenController: Controller<ReqForgotPasswordToken>
+  forgotPasswordController: Controller<ReqForgotPassword>
+  getMeController: Controller<ReqAuthorization>
+  meUpdateController: Controller<ReqMeUpdate>
+  userProfileController: Controller<any, ReqUserProfile>
+  followController: Controller<ReqFollow>
+  unFollowController: Controller<ReqUnFollow>
+  resetPasswordController: Controller<ReqResetPassword>
+  uploadImageController: Controller<ReqUploadImage>
+  uploadVideoController: Controller<ReqUploadVideo>
 }
 
 export const controllers: IRequestHandler = {

@@ -45,6 +45,7 @@ export default [
     rules: {
       'import/no-cycle': 'error',
       'import/no-default-export': 'error',
+
       'prefer-arrow/prefer-arrow-functions': [
         'error',
         {
@@ -75,6 +76,7 @@ export default [
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
+          args: 'all',
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
           caughtErrorsIgnorePattern: '^_'

@@ -1,43 +1,43 @@
 import { resendVerifyEmailValidate } from './user/verifyEmail'
 import { ObjectSchema } from 'joi'
-import { reqRegister } from '@/models/dto/auth/register'
-import { reqLogin } from '@/models/dto/auth/login'
+import { ReqRegister } from '@/models/dto/auth/register'
+import { ReqLogin } from '@/models/dto/auth/login'
 
-import { reqForgotPassword } from '@/models/dto/auth/forgotPassword'
+import { ReqForgotPassword } from '@/models/dto/auth/forgotPassword'
 import { meUpdateValidate } from './user/meUpdate'
 import { forgotPasswordValidate, loginValidate, logoutValidate, registerValidate } from './auth'
 import { accessTokenValidate, forgotPasswordTokenValidate, refreshTokenValidate, verifyEmailValidate } from './token'
 import {
-  reqAuthorization,
-  reqForgotPasswordToken,
-  reqRefreshToken,
-  reqVerifyEmailToken
+  ReqAuthorization,
+  ReqForgotPasswordToken,
+  ReqRefreshToken,
+  ReqVerifyEmailToken
 } from '@/models/dto/token/token'
-import { reqMeUpdate } from '@/models/dto/users'
-import { reqUserProfile } from '@/models/dto/users/userProfile'
+import { ReqMeUpdate } from '@/models/dto/users'
+import { ReqUserProfile } from '@/models/dto/users/userProfile'
 import { userProfileValidate } from './user/userProfile'
-import { reqFollow } from '@/models/dto/follow/follow'
+import { ReqFollow } from '@/models/dto/follow/follow'
 import { followValidate } from './follow'
 import { unFollowValidate } from './follow/unFollow'
-import { reqUnFollow } from '@/models/dto/follow/unFollow'
-import { reqResetPassword } from '@/models/dto/auth/resetPassword'
+import { ReqUnFollow } from '@/models/dto/follow/unFollow'
+import { ReqResetPassword } from '@/models/dto/auth/resetPassword'
 import { resetPasswordValidate } from './auth/resetPassword'
 
 export interface IValidators {
-  registerValidate: ObjectSchema<reqRegister>
-  loginValidate: ObjectSchema<reqLogin>
-  logoutValidate: ObjectSchema<reqRefreshToken>
-  refreshTokenValidate: ObjectSchema<reqRefreshToken>
-  verifyEmailValidate: ObjectSchema<reqVerifyEmailToken>
-  resendVerifyEmailValidate: ObjectSchema<reqAuthorization>
-  forgotPasswordTokenValidate: ObjectSchema<reqForgotPasswordToken>
-  forgotPasswordValidate: ObjectSchema<reqForgotPassword>
-  accessTokenValidate: ObjectSchema<reqAuthorization>
-  meUpdateValidate: ObjectSchema<reqMeUpdate>
-  userProfileValidate: ObjectSchema<reqUserProfile>
-  followValidate: ObjectSchema<reqFollow>
-  unFollowValidate: ObjectSchema<reqUnFollow>
-  resetPasswordValidate: ObjectSchema<reqResetPassword>
+  registerValidate: ObjectSchema<ReqRegister>
+  loginValidate: ObjectSchema<ReqLogin>
+  logoutValidate: ObjectSchema<ReqRefreshToken>
+  refreshTokenValidate: ObjectSchema<ReqRefreshToken>
+  verifyEmailValidate: ObjectSchema<ReqVerifyEmailToken>
+  resendVerifyEmailValidate: ObjectSchema<ReqAuthorization>
+  forgotPasswordTokenValidate: ObjectSchema<ReqForgotPasswordToken>
+  forgotPasswordValidate: ObjectSchema<ReqForgotPassword>
+  accessTokenValidate: ObjectSchema<ReqAuthorization>
+  meUpdateValidate: ObjectSchema<ReqMeUpdate>
+  userProfileValidate: ObjectSchema<ReqUserProfile>
+  followValidate: ObjectSchema<ReqFollow>
+  unFollowValidate: ObjectSchema<ReqUnFollow>
+  resetPasswordValidate: ObjectSchema<ReqResetPassword>
 }
 
 export const validators: IValidators = {

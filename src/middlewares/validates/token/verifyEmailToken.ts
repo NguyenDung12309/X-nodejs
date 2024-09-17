@@ -1,16 +1,16 @@
 import { joi } from '@/helpers/joi'
 import { verifyEmailToken } from './custom'
 import { getCommonMessageValidate } from '@/helpers/message'
-import { reqVerifyEmailToken } from '@/models/dto/token/token'
+import { ReqVerifyEmailToken } from '@/models/dto/token/token'
 
-export const verifyEmailValidate = joi.object<reqVerifyEmailToken>({
+export const verifyEmailValidate = joi.object<ReqVerifyEmailToken>({
   email_verify_token: joi
     .string()
     .required()
     .trim()
     .external(verifyEmailToken)
     .messages(
-      getCommonMessageValidate<reqVerifyEmailToken>({
+      getCommonMessageValidate<ReqVerifyEmailToken>({
         field: 'email_verify_token'
       })
     )

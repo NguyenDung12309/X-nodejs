@@ -24,22 +24,22 @@ export class TokenService {
   signAccessToken = ({ user_id, verify }: ITokenProps) => {
     return signToken({
       payload: { user_id, verify, tokenType: TokenType.AccessToken },
-      privateKey: ENV_CONST.accessKey || '',
+      privateKey: ENV_CONST.accessKey ?? '',
       options: { expiresIn: accessTokenExpireTime }
     })
   }
 
   signRefreshToken = ({ user_id, verify, ...prop }: ITokenProps) => {
-    if (prop.exp || prop.iat) {
+    if (prop.exp ?? prop.iat) {
       return signToken({
         payload: { user_id, verify, tokenType: TokenType.RefreshToken, ...prop },
-        privateKey: ENV_CONST.refreshKey || ''
+        privateKey: ENV_CONST.refreshKey ?? ''
       })
     }
 
     return signToken({
       payload: { user_id, verify, tokenType: TokenType.RefreshToken },
-      privateKey: ENV_CONST.refreshKey || '',
+      privateKey: ENV_CONST.refreshKey ?? '',
       options: { expiresIn: refreshTokenExpireTime }
     })
   }
@@ -47,7 +47,7 @@ export class TokenService {
   signEmailVerifyToken = ({ user_id, verify }: ITokenProps) => {
     return signToken({
       payload: { user_id, verify, tokenType: TokenType.EmailVerifyToken },
-      privateKey: ENV_CONST.verifyEmailKey || '',
+      privateKey: ENV_CONST.verifyEmailKey ?? '',
       options: { expiresIn: emailExpireTime }
     })
   }
@@ -59,7 +59,7 @@ export class TokenService {
   signForgotPasswordToken = ({ user_id, verify }: ITokenProps) => {
     return signToken({
       payload: { user_id, verify, tokenType: TokenType.ForgotPasswordToken },
-      privateKey: ENV_CONST.forgotPasswordKey || '',
+      privateKey: ENV_CONST.forgotPasswordKey ?? '',
       options: { expiresIn: forgotPasswordExpireTime }
     })
   }
@@ -68,7 +68,7 @@ export class TokenService {
     const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(data)
     const { exp, iat } = await verifyToken<RefreshTokenSchema>({
       token: refreshToken,
-      privateKey: ENV_CONST.refreshKey || ''
+      privateKey: ENV_CONST.refreshKey ?? ''
     })
 
     await databaseService.refreshToken.insertOne(

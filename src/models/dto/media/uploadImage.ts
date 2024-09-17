@@ -1,8 +1,8 @@
-export interface reqUploadImage {
+export interface ReqUploadImage {
   image: File
 }
 
-export interface resUploadImage {
+export interface ResUploadImage {
   image_url: string
 }
 

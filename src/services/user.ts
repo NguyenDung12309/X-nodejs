@@ -1,17 +1,16 @@
 import { databaseService } from './db.js'
 import { UserSchema } from '@/models/schemas/user.js'
-import { __ } from 'i18n'
 import { sha256 } from '@/helpers/crypto.js'
 import { UserVerifyStatus } from '@/types/type.js'
 
 import { Document, ObjectId } from 'mongodb'
-import { reqRegister } from '@/models/dto/auth/register.js'
+import { ReqRegister } from '@/models/dto/auth/register.js'
 import { tokenService } from './token.js'
 import { omit } from 'lodash'
 import { UserDto } from '@/models/dto/users/me.js'
 import { ErrorWithStatus } from '@/types/errors.js'
-import { useI18n } from '@/helpers/i18n.js'
 import { HTTP_STATUS } from '@/constraints/httpStatus.js'
+import { useI18n } from '@/helpers/i18n.js'
 
 class UserService {
   userInfo: UserDto | undefined
@@ -34,7 +33,7 @@ class UserService {
     return result
   }
 
-  createUser = async (payload: reqRegister) => {
+  createUser = async (payload: ReqRegister) => {
     const userId = new ObjectId()
     const verify = UserVerifyStatus.unverified
     const token = await tokenService.signEmailVerifyToken({ user_id: userId, verify })

@@ -1,3 +1,3 @@
-export interface reqFollow {
-  followed_user_id: String
+export interface ReqFollow {
+  followed_user_id: string
 }

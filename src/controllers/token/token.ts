@@ -1,10 +1,10 @@
 import { handleResponseSuccess } from '@/helpers/handler'
 import {
-  reqAuthorization,
-  reqRefreshToken,
-  reqVerifyEmailToken,
-  resAuthToken,
-  resVerifyMailToken
+  ReqAuthorization,
+  ReqRefreshToken,
+  ReqVerifyEmailToken,
+  ResAuthToken,
+  ResVerifyMailToken
 } from '@/models/dto/token/token'
 
 import { UserSchema } from '@/models/schemas/user'
@@ -17,11 +17,11 @@ import { verifyToken } from '@/helpers/jwt'
 import { RefreshTokenSchema } from '@/models/schemas/refreshToken'
 import { ENV_CONST } from '@/constraints/common'
 
-export const getNewAccessTokenController: Controller<reqRefreshToken> = async (req, res) => {
+export const getNewAccessTokenController: Controller<ReqRefreshToken> = async (req, res) => {
   const refreshTokenInfo = tokenService.refreshTokenInfo
 
   const token = req.body.refresh_token
-  const { exp, iat } = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.refreshKey || '' })
+  const { exp, iat } = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.refreshKey ?? '' })
 
   const [_, result] = await Promise.all([
     databaseService.refreshToken.deleteOne({ token }),
@@ -33,7 +33,7 @@ export const getNewAccessTokenController: Controller<reqRefreshToken> = async (r
     })
   ])
 
-  return handleResponseSuccess<resAuthToken>(res, {
+  return handleResponseSuccess<ResAuthToken>(res, {
     data: {
       access_token: result.accessToken,
       refresh_token: result.refreshToken
@@ -41,7 +41,7 @@ export const getNewAccessTokenController: Controller<reqRefreshToken> = async (r
   })
 }
 
-export const verifyEmailController: Controller<reqVerifyEmailToken> = async (req, res) => {
+export const verifyEmailController: Controller<ReqVerifyEmailToken> = async (__, res) => {
   const userInfo = userService.userInfo as UserSchema
 
   const [_, token] = await Promise.all([
@@ -55,7 +55,7 @@ export const verifyEmailController: Controller<reqVerifyEmailToken> = async (req
     })
   ])
 
-  return handleResponseSuccess<resAuthToken>(res, {
+  return handleResponseSuccess<ResAuthToken>(res, {
     data: {
       access_token: token.accessToken,
       refresh_token: token.refreshToken
@@ -63,7 +63,7 @@ export const verifyEmailController: Controller<reqVerifyEmailToken> = async (req
   })
 }
 
-export const resendMailTokenController: Controller<reqAuthorization> = async (req, res) => {
+export const resendMailTokenController: Controller<ReqAuthorization> = async (_, res) => {
   const userInfo = userService.userInfo as UserSchema
 
   const newVerifyToken = await tokenService.signEmailVerifyToken({
@@ -76,7 +76,7 @@ export const resendMailTokenController: Controller<reqAuthorization> = async (re
     verify: UserVerifyStatus.unverified
   })
 
-  return handleResponseSuccess<resVerifyMailToken>(res, {
+  return handleResponseSuccess<ResVerifyMailToken>(res, {
     data: {
       email_verify_token: newVerifyToken
     }

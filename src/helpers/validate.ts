@@ -19,9 +19,9 @@ interface TValidatorMiddleWare {
 export const validatorMiddleWare = ({ validator, location, initStatusCode }: TValidatorMiddleWare) => {
   if (!has(validators, validator)) throw new Error(`'${validator}' is not exist`)
 
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, _: Response, next: NextFunction) => {
     try {
-      await validators[validator].validateAsync(req[location || 'body'])
+      await validators[validator].validateAsync(req[location ?? 'body'])
 
       if (apiAccessPermissions[req.url] && userService.userInfo) {
         const isHasPermission = checkPermission(req.url, userService.userInfo.verify as UserVerifyStatus)
@@ -34,9 +34,9 @@ export const validatorMiddleWare = ({ validator, location, initStatusCode }: TVa
       next()
     } catch (err) {
       if (err instanceof Joi.ValidationError) {
-        let statusCode = initStatusCode || HTTP_STATUS.UNPROCESSABLE_ENTITY
+        let statusCode = initStatusCode ?? HTTP_STATUS.UNPROCESSABLE_ENTITY
 
-        const mapkupErrorDetail = err.details.map((detail) => {
+        const makeupErrorDetail = err.details.map((detail) => {
           if (detail.message.includes('statusCode')) {
             const newMessage = stringToObject(detail.message)
 
@@ -51,7 +51,7 @@ export const validatorMiddleWare = ({ validator, location, initStatusCode }: TVa
           return detail
         })
 
-        err.details = mapkupErrorDetail as unknown as ValidationErrorItem[]
+        err.details = makeupErrorDetail as unknown as ValidationErrorItem[]
         ;(err as any).statusCode = statusCode
 
         next(err)

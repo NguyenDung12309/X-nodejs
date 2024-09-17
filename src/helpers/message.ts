@@ -18,13 +18,13 @@ export const getCommonMessageValidate = <T>(param: {
     'string.email': useI18n.__('validate.common.invalid', { field: fieldName || '' }),
     'string.min': useI18n.__('validate.common.minMax', {
       field: fieldName || '',
-      min: param.min || '',
-      max: param.max || ''
+      min: param.min ?? '',
+      max: param.max ?? ''
     }),
     'string.max': useI18n.__('validate.common.minMax', {
       field: fieldName || '',
-      min: param.min || '',
-      max: param.max || ''
+      min: param.min ?? '',
+      max: param.max ?? ''
     }),
     'any.only': useI18n.__('validate.common.matchField', { field: fieldName || '', match: matchFieldName || '' }),
     'date.format': useI18n.__('validate.common.iso8601', { field: fieldName || '' }),

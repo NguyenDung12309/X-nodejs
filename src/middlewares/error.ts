@@ -3,7 +3,7 @@ import { useI18n } from '@/helpers/i18n'
 import { ErrorHandler } from '@/types/type'
 import { omit } from 'lodash'
 
-export const defaultErrorHandler: ErrorHandler = (error, req, res, _) => {
+export const defaultErrorHandler: ErrorHandler = (error, _, res, __) => {
   res
     .status(error.statusCode || HTTP_STATUS.INTERNAL_SERVER_ERROR)
     .json(
