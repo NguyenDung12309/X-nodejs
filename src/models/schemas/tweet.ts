@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { Media, TweetAudience } from '@/types/type'
+import { Media, TweetAudience, TweetType } from '@/types/type'
 import { objectAssign } from '@/helpers/utils'
 
 export class Tweet {
@@ -11,6 +11,7 @@ export class Tweet {
   hashtags: ObjectId[]
   mentions: ObjectId[]
   medias: Media[]
+  type: TweetType
   guest_views: number
   user_views: number
   created_at?: Date
