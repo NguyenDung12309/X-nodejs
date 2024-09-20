@@ -5,7 +5,7 @@ export const getCommonMessageValidate = <T>(param: {
   field?: keyof T
   min?: string
   max?: string
-  matchField?: keyof T
+  matchField?: string | keyof T
 }) => {
   const fieldName = param.field as string
   const matchFieldName = param.matchField as string

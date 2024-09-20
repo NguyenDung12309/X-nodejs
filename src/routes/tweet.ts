@@ -6,9 +6,9 @@ import express from 'express'
 const router = express.Router()
 
 router.get(
-  API_CONST.tweet,
+  API_CONST.createTweet,
   validatorMiddleWare({ validator: 'createTweetValidate' }),
-  wrapRequestHandler('tweetController')
+  wrapRequestHandler('createTweetController')
 )
 
 export const tweetRouter = router
