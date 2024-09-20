@@ -29,8 +29,8 @@ import { uploadImageController } from './media/uploadImage'
 import { ReqUploadVideo } from '@/models/dto/media/uploadVideo'
 import { ReqUploadImage } from '@/models/dto/media/uploadImage'
 import { uploadVideoController } from './media/uploadVideo'
-import { ReqTweet } from '@/models/dto/tweet/tweet'
-import { tweetController } from './tweet/tweet'
+import { ReqCreateTweet } from '@/models/dto/tweet/tweet'
+import { tweetController } from './tweet/createTweet'
 
 export interface IRequestHandler {
   registerController: Controller<ReqRegister>
@@ -49,7 +49,7 @@ export interface IRequestHandler {
   resetPasswordController: Controller<ReqResetPassword>
   uploadImageController: Controller<ReqUploadImage>
   uploadVideoController: Controller<ReqUploadVideo>
-  tweetController: Controller<ReqTweet>
+  tweetController: Controller<ReqCreateTweet>
 }
 
 export const controllers: IRequestHandler = {

@@ -1,11 +1,12 @@
-import { Media, TweetAudience } from '@/types/type'
+import { Media, TweetAudience, TweetType } from '@/types/type'
 import { ObjectId } from 'mongodb'
 
-export interface ReqTweet {
+export interface ReqCreateTweet {
   content: string
   audience: TweetAudience
   parent_id: ObjectId | null
   hashtags: ObjectId[]
   mentions: ObjectId[]
   medias: Media[]
+  type: TweetType
 }
