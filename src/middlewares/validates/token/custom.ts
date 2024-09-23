@@ -20,7 +20,7 @@ export const verifyTRefreshToken = async (token: string, helper: CustomHelpers) 
     const externalMessage = helper.message({
       external: objectToString(
         new ErrorWithStatus({
-          message: useI18n.__('validate.common.invalid', { field: 'token' }),
+          message: useI18n.__('validate.common.invalid', { field: 'refresh_token' }),
           statusCode: HTTP_STATUS.UNAUTHORIZED
         })
       )

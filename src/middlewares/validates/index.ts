@@ -22,8 +22,8 @@ import { unFollowValidate } from './follow/unFollow'
 import { ReqUnFollow } from '@/models/dto/follow/unFollow'
 import { ReqResetPassword } from '@/models/dto/auth/resetPassword'
 import { resetPasswordValidate } from './auth/resetPassword'
-import { ReqCreateTweet } from '@/models/dto/tweet/tweet'
 import { createTweetValidate } from './tweet/createTweet'
+import { ReqCreateTweet } from '@/models/dto/tweet/createTweet'
 
 export interface IValidators {
   registerValidate: ObjectSchema<ReqRegister>
