@@ -4,6 +4,7 @@ import { UserSchema } from '@/models/schemas/user'
 import { DatabaseName } from '@/constraints/database'
 import { RefreshTokenSchema } from '@/models/schemas/refreshToken'
 import { FollowSchema } from '@/models/schemas/follow'
+import { TweetSchema } from '@/models/schemas/tweet'
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@x.grxx64n.mongodb.net/?retryWrites=true&w=majority&appName=X`
 
@@ -37,6 +38,10 @@ class DatabaseService {
   }
 
   get follow(): Collection<FollowSchema> {
+    return this.db.collection(DatabaseName.FOLLOW)
+  }
+
+  get tweet(): Collection<TweetSchema> {
     return this.db.collection(DatabaseName.FOLLOW)
   }
 

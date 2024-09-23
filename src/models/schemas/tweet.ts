@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 import { Media, TweetAudience, TweetType } from '@/types/type'
 import { objectAssign } from '@/helpers/utils'
 
-export class Tweet {
+export class TweetSchema {
   _id?: ObjectId
   user_id: ObjectId
   content: string
@@ -17,7 +17,7 @@ export class Tweet {
   created_at?: Date
   updated_at?: Date
 
-  constructor(data: Partial<Tweet>) {
+  constructor(data: Partial<TweetSchema>) {
     const date = new Date()
 
     objectAssign(
