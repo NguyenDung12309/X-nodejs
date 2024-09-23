@@ -41,14 +41,19 @@ export const registerValidate = joi.object<ReqRegister>({
         max: '50'
       })
     ),
-  confirm_password: joi.valid(joi.ref('password')).messages(
-    getCommonMessageValidate<ReqRegister>({
-      field: 'confirm_password',
-      matchField: 'password'
-    })
-  ),
+  confirm_password: joi
+    .string()
+    .required()
+    .valid(joi.ref('password'))
+    .messages(
+      getCommonMessageValidate<ReqRegister>({
+        field: 'confirm_password',
+        matchField: 'password'
+      })
+    ),
   date_of_birth: joi
     .date()
+    .required()
     .iso()
     .messages(
       getCommonMessageValidate<ReqRegister>({
