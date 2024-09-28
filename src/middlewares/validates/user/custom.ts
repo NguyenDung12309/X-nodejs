@@ -39,3 +39,22 @@ export const checkUserNameExist = async (username: string, helper: CustomHelpers
 
   return username
 }
+
+export const checkUserNameNotExist = async (username: string, helper: CustomHelpers) => {
+  const result = await userService.findUser({ username: username }, true)
+
+  if (!result) {
+    const externalMessage = helper.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.notExist', { field: 'username' }),
+          statusCode: HTTP_STATUS.NOT_FOUND
+        })
+      )
+    })
+
+    return externalMessage
+  }
+
+  return username
+}

@@ -10,13 +10,26 @@ import { ObjectId } from 'mongodb'
 
 export const isFollow = async (followerId: string, helper: CustomHelpers) => {
   const { _id } = userService.userInfo as UserSchema
+  const [followerInfo, followDocument] = await Promise.all([
+    followService.findFollower(followerId, true),
+    followService.findFollowDocument({
+      user_id: _id as ObjectId,
+      followed_user_id: followerId
+    })
+  ])
 
-  await followService.findFollower(followerId)
+  if (!followerInfo) {
+    const externalMessage = helper.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.notExist', { field: 'id' }),
+          statusCode: HTTP_STATUS.NOT_FOUND
+        })
+      )
+    })
 
-  const followDocument = await followService.findFollowDocument({
-    user_id: _id as ObjectId,
-    followed_user_id: followerId
-  })
+    return externalMessage
+  }
 
   if (followDocument) {
     const externalMessage = helper.message({
@@ -37,12 +50,26 @@ export const isFollow = async (followerId: string, helper: CustomHelpers) => {
 export const isNotFollow = async (followerId: string, helper: CustomHelpers) => {
   const { _id } = userService.userInfo as UserSchema
 
-  await followService.findFollower(followerId)
+  const [followerInfo, followDocument] = await Promise.all([
+    followService.findFollower(followerId, true),
+    followService.findFollowDocument({
+      user_id: _id as ObjectId,
+      followed_user_id: followerId
+    })
+  ])
 
-  const followDocument = await followService.findFollowDocument({
-    user_id: _id as ObjectId,
-    followed_user_id: followerId
-  })
+  if (!followerInfo) {
+    const externalMessage = helper.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.notExist', { field: 'id' }),
+          statusCode: HTTP_STATUS.NOT_FOUND
+        })
+      )
+    })
+
+    return externalMessage
+  }
 
   if (!followDocument) {
     const externalMessage = helper.message({
