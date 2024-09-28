@@ -83,10 +83,10 @@ export class TokenService {
     return { accessToken, refreshToken }
   }
 
-  findRefreshToken = async (data: Partial<RefreshTokenSchema>) => {
+  findRefreshToken = async (data: Partial<RefreshTokenSchema>, noError?: boolean) => {
     const result = await databaseService.refreshToken.findOne(data)
 
-    if (!result) {
+    if (!result && !noError) {
       this.resetRefreshToken()
 
       throw new ErrorWithStatus({
@@ -95,7 +95,7 @@ export class TokenService {
       })
     }
 
-    this.refreshTokenInfo = result
+    this.refreshTokenInfo = !result ? undefined : result
 
     return result
   }

@@ -13,7 +13,7 @@ import { ObjectId } from 'mongodb'
 export const verifyTRefreshToken = async (token: string, helper: CustomHelpers) => {
   const [decode, result] = await Promise.all([
     verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.refreshKey ?? '' }),
-    tokenService.findRefreshToken({ token: token })
+    tokenService.findRefreshToken({ token: token }, true)
   ])
 
   if (!result || !decode) {
@@ -34,7 +34,7 @@ export const verifyTRefreshToken = async (token: string, helper: CustomHelpers) 
 
 export const verifyEmailToken = async (token: string, helper: CustomHelpers) => {
   const decode = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.verifyEmailKey ?? '' })
-  const result = await userService.findUser({ _id: new ObjectId(decode.user_id) })
+  const result = await userService.findUser({ _id: new ObjectId(decode.user_id) }, true)
 
   if (!result || !decode) {
     return helper.message({
@@ -65,7 +65,7 @@ export const verifyEmailToken = async (token: string, helper: CustomHelpers) => 
 
 export const verifyAccessToken = async (token: string, helper: CustomHelpers) => {
   const decode = await verifyToken<RefreshTokenSchema>({ token: token, privateKey: ENV_CONST.accessKey ?? '' })
-  const result = await userService.findUser({ _id: new ObjectId(decode.user_id) })
+  const result = await userService.findUser({ _id: new ObjectId(decode.user_id) }, true)
 
   if (!result || !decode) {
     const externalMessage = helper.message({
@@ -88,7 +88,7 @@ export const verifyForgotPasswordToken = async (token: string, helper: CustomHel
     token: token,
     privateKey: ENV_CONST.forgotPasswordKey ?? ''
   })
-  const result = await userService.findUser({ _id: new ObjectId(decode.user_id) })
+  const result = await userService.findUser({ _id: new ObjectId(decode.user_id) }, true)
 
   if (!result || result.forgot_password_token !== token) {
     const externalMessage = helper.message({

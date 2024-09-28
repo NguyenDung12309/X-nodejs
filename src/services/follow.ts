@@ -11,11 +11,11 @@ class FollowService {
   followerInfo: UserDto | undefined
   documentFollowerInfo: FollowSchema | undefined
 
-  findFollower = async (followerId: string) => {
+  findFollower = async (followerId: string, noError?: boolean) => {
     const result = await databaseService.users.findOne({ _id: new ObjectId(followerId) })
     const omitResult = omit(result, ['email_verify_token', 'password', 'forgot_password_token'])
 
-    if (!result) {
+    if (!result && !noError) {
       this.resetFollowerInfo()
 
       throw new ErrorWithStatus({

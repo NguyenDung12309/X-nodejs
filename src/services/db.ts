@@ -5,6 +5,7 @@ import { DatabaseName } from '@/constraints/database'
 import { RefreshTokenSchema } from '@/models/schemas/refreshToken'
 import { FollowSchema } from '@/models/schemas/follow'
 import { TweetSchema } from '@/models/schemas/tweet'
+import { HashTagSchema } from '@/models/schemas/hashTag'
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@x.grxx64n.mongodb.net/?retryWrites=true&w=majority&appName=X`
 
@@ -42,7 +43,11 @@ class DatabaseService {
   }
 
   get tweet(): Collection<TweetSchema> {
-    return this.db.collection(DatabaseName.FOLLOW)
+    return this.db.collection(DatabaseName.TWEET)
+  }
+
+  get hashtag(): Collection<HashTagSchema> {
+    return this.db.collection(DatabaseName.HASHTAG)
   }
 
   indexUsers = async () => {

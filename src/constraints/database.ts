@@ -2,7 +2,8 @@ export enum DatabaseName {
   USERS = 'users',
   REFRESH_TOKEN = 'refreshToken',
   FOLLOW = 'follow',
-  TWEET = 'tweet'
+  TWEET = 'tweet',
+  HASHTAG = 'hashtag'
 }
 
 export const accessTokenExpireTime = '15m'

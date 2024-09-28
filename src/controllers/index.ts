@@ -29,8 +29,8 @@ import { uploadImageController } from './media/uploadImage'
 import { ReqUploadVideo } from '@/models/dto/media/uploadVideo'
 import { ReqUploadImage } from '@/models/dto/media/uploadImage'
 import { uploadVideoController } from './media/uploadVideo'
-import { ReqCreateTweet } from '@/models/dto/tweet/tweet'
 import { createTweetController } from './tweet/createTweet'
+import { ReqCreateTweet } from '@/models/dto/tweet/createTweet'
 
 export interface IRequestHandler {
   registerController: Controller<ReqRegister>
