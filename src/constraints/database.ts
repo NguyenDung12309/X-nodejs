@@ -3,7 +3,8 @@ export enum DatabaseName {
   REFRESH_TOKEN = 'refreshToken',
   FOLLOW = 'follow',
   TWEET = 'tweet',
-  HASHTAG = 'hashtag'
+  HASHTAG = 'hashtag',
+  BOOKMARK = 'bookmark'
 }
 
 export const accessTokenExpireTime = '15m'
