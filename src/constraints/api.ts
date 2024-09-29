@@ -7,7 +7,8 @@ export const USER_API_CONST = {
   follow: '/follow',
   uploadImage: '/upload-image',
   uploadVideo: '/upload-video',
-  createTweet: '/create-tweet'
+  createTweet: '/create-tweet',
+  bookmark: '/bookmark'
 }
 
 export const API_CONST = {
@@ -33,5 +34,6 @@ export const apiAccessPermissions = {
   [API_CONST.follow]: verifyOnly,
   [API_CONST.uploadImage]: verifyOnly,
   [API_CONST.uploadVideo]: verifyOnly,
-  [API_CONST.createTweet]: verifyOnly
+  [API_CONST.createTweet]: verifyOnly,
+  [API_CONST.bookmark]: verifyOnly
 }

@@ -14,9 +14,10 @@ import { mediaService } from './services/media.js'
 import { defaultErrorHandler } from './middlewares/error.js'
 import { UPLOAD_IMAGE_DIR, UPLOAD_IMAGE_PATH, UPLOAD_VIDEO_DIR, UPLOAD_VIDEO_PATH } from './constraints/path.js'
 import { tweetRouter } from './routes/tweet.js'
+import { bookmarkRouter } from './routes/bookmark.js'
 const app = express()
 
-const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter, tweetRouter]
+const routers = [userRouter, tokenRouter, authRouter, followRouter, mediaRouter, tweetRouter, bookmarkRouter]
 
 app.use(express.json())
 

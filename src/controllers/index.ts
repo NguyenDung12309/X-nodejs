@@ -31,6 +31,10 @@ import { ReqUploadImage } from '@/models/dto/media/uploadImage'
 import { uploadVideoController } from './media/uploadVideo'
 import { createTweetController } from './tweet/createTweet'
 import { ReqCreateTweet } from '@/models/dto/tweet/createTweet'
+import { createBookmarkController } from './bookmark/createBookmark'
+import { ReqCreateBookmark } from '@/models/dto/bookmark/createBookmark'
+import { ReqDeleteBookmark } from '@/models/dto/bookmark/deleteBookmark'
+import { deleteBookmarkController } from './bookmark/deleteBookmark'
 
 export interface IRequestHandler {
   registerController: Controller<ReqRegister>
@@ -50,6 +54,8 @@ export interface IRequestHandler {
   uploadImageController: Controller<ReqUploadImage>
   uploadVideoController: Controller<ReqUploadVideo>
   createTweetController: Controller<ReqCreateTweet>
+  createBookmarkController: Controller<ReqCreateBookmark>
+  deleteBookmarkController: Controller<ReqDeleteBookmark>
 }
 
 export const controllers: IRequestHandler = {
@@ -69,5 +75,7 @@ export const controllers: IRequestHandler = {
   resetPasswordController,
   uploadImageController,
   uploadVideoController,
-  createTweetController
+  createTweetController,
+  createBookmarkController,
+  deleteBookmarkController
 }

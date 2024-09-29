@@ -6,6 +6,7 @@ import { RefreshTokenSchema } from '@/models/schemas/refreshToken'
 import { FollowSchema } from '@/models/schemas/follow'
 import { TweetSchema } from '@/models/schemas/tweet'
 import { HashTagSchema } from '@/models/schemas/hashTag'
+import { BookmarkSchema } from '@/models/schemas/bookmark'
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@x.grxx64n.mongodb.net/?retryWrites=true&w=majority&appName=X`
 
@@ -48,6 +49,10 @@ class DatabaseService {
 
   get hashtag(): Collection<HashTagSchema> {
     return this.db.collection(DatabaseName.HASHTAG)
+  }
+
+  get bookmark(): Collection<BookmarkSchema> {
+    return this.db.collection(DatabaseName.BOOKMARK)
   }
 
   indexUsers = async () => {

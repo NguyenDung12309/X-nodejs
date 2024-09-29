@@ -24,6 +24,10 @@ import { ReqResetPassword } from '@/models/dto/auth/resetPassword'
 import { resetPasswordValidate } from './auth/resetPassword'
 import { createTweetValidate } from './tweet/createTweet'
 import { ReqCreateTweet } from '@/models/dto/tweet/createTweet'
+import { ReqCreateBookmark } from '@/models/dto/bookmark/createBookmark'
+import { createBookmarkValidate } from './bookmark/createBookmark'
+import { ReqDeleteBookmark } from '@/models/dto/bookmark/deleteBookmark'
+import { deleteBookmarkValidate } from './bookmark/deleteBookmark'
 
 export interface IValidators {
   registerValidate: ObjectSchema<ReqRegister>
@@ -41,6 +45,8 @@ export interface IValidators {
   unFollowValidate: ObjectSchema<ReqUnFollow>
   resetPasswordValidate: ObjectSchema<ReqResetPassword>
   createTweetValidate: ObjectSchema<ReqCreateTweet>
+  createBookmarkValidate: ObjectSchema<ReqCreateBookmark>
+  deleteBookmarkValidate: ObjectSchema<ReqDeleteBookmark>
 }
 
 export const validators: IValidators = {
@@ -58,5 +64,7 @@ export const validators: IValidators = {
   followValidate,
   unFollowValidate,
   resetPasswordValidate,
-  createTweetValidate
+  createTweetValidate,
+  createBookmarkValidate,
+  deleteBookmarkValidate
 }

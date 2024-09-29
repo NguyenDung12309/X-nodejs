@@ -28,6 +28,12 @@ class TweetService {
     return result
   }
 
+  getTweet = async (id: string) => {
+    const result = await databaseService.tweet.findOne({ _id: new ObjectId(id) })
+
+    return result
+  }
+
   async checkAndCreateHashtag(hashtags: string[]) {
     const result = await Promise.all(
       hashtags.map(async (tag) => {

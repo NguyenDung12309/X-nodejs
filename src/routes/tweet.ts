@@ -5,7 +5,7 @@ import express from 'express'
 
 const router = express.Router()
 
-router.get(
+router.post(
   API_CONST.createTweet,
   validatorMiddleWare({ validator: 'createTweetValidate' }),
   wrapRequestHandler('createTweetController')
