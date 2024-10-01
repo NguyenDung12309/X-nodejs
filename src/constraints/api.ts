@@ -21,6 +21,7 @@ export const API_CONST = {
   verifyForgotPassword: '/verify-forgot-password',
   userProfile: '/user-profile/',
   resetPassword: '/reset-password',
+  tweet: '/tweet',
   ...USER_API_CONST
 }
 
@@ -35,5 +36,6 @@ export const apiAccessPermissions = {
   [API_CONST.uploadImage]: verifyOnly,
   [API_CONST.uploadVideo]: verifyOnly,
   [API_CONST.createTweet]: verifyOnly,
-  [API_CONST.bookmark]: verifyOnly
+  [API_CONST.bookmark]: verifyOnly,
+  [API_CONST.tweet]: verifyOnly
 }

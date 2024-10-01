@@ -18,6 +18,7 @@ export class UserSchema {
   username?: string
   avatar?: string
   cover_photo?: string
+  twitter_circle?: ObjectId[]
 
   constructor(data: Partial<UserSchema>) {
     const date = new Date()
