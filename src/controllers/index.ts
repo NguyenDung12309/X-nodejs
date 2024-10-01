@@ -35,6 +35,7 @@ import { createBookmarkController } from './bookmark/createBookmark'
 import { ReqCreateBookmark } from '@/models/dto/bookmark/createBookmark'
 import { ReqDeleteBookmark } from '@/models/dto/bookmark/deleteBookmark'
 import { deleteBookmarkController } from './bookmark/deleteBookmark'
+import { getTweetController } from './tweet/getTweet'
 
 export interface IRequestHandler {
   registerController: Controller<ReqRegister>
@@ -55,7 +56,8 @@ export interface IRequestHandler {
   uploadVideoController: Controller<ReqUploadVideo>
   createTweetController: Controller<ReqCreateTweet>
   createBookmarkController: Controller<ReqCreateBookmark>
-  deleteBookmarkController: Controller<ReqDeleteBookmark>
+  deleteBookmarkController: Controller<any, ReqDeleteBookmark>
+  getTweetController: Controller<any>
 }
 
 export const controllers: IRequestHandler = {
@@ -77,5 +79,6 @@ export const controllers: IRequestHandler = {
   uploadVideoController,
   createTweetController,
   createBookmarkController,
-  deleteBookmarkController
+  deleteBookmarkController,
+  getTweetController
 }

@@ -2,6 +2,7 @@ import { ErrorWithStatus } from './../types/errors'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import 'dotenv/config'
 import { HTTP_STATUS } from '@/constraints/httpStatus'
+import { userService } from '@/services/user'
 
 const optional: SignOptions = {
   algorithm: 'HS256'
@@ -32,6 +33,8 @@ export const verifyToken = <T>({ token, privateKey }: { token: string; privateKe
 
     jwt.verify(newToken, privateKey, (error, decoded) => {
       if (error) {
+        userService.resetUserInfo()
+
         return reject(
           new ErrorWithStatus({
             message: error.toString(),

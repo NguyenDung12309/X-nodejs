@@ -93,6 +93,15 @@ userCollection.remove({})
 //         cover_photo: {
 //           bsonType: ['string', 'null'],
 //           description: 'Phải là một chuỗi'
+//         },
+//         twitter_circle: {
+//           bsonType: ['array', 'null'],
+//           uniqueItems: true,
+//           additionalProperties: false,
+//           items: {
+//             bsonType: 'objectId'
+//           },
+//           description: 'Phải là một mang ObjectId'
 //         }
 //       },
 //       additionalProperties: false

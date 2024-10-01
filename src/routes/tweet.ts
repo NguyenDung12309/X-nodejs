@@ -11,4 +11,6 @@ router.post(
   wrapRequestHandler('createTweetController')
 )
 
+router.get(API_CONST.tweet, wrapRequestHandler('getTweetController'))
+
 export const tweetRouter = router
