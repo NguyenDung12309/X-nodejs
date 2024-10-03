@@ -2,7 +2,7 @@ import { REGEX_USERNAME } from '@/constraints/regex'
 import { joi } from '@/helpers/joi'
 import { getCommonMessageValidate } from '@/helpers/message'
 import { ReqMeUpdate } from '@/models/dto/users/meUpdate'
-import { checkUserNameExist } from './custom'
+import { checkUserCircleExist, checkUserNameExist } from './custom'
 
 export const meUpdateValidate = joi.object<ReqMeUpdate>({
   avatar: joi
@@ -71,6 +71,14 @@ export const meUpdateValidate = joi.object<ReqMeUpdate>({
     .messages(
       getCommonMessageValidate<ReqMeUpdate>({
         field: 'website'
+      })
+    ),
+  twitter_circle: joi
+    .array()
+    .items(joi.string().trim().external(checkUserCircleExist))
+    .messages(
+      getCommonMessageValidate<ReqMeUpdate>({
+        field: 'twitter_circle'
       })
     )
 })

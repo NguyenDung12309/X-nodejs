@@ -1,8 +1,10 @@
 import { HTTP_STATUS } from '@/constraints/httpStatus'
 import { useI18n } from '@/helpers/i18n'
 import { objectToString } from '@/helpers/utils'
+import { tweetService } from '@/services/tweet'
+import { userService } from '@/services/user'
 import { ErrorWithStatus } from '@/types/errors'
-import { TweetType } from '@/types/type'
+import { TweetAudience, TweetType, UserVerifyStatus } from '@/types/type'
 import { CustomHelpers } from 'joi'
 import { isEmpty } from 'lodash'
 import { ObjectId } from 'mongodb'
@@ -76,4 +78,91 @@ export const checkContent = async (value: string, helper: CustomHelpers) => {
   }
 
   return value
+}
+
+export const checkTweetExists = async (tweetId: string, helpers: CustomHelpers) => {
+  const isExist = await tweetService.getTweet(tweetId)
+
+  if (!isExist) {
+    const externalMessage = helpers.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.not-exist', { field: 'tweet_id' }),
+          statusCode: HTTP_STATUS.NOT_FOUND
+        })
+      )
+    })
+
+    return externalMessage
+  }
+
+  return tweetId
+}
+
+export const checkAudienceCircle = async (tweetId: string, helpers: CustomHelpers) => {
+  const validTweetId = await checkTweetExists(tweetId, helpers)
+
+  if (typeof validTweetId !== 'string') {
+    return validTweetId
+  }
+
+  const tweetInfo = tweetService.tweetInfo
+
+  if (!userService.userInfo && tweetInfo?.audience === TweetAudience.TwitterCircle) {
+    const externalMessage = helpers.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.notLogin'),
+          statusCode: HTTP_STATUS.UNAUTHORIZED
+        })
+      )
+    })
+
+    return externalMessage
+  }
+
+  const userTweetInfo = await userService.findUserInfo(
+    {
+      _id: tweetInfo?.user_id
+    },
+    true
+  )
+
+  if (
+    !userTweetInfo ||
+    userTweetInfo.verify === UserVerifyStatus.unverified ||
+    userTweetInfo.verify === UserVerifyStatus.banned
+  ) {
+    const externalMessage = helpers.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.userNotValid'),
+          statusCode: HTTP_STATUS.NOT_FOUND
+        })
+      )
+    })
+
+    return externalMessage
+  }
+
+  const isUserInCircle = userTweetInfo.twitter_circle?.some((item) => {
+    const result = new ObjectId(item).equals(userService.userInfo?._id)
+
+    return result
+  })
+
+  if (!isUserInCircle && !userService.userInfo?._id?.equals(tweetInfo?.user_id)) {
+    const externalMessage = helpers.message({
+      external: objectToString(
+        new ErrorWithStatus({
+          message: useI18n.__('validate.common.notPublic', { field: 'tweet' }),
+          statusCode: HTTP_STATUS.FORBIDDEN
+        })
+      )
+    })
+
+    return externalMessage
+  }
+
+  return tweetId
 }

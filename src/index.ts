@@ -36,7 +36,7 @@ app.use(useI18n.init)
 app.use(async (req, res, next) => {
   const url = req.path.replace('/api', '')
 
-  if (Object.values(USER_API_CONST).includes(url)) {
+  if (Object.values(USER_API_CONST).includes(url) || req.headers.authorization) {
     const middleWare = await validatorMiddleWare({
       validator: 'accessTokenValidate',
       location: 'headers',

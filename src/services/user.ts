@@ -15,7 +15,7 @@ import { useI18n } from '@/helpers/i18n.js'
 class UserService {
   userInfo: UserDto | undefined
 
-  findUser = async (data: Partial<UserSchema>, noError?: boolean) => {
+  findMeInfo = async (data: Partial<UserSchema>, noError?: boolean) => {
     const result = await databaseService.users.findOne(data)
     const omitResult = omit(result, ['email_verify_token', 'password', 'forgot_password_token'])
 
@@ -29,6 +29,19 @@ class UserService {
     }
 
     this.userInfo = omitResult
+
+    return result
+  }
+
+  findUserInfo = async (data: Partial<UserSchema>, noError?: boolean) => {
+    const result = await databaseService.users.findOne(data)
+
+    if (!result && !noError) {
+      throw new ErrorWithStatus({
+        message: useI18n.__('validate.common.notExist', { field: 'username' }),
+        statusCode: HTTP_STATUS.NOT_FOUND
+      })
+    }
 
     return result
   }

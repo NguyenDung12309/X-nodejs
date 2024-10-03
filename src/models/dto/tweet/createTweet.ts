@@ -8,4 +8,5 @@ export interface ReqCreateTweet {
   mentions: string[]
   medias: Media[]
   type: TweetType
+  twitter_circle: string[]
 }

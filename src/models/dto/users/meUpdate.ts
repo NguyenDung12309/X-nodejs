@@ -7,4 +7,5 @@ export interface ReqMeUpdate {
   avatar?: string
   cover_photo?: string
   date_of_birth?: string
+  twitter_circle?: string[]
 }

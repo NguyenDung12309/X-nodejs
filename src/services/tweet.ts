@@ -6,6 +6,7 @@ import { userService } from './user'
 import { HashTagSchema } from '@/models/schemas/hashTag'
 
 class TweetService {
+  tweetInfo: TweetSchema | null
   createTweet = async (data: ReqCreateTweet) => {
     const { hashtags, parent_id, mentions, ...rest } = data
 
@@ -30,6 +31,8 @@ class TweetService {
 
   getTweet = async (id: string) => {
     const result = await databaseService.tweet.findOne({ _id: new ObjectId(id) })
+
+    this.tweetInfo = result
 
     return result
   }
