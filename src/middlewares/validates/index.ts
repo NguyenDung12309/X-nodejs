@@ -28,6 +28,8 @@ import { ReqCreateBookmark } from '@/models/dto/bookmark/createBookmark'
 import { createBookmarkValidate } from './bookmark/createBookmark'
 import { ReqDeleteBookmark } from '@/models/dto/bookmark/deleteBookmark'
 import { deleteBookmarkValidate } from './bookmark/deleteBookmark'
+import { ReqGetTweet } from '@/models/dto/tweet/getTweet'
+import { getTweetValidate } from './tweet/getTweet'
 
 export interface IValidators {
   registerValidate: ObjectSchema<ReqRegister>
@@ -47,6 +49,7 @@ export interface IValidators {
   createTweetValidate: ObjectSchema<ReqCreateTweet>
   createBookmarkValidate: ObjectSchema<ReqCreateBookmark>
   deleteBookmarkValidate: ObjectSchema<ReqDeleteBookmark>
+  getTweetValidate: ObjectSchema<ReqGetTweet>
 }
 
 export const validators: IValidators = {
@@ -66,5 +69,6 @@ export const validators: IValidators = {
   resetPasswordValidate,
   createTweetValidate,
   createBookmarkValidate,
-  deleteBookmarkValidate
+  deleteBookmarkValidate,
+  getTweetValidate
 }

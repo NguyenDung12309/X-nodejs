@@ -7,7 +7,7 @@ import { ErrorWithStatus } from '@/types/errors'
 import { CustomHelpers } from 'joi'
 
 export const checkEmailNotExists = async (email: string, helper: CustomHelpers) => {
-  const isExistEmail = await userService.findUser({ email }, true)
+  const isExistEmail = await userService.findMeInfo({ email }, true)
 
   if (!isExistEmail) {
     const externalMessage = helper.message({
@@ -28,7 +28,7 @@ export const checkEmailNotExists = async (email: string, helper: CustomHelpers) 
 export const checkEmailPasswordExists = async (password: string, helper: CustomHelpers) => {
   const { email } = helper.state.ancestors[0]
 
-  const userInfo = await userService.findUser({ email, password: sha256(password) }, true)
+  const userInfo = await userService.findMeInfo({ email, password: sha256(password) }, true)
 
   if (!userInfo) {
     const externalMessage = helper.message({
@@ -47,7 +47,7 @@ export const checkEmailPasswordExists = async (password: string, helper: CustomH
 }
 
 export const checkEmailExists = async (email: string, { message }: CustomHelpers) => {
-  const isExistEmail = await userService.findUser({ email }, true)
+  const isExistEmail = await userService.findMeInfo({ email }, true)
 
   if (isExistEmail) {
     const externalMessage = message({
