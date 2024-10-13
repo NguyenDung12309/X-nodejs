@@ -80,14 +80,14 @@ export const checkContent = async (value: string, helper: CustomHelpers) => {
   return value
 }
 
-export const checkTweetExists = async (tweetId: string, helpers: CustomHelpers) => {
+export const checkTweetExists = async (tweetId: string, helper: CustomHelpers) => {
   const isExist = await tweetService.getTweet(tweetId)
 
   if (!isExist) {
-    const externalMessage = helpers.message({
+    const externalMessage = helper.message({
       external: objectToString(
         new ErrorWithStatus({
-          message: useI18n.__('validate.common.not-exist', { field: 'tweet_id' }),
+          message: useI18n.__('validate.common.notExist', { field: 'tweetId' }),
           statusCode: HTTP_STATUS.NOT_FOUND
         })
       )
