@@ -12,11 +12,6 @@
 // Select the database to use.
 use('X')
 
-const refreshTokenCollection = db.getCollection('refreshToken')
-
-// delete all document
-refreshTokenCollection.remove({})
-
 // add validate
 db.runCommand({
   collMod: 'refreshToken',

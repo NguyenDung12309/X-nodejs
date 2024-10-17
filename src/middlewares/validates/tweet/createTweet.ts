@@ -7,14 +7,14 @@ import { ReqCreateTweet } from '@/models/dto/tweet/createTweet'
 export const createTweetValidate = joi.object<ReqCreateTweet>({
   type: joi
     .number()
-    .valid(TweetType.Tweet)
+    .valid()
     .valid(TweetType.QuoteTweet)
     .valid(TweetType.Comment)
     .valid(TweetType.Retweet)
     .messages(
       getCommonMessageValidate<ReqCreateTweet>({
         field: 'type',
-        matchField: '0,1,2,3'
+        matchField: `${TweetType.QuoteTweet}, ${TweetType.Comment}, ${TweetType.Retweet}`
       })
     ),
   audience: joi
@@ -38,6 +38,7 @@ export const createTweetValidate = joi.object<ReqCreateTweet>({
   content: joi
     .string()
     .trim()
+    .allow(null, '')
     .external(checkContent)
     .messages(
       getCommonMessageValidate<ReqCreateTweet>({

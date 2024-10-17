@@ -55,7 +55,7 @@ export const checkContent = async (value: string, helper: CustomHelpers) => {
     const externalMessage = helper.message({
       external: objectToString(
         new ErrorWithStatus({
-          message: useI18n.__('validate.common.require', { field: 'content' }),
+          message: useI18n.__('validate.common.require', { field: '111content' }),
           statusCode: HTTP_STATUS.UNPROCESSABLE_ENTITY
         })
       )

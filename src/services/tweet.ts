@@ -4,6 +4,7 @@ import { TweetSchema } from '@/models/schemas/tweet'
 import { ObjectId } from 'mongodb'
 import { userService } from './user'
 import { HashTagSchema } from '@/models/schemas/hashTag'
+import { getTweetAggregation } from '@/helpers/aggregate/getTweet'
 
 class TweetService {
   tweetInfo: TweetSchema | null
@@ -30,7 +31,7 @@ class TweetService {
   }
 
   getTweet = async (id: string) => {
-    const result = await databaseService.tweet.findOne({ _id: new ObjectId(id) })
+    const [result] = await databaseService.tweet.aggregate<TweetSchema>(getTweetAggregation(id)).toArray()
 
     this.tweetInfo = result
 
