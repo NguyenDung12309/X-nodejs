@@ -12,6 +12,11 @@
   "env": {
     "node": true
   },
+  "overrides": [
+    {
+      "excludedFiles": ["node_modules/*", "query/*"]
+    }
+  ],
   "rules": {
     "import/no-cycle": "error",
     "import/no-default-export": "error",

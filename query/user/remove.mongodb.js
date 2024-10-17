@@ -14,10 +14,6 @@ use('X')
 
 const userCollection = db.getCollection('users')
 
-// userCollection.createIndex({ aaaa: 1 })
-
-// userCollection.dropIndex({ aaaa: 1 })
-
 // delete all document
 userCollection.remove({})
 

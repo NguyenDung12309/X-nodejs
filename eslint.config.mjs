@@ -124,5 +124,8 @@ export default [
 
       '@typescript-eslint/no-explicit-any': 'off'
     }
+  },
+  {
+    ignores: ['node_modules/*', 'query/*']
   }
 ]
