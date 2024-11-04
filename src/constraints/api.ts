@@ -22,6 +22,7 @@ export const API_CONST = {
   userProfile: '/user-profile/',
   resetPassword: '/reset-password',
   tweet: '/tweet',
+  tweetComment: '/tweet-comment',
   ...USER_API_CONST
 }
 

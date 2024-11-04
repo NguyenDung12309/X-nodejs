@@ -5,6 +5,8 @@ import { ObjectId } from 'mongodb'
 import { userService } from './user'
 import { HashTagSchema } from '@/models/schemas/hashTag'
 import { getTweetAggregation } from '@/helpers/aggregate/getTweet'
+import { getTweetChild } from '@/helpers/aggregate/getTweetChild'
+import { TweetType } from '@/types/type'
 
 class TweetService {
   tweetInfo: TweetSchema | null
@@ -36,6 +38,18 @@ class TweetService {
     this.tweetInfo = result
 
     return result
+  }
+
+  getTweetChild = async (parentId: string, type: TweetType, limit: number, page: number) => {
+    const result = await databaseService.tweet
+      .aggregate<TweetSchema>(getTweetChild(parentId, type, limit, page))
+      .toArray()
+    const total = await databaseService.tweet.countDocuments({ parent_id: new ObjectId(parentId), type })
+
+    return {
+      tweets: result,
+      total
+    }
   }
 
   async checkAndCreateHashtag(hashtags: string[]) {

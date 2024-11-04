@@ -18,4 +18,6 @@ router.get(
   wrapRequestHandler('getTweetController')
 )
 
+router.get(API_CONST.tweetComment, wrapRequestHandler('getTweetChildController'))
+
 export const tweetRouter = router
